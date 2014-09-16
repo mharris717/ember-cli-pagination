@@ -1,12 +1,22 @@
 # Ember CLI Pagination
 
+[![Build Status](https://travis-ci.org/mharris717/ember-cli-pagination.svg?branch=master)](https://travis-ci.org/mharris717/ember-cli-pagination)
+
 Addon for Ember CLI to do simple pagination. Compatible with the kaminari API in Rails
 
 The current page is represented in Ember by the "page" query parameter
 
 The page is passed to the backend via a "page" query parameter.
 
+![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png)
+
 ## Adding to your application
+
+### Install
+
+```
+npm install ember-cli-pagination --save-dev
+```
 
 ### Component
 
@@ -17,13 +27,14 @@ There's a page-numbers component with two properties, currentPage and totalPages
 {{page-numbers currentPage=page totalPages=numPages}}
 ```
 
-### Mixins
+### Controller Mixin
 
-There are mixins for your controller and route.
+* Adds a "page" query param
+* Sets the default page to 1
+* Adds a pageChanged method
 
 ```
 // controller
-
 import PageControllerMixin from 'ember-cli-pagination/controller-mixin';
 
 export default Ember.ArrayController.extend(PageControllerMixin, {
@@ -31,6 +42,9 @@ export default Ember.ArrayController.extend(PageControllerMixin, {
 });
 ```
 
+### Route Mixin
+
+Adds a findPaged(modelName,params) method
 ```
 // route
 import PageRouteMixin from 'ember-cli-pagination/route-mixin';
