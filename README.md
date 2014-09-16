@@ -33,7 +33,7 @@ There's a page-numbers component with two properties, currentPage and totalPages
 * Sets the default page to 1
 * Adds a pageChanged method
 
-```
+```javascript
 // controller
 import PageControllerMixin from 'ember-cli-pagination/controller-mixin';
 
