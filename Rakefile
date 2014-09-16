@@ -1,4 +1,6 @@
 require 'mharris_ext'
+require 'github/markup'
+require 'redcarpet'
 
 class BuildJs
   def build_one(relative_path)
@@ -26,5 +28,14 @@ namespace :build_js do
       BuildJs.new.build
       sleep 1
     end
+  end
+end
+
+task :readme do
+  loop do
+    
+    res = GitHub::Markup.render('README.md', File.read("README.md"))
+    File.create "README.html",res
+    sleep 0.5
   end
 end
