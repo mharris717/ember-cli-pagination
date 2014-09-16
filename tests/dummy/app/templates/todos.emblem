@@ -1,0 +1,13 @@
+h3 Todos
+
+table.table
+  tr
+    th Name
+    th Completed
+  each this
+    tr.todo
+      td= name
+      td= input type="checkbox" checked=completed
+
+
+button{action "save"} Save
