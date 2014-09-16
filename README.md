@@ -24,7 +24,7 @@ There's a page-numbers component with two properties, currentPage and totalPages
 
 ```handlebars
 // your template
-{{page-numbers currentPage=page totalPages=numPages}}
+{{page-numbers currentPage=page totalPages=totalPages}}
 ```
 
 ### Controller Mixin
