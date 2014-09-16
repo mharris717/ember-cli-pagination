@@ -1,25 +1,24 @@
-# Ember-cli-pagination
+# Ember CLI Pagination
 
-This README outlines the details of collaborating on this Ember addon.
+Addon for Ember CLI to do simple pagination. Compatible with the kaminari API in Rails
 
-## Installation
+The current page is represented in Ember by the "page" query parameter
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+The page is passed to the backend via a "page" query parameter.
 
-## Running
+## Adding to your application
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+There's a page-numbers component with two properties, currentPage and totalPages
 
-## Running Tests
+```
+// your template
+{{page-numbers currentPage=page totalPages=numPages}}
+```
 
-* `ember test`
-* `ember test --server`
 
-## Building
+```
+import PageControllerMixin from 'ember-cli-pagination/controller-mixin';
 
-* `ember build`
-
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+export default Ember.ArrayController.extend PageControllerMixin,
+  // your controller code...
+```
