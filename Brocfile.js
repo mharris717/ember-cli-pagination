@@ -4,6 +4,10 @@ var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 var app = new EmberAddon();
 
+app.import({development:'bower_components/route-recognizer/dist/route-recognizer.js'});
+app.import({development:'bower_components/FakeXMLHttpRequest/fake_xml_http_request.js'});
+app.import({development:'bower_components/pretender/pretender.js'});
+
 // Use `app.import` to add additional libraries to the generated
 // output files.
 //
