@@ -21,13 +21,11 @@ c = Ember.Object.extend({
     return this.all.slice(s, +e + 1 || 9e9);
   },
   pageFromRequest: function(request) {
-    var res;
-    res = request.url.match(/page\=(\d+)/);
-    if (res) {
-      return parseInt(res[1]);
-    } else {
-      return 1;
-    }
+    var q, res;
+    q = request.queryParams;
+    res = q ? q.page : 1;
+    res = res || 1;
+    return parseInt(res);
   },
   totalPages: function() {
     return parseInt((parseFloat(this.all.length) + 1.99) / 2.0);

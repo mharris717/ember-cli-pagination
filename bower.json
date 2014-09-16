@@ -13,6 +13,6 @@
     "ember-qunit-notifications": "0.0.4",
     "qunit": "~1.15.0",
     "underscore": "~1.6.0",
-    "pretender": "trek/pretender#0.0.5"
+    "pretender": "trek/pretender#0.2.0"
   }
 }

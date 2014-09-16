@@ -18,11 +18,10 @@ c = Ember.Object.extend
     @all[s..e]
 
   pageFromRequest: (request) ->
-    res = request.url.match(/page\=(\d+)/)
-    if res
-      parseInt(res[1])
-    else
-      1
+    q = request.queryParams
+    res = if q then q.page else 1
+    res = res || 1
+    parseInt(res)
 
   totalPages: ->
     parseInt((parseFloat(@all.length)+1.99)/2.0)
