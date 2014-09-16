@@ -55,3 +55,46 @@ export default Ember.Route.extend(PageRouteMixin, {
   }
 });
 ```
+
+### Rails Side
+
+```
+# Gemfile
+gem 'kaminari'
+```
+
+```
+# controller
+# I'm fairly sure you shouldn't need to set the meta manually, but for now that's what I'm doing.
+
+class TodosController < ApplicationController
+  def index
+    page = (params[:page] || 1).to_i
+    todos = Todo.page(page).per(10)
+    render json: todos, meta: {total_pages: todos.total_pages}
+  end
+end
+```
+
+
+### Testing
+
+We include some helpers to make testing pagination easier. 
+
+The helper used here is responseHash, in the context of a Pretender definition.
+
+It takes the request, all fixtures, and the model name, and returns the appropriate response (with meta tag).
+
+```
+`import Todo from '../../models/todo'`
+`import Helpers from 'ember-cli-pagination/test-helpers'`
+
+c = ->
+  server = new Pretender ->
+    @get "/todos", (request) ->
+      res = Helpers.responseHash(request,Todo.FIXTURES,'todo')
+      
+      [200, {"Content-Type": "application/json"}, JSON.stringify(res)]
+
+`export default c`
+```
