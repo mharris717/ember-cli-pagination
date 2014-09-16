@@ -9,5 +9,6 @@ table.table
       td= name
       td= input type="checkbox" checked=completed
 
+= page-numbers currentPage=page totalPages=totalPages
 
 button{action "save"} Save

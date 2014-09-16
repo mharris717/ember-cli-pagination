@@ -15,4 +15,4 @@ module 'Integration - Todo Index',
 
 test 'Should showo todos', ->
   visit("/todos").then ->
-    equal find(".todo").length,3
+    equal find(".todo").length,2

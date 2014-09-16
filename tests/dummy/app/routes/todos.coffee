@@ -3,7 +3,6 @@
 
 c = Ember.Route.extend PageRouteMixin,
   model: (params) ->
-    @store.find('todo')
-
+    @findPaged 'todo', params
 
 `export default c`
