@@ -1,5 +1,6 @@
 `import startApp from '../helpers/start-app'`
 `import pretenderServer from '../helpers/pretender-server'`
+`import Ember from 'ember'`
 
 App = null
 server = null
@@ -10,7 +11,7 @@ module 'Integration - Todo Index',
     server = pretenderServer()
 
   teardown: -> 
-    Em.run(App,'destroy')
+    Ember.run(App,'destroy')
     server.shutdown()
 
 test 'Should showo todos', ->

@@ -1,6 +1,7 @@
 `import startApp from '../helpers/start-app'`
 `import pretenderServer from '../helpers/pretender-server'`
 `import Todo from '../../models/todo'`
+`import Ember from 'ember'`
 
 App = null
 server = null
@@ -14,7 +15,7 @@ module 'Integration - Pagination',
 
   teardown: -> 
     # Expense.setAddlTempFixtures []
-    Em.run(App,'destroy')
+    Ember.run(App,'destroy')
     server.shutdown()
 
 todosTest = (name,f) ->
