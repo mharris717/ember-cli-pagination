@@ -27,8 +27,7 @@
     "ember-data": "1.0.0-beta.10",
     "express": "^4.8.5",
     "glob": "^4.0.5",
-    "ember-cli-bootstrap": "0.0.3",
-    "ember-cli-coffeescript": "0.0.5"
+    "ember-cli-bootstrap": "0.0.3"
   },
   "keywords": [
     "ember-addon"
