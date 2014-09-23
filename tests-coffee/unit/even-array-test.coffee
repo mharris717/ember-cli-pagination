@@ -26,32 +26,70 @@ FilteredObserver = Ember.Object.extend
     # do nothing
 
   arrayDidChange: (observedObj, start, removeCount, addCount) ->
-    for i in [start...(start+addCount)]
-      obj = observedObj[i]
-      if @get('parent').filterFunc(obj,i)
-        @get('parent').pushObject(obj)
+    if addCount > 0
+      res = []
+      for i in [start...(start+addCount)]
+        obj = observedObj[i]
+        if @get('parent').filterFunc(obj,i)
+          res.push(obj)
+      
+      if res.length > 0
+        @get('parent').pushObjects(res)
+    else
+      console.debug("#{observedObj} #{start} #{removeCount}")
+
+      i = 0
+      for origIndex in @get('parent.arrayAndIndexes').indexes
+        if origIndex == start
+          @get('parent').removeAt(i)
+        i += 1
 
 
 FilteredArray = Ember.Object.extend Ember.MutableArray,
   init: (ops) ->
     @get('all').addArrayObserver(FilteredObserver.create(parent: this))
 
-  "[]": (->
+  arrayAndIndexes: (->
     c = []
+    indexes = []
     i = 0
     for num in @get('all')
       if @filterFunc(num,i)
         c.push(num)
+        indexes.push(i)
       i += 1
-    Ember.A(c)).property()
+    {array: c, indexes: indexes}).property()
 
-  replace: (i,thing,objects) ->
-    for obj in objects
-      @get('[]').pushObject(obj)
-      @arrayContentDidChange(@get('[].length')-1,0,1)
+  "[]": (-> @get('arrayAndIndexes').array).property()
+
+  replace: (i,num_removed,objects) ->
+    console.debug("replace i: #{i} num_removed #{num_removed} objects: #{objects}")
+    if objects.length > 0
+      @get('[]').pushObjects(objects)
+      @arrayContentDidChange(@get('[].length')-objects.length,0,objects.length)
+    else
+      @arrayContentWillChange(i,num_removed,0)
+      n = num_removed
+      while n > 0
+        @get("[]").removeAt(i)
+        n -= 1
+
+      a = @get("[]")
+      console.debug "replace after #{a}"
+
+      @arrayContentDidChange(i,num_removed,0)
+
 
   objectAt: (i) ->
     @get('[]').objectAt(i)
+
+  removeAt: (i) ->
+    a = @get("[]")
+    console.debug "removeAt #{i} #{a}"
+    res = @._super(i)
+    a = @get("[]")
+    console.debug "after #{i} #{a}"
+    res
 
   lengthBinding: "[].length"
 
@@ -127,7 +165,7 @@ test 'filtered array with max size 2', ->
 
 test 'observer updates when multiple pushed at once', ->
   Ember.run -> nums.pushObjects([8,10])
-  equal observer.get('arrayDidChangeCount'),2
+  equal observer.get('arrayDidChangeCount'),1
 
 
 test 'make FilteredArray on the fly', ->
@@ -146,7 +184,17 @@ test 'make FilteredArray on the fly', ->
   equal observer.get('arrayDidChangeCount'),1
   equalArray even,[3,4,5,8]
 
+test 'forEach up to date after removal', ->
+  Ember.run -> nums.removeAt(1)
+  equalArray even,[4]
 
+test 'forEach up to date after removal of odd', ->
+  Ember.run -> nums.removeAt(2)
+  equalArray even,[2,4]
+
+test 'forEach up to date after removal of 4', ->
+  Ember.run -> nums.removeAt(3)
+  equalArray even,[2]
 
 
 PagedArray = Ember.Object.extend
