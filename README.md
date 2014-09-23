@@ -10,6 +10,10 @@ The page is passed to the backend via a "page" query parameter.
 
 ![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png)
 
+## NEXT TEN CALLERS ONLY!!!
+
+I'd be happy to help anyone who'd like to use Ember CLI Pagination in their application, so that people can start using it and I can get feedback. We can jump on Skype for an hour and get everything working. For now open up an issue if you'd like me to assist. 
+
 ## Adding to your application
 
 ### Install
