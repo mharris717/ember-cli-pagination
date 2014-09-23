@@ -5,12 +5,15 @@ observer = null
 nums = null
 even = null
 
-module 'Integration - Pagination', 
+module 'Integration - FilteredArray', 
   setup: ->
     observer = MyObserver.create()
     nums = Ember.A([1,2,3,4,5])
     even = EvenArray.create(all: nums)
+
+    console.debug "adding observer"
     even.addArrayObserver(observer)
+    console.debug "Added observer"
 
   tearDown: ->
     observer = null
@@ -20,33 +23,37 @@ module 'Integration - Pagination',
 
 FilteredObserver = Ember.Object.extend
   arrayWillChange: (observedObj, start, removeCount, addCount) ->
-    @parent.triggerObservers('arrayWillChange',observedObj, start, removeCount, addCount)
+    # do nothing
 
   arrayDidChange: (observedObj, start, removeCount, addCount) ->
     for i in [start...(start+addCount)]
       obj = observedObj[i]
-      if @parent.filterFunc(obj,i)
-        @parent.triggerObservers('arrayDidChange',observedObj, i, 0, 1)
+      if @get('parent').filterFunc(obj,i)
+        @get('parent').pushObject(obj)
 
 
-FilteredArray = Ember.Object.extend
-  observers: []
+FilteredArray = Ember.Object.extend Ember.MutableArray,
+  init: (ops) ->
+    @get('all').addArrayObserver(FilteredObserver.create(parent: this))
 
-  init: ->
-    @all.addArrayObserver(FilteredObserver.create(parent: this))
-
-  forEach: (f) ->
+  "[]": (->
+    c = []
     i = 0
-    for num in @all
+    for num in @get('all')
       if @filterFunc(num,i)
-        f(num)
+        c.push(num)
       i += 1
+    Ember.A(c)).property()
 
-  addArrayObserver: (target) ->
-    @observers.push(target)
+  replace: (i,thing,objects) ->
+    for obj in objects
+      @get('[]').pushObject(obj)
+      @arrayContentDidChange(@get('[].length')-1,0,1)
 
-  triggerObservers: (method, observedObj, start, removeCount, addCount) ->
-    @observers.forEach (o) -> o[method](observedObj, start, removeCount, addCount)
+  objectAt: (i) ->
+    @get('[]').objectAt(i)
+
+  lengthBinding: "[].length"
 
 EvenArray = FilteredArray.extend
   filterFunc: (num) -> num%2 == 0
@@ -80,60 +87,62 @@ test 'basic', ->
   equalArray even,[2,4]
 
 test 'forEach up to date when all changes', ->
-  nums.pushObject(8)
+  Ember.run -> nums.pushObject(8)
   equalArray even,[2,4,8]
 
 test 'observer of EvenArray is updated', ->
-  nums.pushObject(8)
-  equal observer.get('arrayDidChangeCount'),1
+  Ember.run -> nums.pushObject(8)
+  Ember.run -> equal observer.get('arrayDidChangeCount'),1
 
 test 'observer of EvenArray is not updated on odd', ->
-  nums.pushObject(9)
+  Ember.run -> nums.pushObject(9)
   equal observer.get('arrayDidChangeCount'),0
 
 test 'filtered array with max size', ->
-  observer = MyObserver.create()
-  nums = Ember.A([1,2,3,4,5])
-  even = FilteredArray.create(all: nums, filterFunc: (num,i) -> i <= 3)
-  even.addArrayObserver(observer)
+  Ember.run -> 
+    observer = MyObserver.create()
+    nums = Ember.A([1,2,3,4,5])
+    even = FilteredArray.create(all: nums, filterFunc: (num,i) -> i <= 3)
+    even.addArrayObserver(observer)
 
   equalArray even,[1,2,3,4]
 
-  nums.pushObject(9)
+  Ember.run -> nums.pushObject(9)
   equalArray even,[1,2,3,4]
 
 test 'filtered array with max size 2', ->
-  observer = MyObserver.create()
-  nums = Ember.A([1,2,3,4,5])
-  even = FilteredArray.create(all: nums, filterFunc: (num,i) -> i <= 5)
-  even.addArrayObserver(observer)
+  Ember.run -> 
+    observer = MyObserver.create()
+    nums = Ember.A([1,2,3,4,5])
+    even = FilteredArray.create(all: nums, filterFunc: (num,i) -> i <= 5)
+    even.addArrayObserver(observer)
 
   equalArray even,[1,2,3,4,5]
 
-  nums.pushObject(6)
+  Ember.run -> nums.pushObject(6)
   equal observer.get('arrayDidChangeCount'),1
 
-  nums.pushObject(7)
+  Ember.run -> nums.pushObject(7)
   equal observer.get('arrayDidChangeCount'),1
 
 test 'observer updates when multiple pushed at once', ->
-  nums.pushObjects([8,10])
+  Ember.run -> nums.pushObjects([8,10])
   equal observer.get('arrayDidChangeCount'),2
 
 
 test 'make FilteredArray on the fly', ->
-  observer = MyObserver.create()
-  nums = Ember.A([1,2,3,4,5])
-  even = FilteredArray.create(all: nums, filterFunc: (num) -> num >= 3)
-
-  even.addArrayObserver(observer)
+  Ember.run -> 
+    observer = MyObserver.create()
+    nums = Ember.A([1,2,3,4,5])
+    even = FilteredArray.create(all: nums, filterFunc: (num) -> num >= 3)
+    even.addArrayObserver(observer)
 
   equalArray even,[3,4,5]
 
-  nums.pushObject(-4)
+  Ember.run -> nums.pushObject(-4)
   equal observer.get('arrayDidChangeCount'),0
 
-  nums.pushObject(8)
+  Ember.run -> nums.pushObject(8)
   equal observer.get('arrayDidChangeCount'),1
   equalArray even,[3,4,5,8]
 
