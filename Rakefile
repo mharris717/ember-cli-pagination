@@ -75,7 +75,7 @@ end
 task :build_tests do
   #ec "coffee --no-header -b -c -o tests tests"
   TEST_FILES.each_with_index do |f,i|
-    if i <= 4
+    if i <= 9999
       if FileTest.exist?("#{f}.coffee")
         ec "coffee --no-header -b -c #{f}.coffee"
         FileUtils.rm "#{f}.coffee"
