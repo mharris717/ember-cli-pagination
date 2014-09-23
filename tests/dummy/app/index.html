@@ -14,13 +14,12 @@
   </head>
   <body>
     <script>
-      window.DummyENV = {{ENV}};
-      window.EmberENV = window.DummyENV.EmberENV;
+      window.EmberENV = {{EMBER_ENV}};
     </script>
     <script src="assets/vendor.js"></script>
     <script src="assets/dummy.js"></script>
     <script>
-      window.Dummy = require('dummy/app')['default'].create(DummyENV.APP);
+      window.Dummy = require('dummy/app')['default'].create({{APP_CONFIG}});
     </script>
   </body>
 </html>
