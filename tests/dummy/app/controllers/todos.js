@@ -1,8 +1,9 @@
 import Ember from 'ember';
-import PageControllerMixin from 'ember-cli-pagination/controller-mixin';
+import Factory from 'ember-cli-pagination/factory';
+import config from '../config/environment';
 var c;
 
-c = Ember.ArrayController.extend(PageControllerMixin, {
+c = Ember.ArrayController.extend(Factory.controllerMixin(config), {
   actions: {
     save: function() {
       return this.forEach(function(t) {
