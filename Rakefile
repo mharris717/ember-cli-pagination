@@ -13,15 +13,19 @@ class BuildJs
     end
   end
 
-  def build
-    ec "coffee -b -c -o addon addon-coffee"
-    ec "coffee -b -c -o app app-coffee"
+  def build(name)
+    ec "coffee -b -c -o #{name} #{name}-coffee"
+    #ec "coffee -b -c -o app app-coffee"
   end
 end
 
 namespace :build_js do
-  task :once do
-    BuildJs.new.build
+  task :app do
+    BuildJs.new.build(:app)
+  end
+
+  task :addon do
+    BuildJs.new.build(:addon)
   end
 
   task :loop do
@@ -45,12 +49,13 @@ TEST_FILES = ["tests/dummy/app/adapters/application", "tests/dummy/app/controlle
 
 task :copy_coffee_tests do
   root = File.dirname(__FILE__)
+  target_short = "tests_tmp"
   %w(js hbs json html xml txt css).each do |ext|
     Dir["#{root}/tests-coffee/**/*.#{ext}"].each do |file|
       dir = File.dirname(file)
       base = File.basename(file)
 
-      target_dir = dir.gsub("tests-coffee","tests")
+      target_dir = dir.gsub("tests-coffee",target_short)
       puts target_dir
       ec "mkdir -p #{target_dir}"
       FileUtils.cp file,"#{target_dir}/#{base}"
@@ -62,14 +67,18 @@ task :copy_coffee_tests do
       dir = File.dirname(file)
       base = File.basename(file)
 
-      target_dir = dir.gsub("tests-coffee","tests")
+      target_dir = dir.gsub("tests-coffee",target_short)
       puts target_dir
       ec "mkdir -p #{target_dir}"
       FileUtils.cp file,"#{target_dir}/#{base}"
     end
   end
 
-  ec "coffee --no-header -b -c -o tests tests-coffee"
+  ec "coffee --no-header -b -c -o #{target_short} tests-coffee"
+  if FileTest.exist?("#{root}/tests")
+    FileUtils.rm_r("#{root}/tests")
+  end
+  ec "mv tests_tmp tests"
 end
 
 task :build_tests do
@@ -96,3 +105,25 @@ task :print_coffee do
   end.each { |x| res << x }
   puts res.inspect
 end
+
+task :links do
+  root = File.expand_path(File.dirname(__FILE__))
+  %w(app tests addon).each do |name|
+    ec "ln -s #{root}/#{name}-coffee #{root}/coffee_stuff/#{name}-coffee"
+  end
+end
+
+task :guard do
+  root = File.expand_path(File.dirname(__FILE__))
+  dirs = %w(tests).map do |name|
+    "--watchdir #{root}/#{name}-coffee"
+  end.reverse.join(" ")
+  puts "guard #{dirs}"
+  exec "guard #{dirs}"
+end
+
+task "link_tests" do
+  root = File.expand_path(File.dirname(__FILE__))
+  ec "ln -s #{root}/tests-coffee #{root}/tests"
+end
+
