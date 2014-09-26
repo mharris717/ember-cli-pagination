@@ -7,7 +7,7 @@ c = PageControllerMixin = Ember.Mixin.create({
   page: "1",
   pageChanged: (function() {
     var p;
-    console.debug("page changed");
+    console.debug("page changedz");
     p = parseInt(this.get('page'));
     return this.store.find('todo', {
       page: p,
