@@ -4,7 +4,7 @@
 
 c = Ember.Route.extend Factory.routeMixin(config),
   model: (params) ->
-    console.debug "TodosRoute#model"
+    params.perPage = params.perPage || 2
     @findPaged 'todo', params
 
 `export default c`

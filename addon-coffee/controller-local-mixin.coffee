@@ -1,4 +1,5 @@
 `import Ember from 'ember'`
+`import Util from 'ember-cli-pagination/util'`
 
 c = PageControllerMixin = Ember.Mixin.create
   queryParams: ["page"]
@@ -7,13 +8,13 @@ c = PageControllerMixin = Ember.Mixin.create
   pageChanged: (->
     p = parseInt(@get('page'))
     allLength = @get("content.length")
-    hasSetPage = !!@get('content').setPage
-    console.debug "ControllerLocalMixin#pageChanged page #{p} allLength #{allLength} hasSetPage #{hasSetPage}"
+    hasSetPage = !!(@get('content') && @get('content').setPage)
+    Util.log "ControllerLocalMixin#pageChanged page #{p} allLength #{allLength} hasSetPage #{hasSetPage}"
 
     if hasSetPage
       @get('content').setPage p
     else
-      console.debug("ControllerLocalMixin#pageChanged can't set page")).observes("page")
+      Util.log("ControllerLocalMixin#pageChanged can't set page")).observes("page")
 
   totalPagesBinding: "content.totalPages"
 

@@ -1,4 +1,5 @@
 `import Ember from 'ember'`
+`import Util from 'ember-cli-pagination/util'`
 
 c = Ember.Component.extend
   currentPage: null
@@ -8,7 +9,7 @@ c = Ember.Component.extend
     currentPage = Number @get "currentPage"
     totalPages = Number @get "totalPages"
 
-    console.debug "PageNumbers#pageItems, currentPage #{currentPage}, totalPages #{totalPages}"
+    Util.log "PageNumbers#pageItems, currentPage #{currentPage}, totalPages #{totalPages}"
  
     for pageNumber in [1..totalPages]
       page: pageNumber
@@ -28,7 +29,7 @@ c = Ember.Component.extend
  
   actions:
     pageClicked: (number) ->
-      console.debug "PageNumbers#pageClicked number #{number}"
+      Util.log "PageNumbers#pageClicked number #{number}"
       @set "currentPage", number
 
     incrementPage: (num) ->

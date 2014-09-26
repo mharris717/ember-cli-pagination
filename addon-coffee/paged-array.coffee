@@ -1,7 +1,8 @@
 `import Ember from 'ember'`
+`import Util from 'ember-cli-pagination/util'`
 
 DivideIntoPages = Ember.Object.extend
-  perPage: 2
+  perPage: 10
 
   objsForPage: (page) ->
     perPage = @get('perPage')
@@ -17,7 +18,7 @@ DivideIntoPages = Ember.Object.extend
     res = parseInt(res)
     res = 0 if allLength == 0
 
-    console.debug "DivideIntoPages#totalPages, allLength #{allLength}, perPage #{perPage}, res #{res}"
+    Util.log "DivideIntoPages#totalPages, allLength #{allLength}, perPage #{perPage}, res #{res}"
 
     res
 
@@ -29,7 +30,7 @@ DivideIntoPages = Ember.Object.extend
 
 PagedArray = Ember.ArrayProxy.extend
   page: 1
-  perPage: 2
+  perPage: 10
 
   arrangedContent: (->
     page = @get('page')
@@ -40,7 +41,7 @@ PagedArray = Ember.ArrayProxy.extend
     DivideIntoPages.create(perPage: @get('perPage'), all: @get('content')).totalPages()).property("content.@each","perPage")
 
   setPage: (page) ->
-    console.debug "setPage #{page}"
+    Util.log "setPage #{page}"
     @set 'page', page
 
 `export default PagedArray`

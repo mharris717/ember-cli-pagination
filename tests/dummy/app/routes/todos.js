@@ -5,7 +5,7 @@ var c;
 
 c = Ember.Route.extend(Factory.routeMixin(config), {
   model: function(params) {
-    console.debug("TodosRoute#model");
+    params.perPage = params.perPage || 2;
     return this.findPaged('todo', params);
   }
 });

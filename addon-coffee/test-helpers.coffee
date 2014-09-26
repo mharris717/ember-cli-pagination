@@ -14,7 +14,6 @@ c = Ember.Object.extend
   objsForPage: (page) ->
     s= (page-1)*2
     e = s+1
-    # console.debug "getting #{s} to #{e}"
     @all[s..e]
 
   pageFromRequest: (request) ->

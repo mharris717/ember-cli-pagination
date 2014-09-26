@@ -28,6 +28,12 @@ namespace :build_js do
     BuildJs.new.build(:addon)
   end
 
+  task :tests do
+    build_tests
+  end
+
+  task all: [:app,:addon,:tests]
+
   task :loop do
     loop do
       BuildJs.new.build
@@ -36,9 +42,12 @@ namespace :build_js do
   end
 end
 
+task test: ["build_js:all"] do
+  exec "ember test"
+end
+
 task :readme do
   loop do
-    
     res = GitHub::Markup.render('README.md', File.read("README.md"))
     File.create "README.html",res
     sleep 0.5
@@ -47,7 +56,7 @@ end
 
 TEST_FILES = ["tests/dummy/app/adapters/application", "tests/dummy/app/controllers/todos", "tests/dummy/app/models/todo", "tests/dummy/app/routes/todos", "tests/helpers/pretender-server", "tests/integration/index-test", "tests/integration/pagination-test"]
 
-task :copy_coffee_tests do
+def build_tests
   root = File.dirname(__FILE__)
   target_short = "tests_tmp"
   %w(js hbs json html xml txt css).each do |ext|
@@ -81,7 +90,7 @@ task :copy_coffee_tests do
   ec "mv tests_tmp tests"
 end
 
-task :build_tests do
+task :build_tests_bad do
   #ec "coffee --no-header -b -c -o tests tests"
   TEST_FILES.each_with_index do |f,i|
     if i <= 9999
