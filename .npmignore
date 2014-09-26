@@ -4,3 +4,6 @@ node_modules
 screenshots
 tmp
 tests
+app-coffee
+tests-coffee
+addon-coffee
