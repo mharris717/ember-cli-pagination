@@ -9,6 +9,7 @@ c = Ember.Component.extend({
     var currentPage, pageNumber, totalPages, _i, _results;
     currentPage = Number(this.get("currentPage"));
     totalPages = Number(this.get("totalPages"));
+    console.debug("PageNumbers#pageItems, currentPage " + currentPage + ", totalPages " + totalPages);
     _results = [];
     for (pageNumber = _i = 1; 1 <= totalPages ? _i <= totalPages : _i >= totalPages; pageNumber = 1 <= totalPages ? ++_i : --_i) {
       _results.push({
@@ -31,11 +32,10 @@ c = Ember.Component.extend({
   }).property("currentPage"),
   actions: {
     pageClicked: function(number) {
-      console.debug("pageClicked");
+      console.debug("PageNumbers#pageClicked number " + number);
       return this.set("currentPage", number);
     },
     incrementPage: function(num) {
-      console.debug("incrementPage " + num);
       return this.incrementProperty('currentPage', num);
     }
   }

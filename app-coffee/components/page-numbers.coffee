@@ -7,6 +7,8 @@ c = Ember.Component.extend
   pageItems: (->
     currentPage = Number @get "currentPage"
     totalPages = Number @get "totalPages"
+
+    console.debug "PageNumbers#pageItems, currentPage #{currentPage}, totalPages #{totalPages}"
  
     for pageNumber in [1..totalPages]
       page: pageNumber
@@ -26,11 +28,10 @@ c = Ember.Component.extend
  
   actions:
     pageClicked: (number) ->
-      console.debug "pageClicked"
+      console.debug "PageNumbers#pageClicked number #{number}"
       @set "currentPage", number
 
     incrementPage: (num) ->
-      console.debug "incrementPage #{num}"
       @incrementProperty 'currentPage',num
 
 `export default c`
