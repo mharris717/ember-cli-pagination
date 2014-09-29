@@ -8,22 +8,13 @@ c = PageControllerMixin = Ember.Mixin.create({
   page: "1",
   pageChanged: (function() {
     var p;
-    Util.log("page changed");
+    Util.log("PageControllerMixin#pageChanged");
     p = parseInt(this.get('page'));
-    return this.store.find('todo', {
-      page: p,
-      randInd: Math.random()
-    }).then((function(_this) {
-      return function(res) {
-        var l;
-        l = res.get('length');
-        Util.log("setting content length " + l);
-        return _this.set('content', res);
-      };
-    })(this));
+    if (this.get('content') && this.get('content').setPage) {
+      return this.get('content').setPage(p);
+    }
   }).observes('page'),
-  pageMetaBinding: "content.meta",
-  totalPagesBinding: "pageMeta.total_pages"
+  totalPagesBinding: "content.totalPages"
 });
 
 export default c;

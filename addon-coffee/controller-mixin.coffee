@@ -5,15 +5,13 @@ c = PageControllerMixin = Ember.Mixin.create
   queryParams: ["page"]
   page: "1"
 
-  pageChanged: (-> 
-    Util.log "page changed"
+  pageChanged: (->
+    Util.log "PageControllerMixin#pageChanged"
     p = parseInt(@get('page'))
-    @store.find('todo', page: p, randInd: Math.random()).then (res) =>
-      l = res.get('length')
-      Util.log "setting content length #{l}"
-      @set 'content',res).observes('page')
 
-  pageMetaBinding: "content.meta"
-  totalPagesBinding: "pageMeta.total_pages"
+    if @get('content') && @get('content').setPage
+      @get('content').setPage p).observes('page')
+
+  totalPagesBinding: "content.totalPages"
 
 `export default c`
