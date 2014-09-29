@@ -5,16 +5,20 @@ var PagedRemoteArray, c;
 
 PagedRemoteArray = Ember.ArrayProxy.extend({
   page: 1,
-  perPage: 10,
   fetchContent: function() {
-    var modelName, page, res, store;
+    var modelName, ops, page, perPage, res, store;
     Util.log("PagedRemoteArray#fetchContent");
     page = parseInt(this.get('page') || 1);
+    perPage = parseInt(this.get('perPage'));
     store = this.get('store');
     modelName = this.get('modelName');
-    res = store.find(modelName, {
+    ops = {
       page: page
-    });
+    };
+    if (perPage) {
+      ops.per_page = perPage;
+    }
+    res = store.find(modelName, ops);
     res.then((function(_this) {
       return function(rows) {
         Util.log("PagedRemoteArray#fetchContent in res.then " + rows);
@@ -36,6 +40,7 @@ c = Ember.Mixin.create({
   findPaged: function(name, params) {
     return PagedRemoteArray.create({
       page: params.page,
+      perPage: params.perPage,
       modelName: name,
       store: this.store
     });
