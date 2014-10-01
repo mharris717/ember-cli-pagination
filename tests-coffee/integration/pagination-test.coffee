@@ -55,9 +55,6 @@ todosTest "clicking page 2", ->
     hasTodos 1
     hasActivePage 2
 
-todosTest "next button - proper buttons visible", ->
-  hasActivePage 1
-
 todosTest "click next", ->
   clickPage "next"
 

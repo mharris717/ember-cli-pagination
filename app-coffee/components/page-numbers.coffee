@@ -36,9 +36,8 @@ c = Ember.Component.extend
       currentPage = Number(@get("currentPage"))
       totalPages = Number(@get("totalPages"))
 
-      return false  if currentPage is totalPages
-      return false  if currentPage <= 1
-
+      return false  if currentPage is totalPages and num is 1
+      return false  if currentPage <= 1 and num is -1
       @incrementProperty 'currentPage',num
 
 `export default c`
