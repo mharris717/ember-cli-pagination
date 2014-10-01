@@ -37,17 +37,6 @@ Ember.Test.registerAsyncHelper('hasActivePage', function(app, num, context) {
   });
 });
 
-hasButtons = function(ops) {
-  var length, name, present, _results;
-  _results = [];
-  for (name in ops) {
-    present = ops[name];
-    length = present ? 1 : 0;
-    _results.push(equal(find(".pagination ." + name).length, length));
-  }
-  return _results;
-};
-
 hasTodos = function(l) {
   return equal(find("table tr.todo").length, l);
 };
@@ -57,10 +46,12 @@ hasPages = function(l) {
 };
 
 clickPage = function(i) {
-  if (i === "prev" || i === "next") {
-    return click(".pagination ." + i + " a");
+  if(i === "prev") {
+    return click("li.prev a");
+  } else if(i === "next") {
+    return click("li.next a");
   } else {
-    return click(".pagination li:eq(" + (i - 1) + ") a");
+    return click(".pagination li:eq(" + i + ") a");
   }
 };
 
@@ -81,21 +72,10 @@ todosTest("clicking page 2", function() {
   });
 });
 
-todosTest("next button - proper buttons visible", function() {
-  hasActivePage(1);
-  return hasButtons({
-    prev: false,
-    next: true
-  });
-});
 
 todosTest("click next", function() {
   clickPage("next");
   return andThen(function() {
-    hasButtons({
-      prev: true,
-      next: false
-    });
     hasTodos(1);
     return hasActivePage(2);
   });
@@ -107,10 +87,6 @@ todosTest("click prev", function() {
     return clickPage("prev");
   });
   return andThen(function() {
-    hasButtons({
-      prev: false,
-      next: true
-    });
     hasTodos(2);
     return hasActivePage(1);
   });

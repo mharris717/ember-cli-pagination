@@ -40,8 +40,8 @@ c = Ember.Component.extend({
       var currentPage = Number(this.get("currentPage")),
           totalPages = Number(this.get("totalPages"));
 
-      if(currentPage === totalPages){ return false; }
-      if(currentPage <= 1) { return false; }
+      if(currentPage === totalPages && num === 1){ return false; }
+      if(currentPage <= 1 && num === -1) { return false; }
       return this.incrementProperty('currentPage', num);
     }
   }
