@@ -46,10 +46,8 @@ hasPages = function(l) {
 };
 
 clickPage = function(i) {
-  if(i === "prev") {
-    return click("li.prev a");
-  } else if(i === "next") {
-    return click("li.next a");
+  if(i === "prev" || i === "next") {
+    return click(".pagination li." + i + " a");
   } else {
     return click(".pagination li:eq(" + i + ") a");
   }
