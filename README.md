@@ -2,37 +2,103 @@
 
 [![Build Status](https://travis-ci.org/mharris717/ember-cli-pagination.svg?branch=master)](https://travis-ci.org/mharris717/ember-cli-pagination)
 
-Addon for Ember CLI to do simple pagination. Compatible with the kaminari API in Rails
-
-The current page is represented in Ember by the "page" query parameter
-
-The page is passed to the backend via a "page" query parameter.
+Simple pagination addon for your Ember CLI app.
 
 ![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png)
 
-## NEXT TEN CALLERS ONLY!!!
+Features: 
 
-I'd be happy to help anyone who'd like to use Ember CLI Pagination in their application, so that people can start using it and I can get feedback. We can jump on Skype for an hour and get everything working. For now open up an issue if you'd like me to assist. 
+ - Default pagination template - but you can write your own
+ - Current page bound to the `page` query param
+ - Compatible with the Kaminari API Rails gem
 
-## Adding to your application
+**Questions?**
 
-### Install
+This is a new project, but several people are already using it successfully. If you have any trouble, open an issue, and you should get help quickly.
+
+## Requirements
+
+- ember-cli 0.44 or higher
+
+## Installation
 
 ```
 npm install ember-cli-pagination --save-dev
 ```
 
-### Component
+## Usage
 
-There's a page-numbers component with two properties, currentPage and totalPages
+`ember-cli-pagination` can paginate an array of models backed by an `ArrayController`. Let's say you have a `PostsRoute` whose `model` hook looks something like this
+
+```js
+model: function() {
+  return this.store.find('post');
+}
+```
+
+This returns 1,000 posts, too many to show at once. You'd like to paginate the results.
+
+### Route Mixin
+
+First, add the Route Mixin. This Mixin adds a `findPaged(modelName, params)` method to your route, which will
+return a `PagedArray`:
+
+```javascript
+// routes/posts.js
+import PageFactory from 'ember-cli-pagination/factory';
+import config from '../config/environment';
+
+export default Ember.Route.extend(PageFactory.routeMixin(config), {
+  model: function(params) {
+    return this.findPaged('post', params);
+  }
+});
+```
+
+> Note: be sure to pass the `params`, even if you're not using them currently
+
+### Controller Mixin
+
+Next, add the Controller Mixin. This mixin does several things:  
+
+ - Adds a `page` query param
+ - Sets the default page to `1`
+ - Adds a `pageChanged` method that observes the `page` property
+
+```javascript
+// controllers/posts.js
+import PageFactory from 'ember-cli-pagination/factory';
+import config from '../config/environment';
+
+export default Ember.ArrayController.extend(PageFactory.controllerMixin(config), {
+  // your controller code...
+});
+```
+
+### Page-Numbers Component
+
+With the `PagedArray` backing your mixed-in controller, you can now use the `page-numbers`
+component in your template:
 
 ```handlebars
-// your template
+{{!-- templates/posts.hbs --}}
+{{#each post in controller}}
+  <p>{{post.title}}<p>
+{{/each}}
+
 {{page-numbers currentPage=page totalPages=totalPages}}
 ```
 
-To override the page-numbers template, make your own template in your app at app/templates/components/page-numbers.hbs
+The default template for `page-numbers` will render, and the pagination interface will control
+which page of models renders in the `each` code block.
 
+You can also create a custom template for the `page-numbers` component. Create your new template here
+
+```
+app/templates/components/page-numbers.hbs
+```
+
+and use [the default template](https://github.com/mharris717/ember-cli-pagination/blob/master/app/templates/components/page-numbers.hbs) as an guide. You'll want to use the `currentPage` and `totalPages` variables passed in from your controller.
 
 ### Setting Pagination Type
 
@@ -51,39 +117,7 @@ module.exports = function(environment) {
 ```
 
 
-### Controller Mixin
-
-* Adds a "page" query param
-* Sets the default page to 1
-* Adds a pageChanged method that observes the page property
-
-```javascript
-// controller
-import PageFactory from 'ember-cli-pagination/factory';
-import config from '../config/environment';
-
-export default Ember.ArrayController.extend(PageFactory.controllerMixin(config), {
-  // your controller code...
-});
-```
-
-### Route Mixin
-
-Adds a findPaged(modelName,params) method, which returns a PagedArray.
-
-```javascript
-// route
-import PageFactory from 'ember-cli-pagination/factory';
-import config from '../config/environment';
-
-export default Ember.Route.extend(PageFactory.routeMixin(config), {
-  model: function(params) {
-    return this.findPaged('model-name',params);
-  }
-});
-```
-
-### Rails Side
+### Using Kaminari in Rails
 
 ```ruby
 # Gemfile
