@@ -89,3 +89,32 @@ todosTest("click prev", function() {
     return hasActivePage(1);
   });
 });
+
+todosTest("click next on last page and not increment", function() {
+  clickPage(2);
+  andThen(function() {
+    return clickPage("next");
+  });
+  andThen(function() {
+    return clickPage("next");
+  });
+  return andThen(function() {
+    hasTodos(1);
+    equal(currentURL(), "/todos?page=2");
+    notEqual(currentURL(), "/todos?page=3");
+    return hasActivePage(2);
+  });
+});
+
+todosTest("click prev on first page and not decrement", function() {
+  clickPage("prev");
+  andThen(function() {
+    return clickPage("prev");
+  });
+  return andThen(function() {
+    hasTodos(2);
+    equal(currentURL(), "/todos");
+    notEqual(currentURL(), "/todos?page=-1");
+    return hasActivePage(1);
+  });
+});

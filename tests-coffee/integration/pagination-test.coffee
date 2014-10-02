@@ -70,3 +70,29 @@ todosTest "click prev", ->
   andThen ->
     hasTodos 2
     hasActivePage 1
+
+todosTest "click next on last page and not increment", ->
+  clickPage 2
+  andThen ->
+    clickPage "next"
+
+  andThen ->
+    clickPage "next"
+
+  andThen ->
+    hasTodos 1
+    equal currentURL(), "/todos?page=2"
+    notEqual currentURL(), "/todos?page=3"
+    hasActivePage 2
+
+todosTest "click prev on first page and not decrement", ->
+  clickPage "prev"
+  andThen ->
+    clickPage "prev"
+
+  andThen ->
+    hasTodos 2
+    equal currentURL(), "/todos"
+    notEqual currentURL(), "/todos?page=-1"
+    hasActivePage 1
+
