@@ -7,9 +7,21 @@ import PageRouteLocalMixin from 'ember-cli-pagination/route-local-mixin';
 var Factory;
 
 Factory = Ember.Object.extend({
+  paginationTypeInner: function() {
+    var ops, res;
+    res = this.get('config').paginationType;
+    if (res) {
+      return res;
+    }
+    ops = this.get('config').pagination;
+    if (ops) {
+      return ops.type;
+    }
+    return null;
+  },
   paginationType: function() {
     var res;
-    res = this.get('config').paginationType;
+    res = this.paginationTypeInner();
     if (!(res === "local" || res === "remote")) {
       throw "unknown pagination type";
     }
