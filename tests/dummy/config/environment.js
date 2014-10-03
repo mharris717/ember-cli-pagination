@@ -18,7 +18,10 @@ module.exports = function(environment) {
       // when it is created
     },
 
-    paginationType: "remote"
+    pagination: {
+      type: "remote",
+      perPage: 10
+    }
   };
 
   if (environment === 'development') {
@@ -39,6 +42,8 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+
+    ENV.pagination.perPage = 2;
   }
 
   if (environment === 'production') {

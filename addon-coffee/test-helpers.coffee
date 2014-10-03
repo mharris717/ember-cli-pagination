@@ -12,18 +12,24 @@ c = Ember.Object.extend
     res
 
   objsForPage: (page) ->
-    s= (page-1)*2
+    perPage = @perPageFromRequest(@request)
+    s= (page-1)*perPage
     e = s+1
     @all[s..e]
 
   pageFromRequest: (request) ->
-    q = request.queryParams
-    res = if q then q.page else 1
-    res = res || 1
+    res = request.queryParams.page || 1
+    parseInt(res)
+
+  perPageFromRequest: (request) ->
+    res = request.queryParams.per_page || 10
+    console.debug "perPage: #{res}"
+    console.debug request.queryParams
     parseInt(res)
 
   totalPages: ->
-    parseInt((parseFloat(@all.length)+1.99)/2.0)
+    perPage = @perPageFromRequest(@request)
+    parseInt((parseFloat(@all.length)+parseFloat(perPage)-0.01)/parseFloat(perPage))
 
 c.reopenClass
   responseHash: (request,all,name) ->

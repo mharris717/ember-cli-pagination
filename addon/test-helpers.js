@@ -15,20 +15,28 @@ c = Ember.Object.extend({
     return res;
   },
   objsForPage: function(page) {
-    var e, s;
-    s = (page - 1) * 2;
+    var e, perPage, s;
+    perPage = this.perPageFromRequest(this.request);
+    s = (page - 1) * perPage;
     e = s + 1;
     return this.all.slice(s, +e + 1 || 9e9);
   },
   pageFromRequest: function(request) {
-    var q, res;
-    q = request.queryParams;
-    res = q ? q.page : 1;
-    res = res || 1;
+    var res;
+    res = request.queryParams.page || 1;
+    return parseInt(res);
+  },
+  perPageFromRequest: function(request) {
+    var res;
+    res = request.queryParams.per_page || 10;
+    console.debug("perPage: " + res);
+    console.debug(request.queryParams);
     return parseInt(res);
   },
   totalPages: function() {
-    return parseInt((parseFloat(this.all.length) + 1.99) / 2.0);
+    var perPage;
+    perPage = this.perPageFromRequest(this.request);
+    return parseInt((parseFloat(this.all.length) + parseFloat(perPage) - 0.01) / parseFloat(perPage));
   }
 });
 

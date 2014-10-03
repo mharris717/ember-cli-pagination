@@ -2,7 +2,7 @@
 `import Util from 'ember-cli-pagination/util'`
 
 c = PageControllerMixin = Ember.Mixin.create
-  queryParams: ["page"]
+  queryParams: ["page", "perPage"]
   page: "1"
 
   pageChanged: (->
