@@ -18,7 +18,7 @@ This is a new project, but several people are already using it successfully. If 
 
 ## Requirements
 
-- ember-cli 0.44 or higher
+- ember-cli 0.0.39 or higher
 
 ## Installation
 
