@@ -100,22 +100,43 @@ app/templates/components/page-numbers.hbs
 
 and use [the default template](https://github.com/mharris717/ember-cli-pagination/blob/master/app/templates/components/page-numbers.hbs) as an guide. You'll want to use the `currentPage` and `totalPages` variables passed in from your controller.
 
-### Setting Pagination Type
+### Pagination Types
 
 There are two types of pagination: Local and Remote.
 
-* Local - All records are loaded at the start, or are already present client-side. 
-* Remote - Only records for the current page are loaded client-side. New records are loaded when the page changes.
+* `Local` - All records are loaded at the start, or are already present client-side. 
+* `Remote` - Only records for the current page are loaded client-side. New records are loaded when the page changes.
 
-Set your pagination type in your environment.js file. It must be either "local" or "remote"
+How to set your pagination type is covered in [Setting Configuration Values](#setting-configuration-values)
+
+##### Cases for `Local` Pagination:
+
+* All records are stored in a local database (PouchDB, localState, etc).
+* You are using the FixtureAdapter.
+* You are querying a backend for records (possible with ActiveModelAdapter), but it does not support pagination, meaning it will return all records. 
+
+##### Cases for `Remote` Pagination:
+
+* You are querying a backend that supports pagination. A backend Rails app with Kaminari would fit here.
+* You are using an Ember Data adapter that mimics a pagination-supporting backend by implementing findQuery. 
+
+### Setting Configuration Values
+
+Set your pagination type in your environment.js file. It must be either `local` or `remote`
+
+You may also set a default perPage value here, although it is not required.
 
 ```javascript
 module.exports = function(environment) {
   var ENV = {
-    paginationType: "remote", 
+    pagination: {
+      type: "remote",
+      perPage: 10
+    }
     // ....
 ```
 
+The old method of setting paginationType (instead of a nested pagination.type) still works for now.
 
 ### Using Kaminari in Rails
 
