@@ -33,14 +33,14 @@
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
 
+    <script>
+      window.EmberENV = {{EMBER_ENV}};
+    </script>
     <script src="assets/vendor.js"></script>
     <script src="assets/test-support.js"></script>
     <script src="assets/ember-cli-update.js"></script>
     <script src="testem.js"></script>
     <script>
-      window.EmberCliUpdateENV = require('ember-cli-update/config/environment')['default'];
-      window.EmberENV = window.EmberCliUpdateENV.EmberENV;
-
       require('ember-cli-update/tests/test-helper');
     </script>
     <script src="assets/test-loader.js"></script>
