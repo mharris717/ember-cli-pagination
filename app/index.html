@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EmberCliUpdate</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{BASE_TAG}}
+
+    <link rel="stylesheet" href="assets/vendor.css">
+    <link rel="stylesheet" href="assets/ember-cli-update.css">
+  </head>
+  <body>
+    <script src="assets/vendor.js"></script>
+    <script src="assets/ember-cli-update.js"></script>
+    <script>
+      window.EmberCliUpdateENV = require('ember-cli-update/config/environment')['default'];
+      window.EmberENV = window.EmberCliUpdateENV.EmberENV;
+      window.EmberCliUpdate = require('ember-cli-update/app')['default'].create(EmberCliUpdateENV.APP);
+    </script>
+  </body>
+</html>
