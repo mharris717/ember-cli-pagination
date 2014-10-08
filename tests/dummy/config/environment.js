@@ -43,7 +43,7 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
 
-    ENV.pagination.perPage = 2;
+    ENV.pagination.perPage = 10;
   }
 
   if (environment === 'production') {

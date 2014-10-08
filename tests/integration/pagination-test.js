@@ -59,7 +59,7 @@ var clickPage = function(i) {
 
 todosTest("page links", function() {
   equal(find(".pagination").length, 1);
-  hasPages(2);
+  hasPages(4);
 });
 
 todosTest("first page is active at start", function() {
@@ -69,8 +69,21 @@ todosTest("first page is active at start", function() {
 todosTest("clicking page 2", function() {
   clickPage(2);
   andThen(function() {
-    hasTodos(1);
+    hasTodos(10);
     hasActivePage(2);
+  });
+});
+
+todosTest("clicking page 4", function() {
+  clickPage(4);
+  andThen(function() {
+    hasTodos(3);
+    hasActivePage(4);
+
+    hasButtons({
+      prev: true,
+      next: false
+    });
   });
 });
 
@@ -87,9 +100,9 @@ todosTest("click next", function() {
   andThen(function() {
     hasButtons({
       prev: true,
-      next: false
+      next: true
     });
-    hasTodos(1);
+    hasTodos(10);
     hasActivePage(2);
   });
 });
@@ -104,7 +117,7 @@ todosTest("click prev", function() {
       prev: false,
       next: true
     });
-    hasTodos(2);
+    hasTodos(10);
     hasActivePage(1);
   });
 });

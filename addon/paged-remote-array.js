@@ -1,13 +1,26 @@
 import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
 
-export default Ember.ArrayProxy.extend({
+var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
+  then: function(f) {
+    var promise = this.get('promise');
+    var me = this;
+
+    promise.then(function() {
+      f(me);
+    });
+  }
+});
+
+export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
   page: 1,
 
-  fetchContent: function() {
-    Util.log("PagedRemoteArray#fetchContent");
+  init: function() {
+    this.set('promise', this.fetchContent());
+  },
 
-    var page = parseInt(this.get('page'));
+  fetchContent: function() {
+    var page = parseInt(this.get('page') || 1);
     var perPage = parseInt(this.get('perPage'));
     var store = this.get('store');
     var modelName = this.get('modelName');
@@ -28,13 +41,10 @@ export default Ember.ArrayProxy.extend({
     return res;
   },
 
-  content: (function() {
-    return this.fetchContent();
-  }).property("page"),
-
   totalPagesBinding: "meta.total_pages",
 
   setPage: function(page) {
     this.set('page', page);
+    this.set('promise', this.fetchContent());
   }
 });

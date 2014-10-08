@@ -2,22 +2,19 @@ import Todo from '../../models/todo';
 import Helpers from 'ember-cli-pagination/test-helpers';
 import Factory from 'ember-cli-pagination/factory';
 import config from '../../config/environment';
-var c, todos;
 
-todos = function() {
+var todos = function() {
   return Todo.FIXTURES;
 };
 
-c = function() {
-  var server;
-  return server = new Pretender(function() {
+export default function() {
+  return new Pretender(function() {
     return this.get("/todos", function(request) {
-      var paginationType, res;
       request.queryParams.per_page = request.queryParams.per_page || (config.pagination || {}).perPage;
-      paginationType = Factory.create({
-        config: config
-      }).paginationType();
-      res = (function() {
+
+      var paginationType = Factory.create({config: config}).paginationType();
+
+      var getRes = function() {
         if (paginationType === "local") {
           return {
             todos: todos()
@@ -27,14 +24,8 @@ c = function() {
         } else {
           throw "unknown pagination type";
         }
-      })();
-      return [
-        200, {
-          "Content-Type": "application/json"
-        }, JSON.stringify(res)
-      ];
+      };
+      return [200, {"Content-Type": "application/json"}, JSON.stringify(getRes())];
     });
   });
-};
-
-export default c;
+}

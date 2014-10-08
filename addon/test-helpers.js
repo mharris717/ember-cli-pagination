@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import DivideIntoPages from './divide-into-pages';
 
 var TestHelpers = Ember.Object.extend({
   responseHash: function() {
@@ -12,11 +13,13 @@ var TestHelpers = Ember.Object.extend({
     return res;
   },
 
-  objsForPage: function(page) {
+  divideObj: function() {
     var perPage = this.perPageFromRequest(this.request);
-    var s = (page - 1) * perPage;
-    var e = s + 1;
-    return this.all.slice(s,e+1);
+    return DivideIntoPages.create({perPage: perPage, all: this.all});
+  },
+
+  objsForPage: function(page) {
+    return this.divideObj().objsForPage(page);
   },
 
   pageFromRequest: function(request) {
@@ -28,9 +31,9 @@ var TestHelpers = Ember.Object.extend({
     var res = request.queryParams.per_page;
     return parseInt(res);
   },
+
   totalPages: function() {
-    var perPage = this.perPageFromRequest(this.request);
-    return parseInt((parseFloat(this.all.length) + parseFloat(perPage) - 0.01) / parseFloat(perPage));
+    return this.divideObj().totalPages();
   }
 });
 
