@@ -19,7 +19,7 @@ module.exports = function(environment) {
     },
 
     pagination: {
-      type: "remote",
+      type: "local",
       perPage: 10
     }
   };
