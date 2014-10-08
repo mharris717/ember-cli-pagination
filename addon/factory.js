@@ -1,8 +1,8 @@
 import Ember from 'ember';
-import PageControllerMixin from 'ember-cli-pagination/controller-mixin';
-import PageControllerLocalMixin from 'ember-cli-pagination/controller-local-mixin';
-import PageRouteMixin from 'ember-cli-pagination/route-mixin';
-import PageRouteLocalMixin from 'ember-cli-pagination/route-local-mixin';
+import PageControllerMixin from 'ember-cli-pagination/remote/controller-mixin';
+import PageControllerLocalMixin from 'ember-cli-pagination/local/controller-local-mixin';
+import PageRouteMixin from 'ember-cli-pagination/remote/route-mixin';
+import PageRouteLocalMixin from 'ember-cli-pagination/local/route-local-mixin';
 
 var Factory = Ember.Object.extend({
   paginationTypeInner: function() {

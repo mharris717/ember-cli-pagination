@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import PagedArray from 'ember-cli-pagination/paged-array';
+import PagedArray from 'ember-cli-pagination/local/paged-array';
 import Util from 'ember-cli-pagination/util';
 
 export default Ember.Mixin.create({

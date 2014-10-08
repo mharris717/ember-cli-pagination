@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import Util from './util';
-import DivideIntoPages from './divide-into-pages';
+import Util from 'ember-cli-pagination/util';
+import DivideIntoPages from 'ember-cli-pagination/divide-into-pages';
 
 export default Ember.ArrayProxy.extend({
   page: 1,
