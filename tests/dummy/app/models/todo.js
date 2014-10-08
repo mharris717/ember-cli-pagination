@@ -1,7 +1,6 @@
 import DS from 'ember-data';
-var Todo;
 
-Todo = DS.Model.extend({
+var Todo = DS.Model.extend({
   name: DS.attr('string'),
   completed: DS.attr('boolean')
 });

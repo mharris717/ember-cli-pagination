@@ -1,25 +1,23 @@
 import startApp from '../helpers/start-app';
 import pretenderServer from '../helpers/pretender-server';
 import Ember from 'ember';
-var App, server;
 
-App = null;
-
-server = null;
+var App = null;
+var server = null;
 
 module('Integration - Todo Index', {
   setup: function() {
     App = startApp();
-    return server = pretenderServer();
+    server = pretenderServer();
   },
   teardown: function() {
     Ember.run(App, 'destroy');
-    return server.shutdown();
+    server.shutdown();
   }
 });
 
 test('Should showo todos', function() {
-  return visit("/todos").then(function() {
-    return equal(find(".todo").length, 2);
+  visit("/todos").then(function() {
+    equal(find(".todo").length, 2);
   });
 });
