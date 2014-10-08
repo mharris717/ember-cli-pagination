@@ -16,16 +16,16 @@ var TestHelpers = Ember.Object.extend({
     var perPage = this.perPageFromRequest(this.request);
     var s = (page - 1) * perPage;
     var e = s + 1;
-    return this.all.slice(s, +e + 1);
+    return this.all.slice(s,e+1);
   },
 
   pageFromRequest: function(request) {
-    var res = request.queryParams.page || 1;
+    var res = request.queryParams.page;
     return parseInt(res);
   },
 
   perPageFromRequest: function(request) {
-    var res = request.queryParams.per_page || 10;
+    var res = request.queryParams.per_page;
     return parseInt(res);
   },
   totalPages: function() {

@@ -7,7 +7,7 @@ export default Ember.ArrayProxy.extend({
   fetchContent: function() {
     Util.log("PagedRemoteArray#fetchContent");
 
-    var page = parseInt(this.get('page') || 1);
+    var page = parseInt(this.get('page'));
     var perPage = parseInt(this.get('perPage'));
     var store = this.get('store');
     var modelName = this.get('modelName');
