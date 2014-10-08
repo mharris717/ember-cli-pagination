@@ -1,7 +1,11 @@
 <div class="pagination-centered">
   <ul class="pagination">
     {{#if canStepBackward}}
-      <li class="arrow prev">
+      <li class="arrow prev enabled-arrow">
+        <a {{action "incrementPage" -1}}>&laquo;</a>
+      </li>
+    {{else}}
+      <li class="arrow prev disabled">
         <a {{action "incrementPage" -1}}>&laquo;</a>
       </li>
     {{/if}}
@@ -19,7 +23,11 @@
     {{/each}}
 
     {{#if canStepForward}}
-      <li class="arrow next">
+      <li class="arrow next enabled-arrow">
+        <a {{action "incrementPage" 1}}>&raquo;</a>
+      </li>
+    {{else}}
+      <li class="arrow next disabled">
         <a {{action "incrementPage" 1}}>&raquo;</a>
       </li>
     {{/if}}
