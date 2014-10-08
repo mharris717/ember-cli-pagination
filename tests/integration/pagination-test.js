@@ -28,7 +28,7 @@ Ember.Test.registerAsyncHelper('hasActivePage', function(app, num, context) {
   findWithAssert(".pagination li.page-number", context).each(function() {
     var li = $(this);
     var active = num - 1 === i;
-    equal(li.hasClass('active'), active);
+    equal(li.hasClass('active'), active, "Has active page");
     i += 1;
   });
 });
@@ -36,8 +36,12 @@ Ember.Test.registerAsyncHelper('hasActivePage', function(app, num, context) {
 var hasButtons = function(ops) {
   for (var name in ops) {
     var present = ops[name];
-    var length = present ? 1 : 0;
-    equal(find(".pagination ." + name).length, length);
+
+    if(present) {
+      equal(find(".pagination ." + name + ".enabled-arrow").length, 1);
+    } else {
+      equal(find(".pagination ." + name + ".disabled").length, 1);
+    }
   }
 };
 
@@ -53,7 +57,7 @@ var clickPage = function(i) {
   if (i === "prev" || i === "next") {
     click(".pagination ." + i + " a");
   } else {
-    click(".pagination li:eq(" + (i - 1) + ") a");
+    click(".pagination li.page-number:eq(" + (i - 1) + ") a");
   }
 };
 
@@ -118,6 +122,35 @@ todosTest("click prev", function() {
       next: true
     });
     hasTodos(10);
+    hasActivePage(1);
+  });
+});
+
+todosTest("click next on last page and not increment", function() {
+  clickPage(4);
+  andThen(function() {
+    clickPage("next");
+  });
+  andThen(function() {
+    clickPage("next");
+  });
+  andThen(function() {
+    hasTodos(3);
+    equal(currentURL(), "/todos?page=4");
+    notEqual(currentURL(), "/todos?page=5");
+    hasActivePage(4);
+  });
+});
+
+todosTest("click prev on first page and not decrement", function() {
+  clickPage("prev");
+  andThen(function() {
+    clickPage("prev");
+  });
+  andThen(function() {
+    hasTodos(10);
+    equal(currentURL(), "/todos?page=1");
+    notEqual(currentURL(), "/todos?page=-1");
     hasActivePage(1);
   });
 });
