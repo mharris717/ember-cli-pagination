@@ -4,7 +4,7 @@
     <th>Completed</th>
   </tr>
 
-  {{#each this}}
+  {{#each pagedContent}}
     <tr class="todo">
       <td>{{name}}</td>
       <td>
@@ -14,6 +14,6 @@
   {{/each}}
 </table>
 
-{{page-numbers currentPage=page totalPages=totalPages}}
+{{page-numbers content=pagedContent}}
 
 <button {{action "save"}}>Save</button>

@@ -2,8 +2,8 @@ import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
 
 export default Ember.Component.extend({
-  currentPage: null,
-  totalPages: null,
+  currentPageBinding: "content.page",
+  totalPagesBinding: "content.totalPages",
 
   pageItems: function() {
     var currentPage = Number(this.get("currentPage"));

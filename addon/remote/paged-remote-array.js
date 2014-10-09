@@ -43,8 +43,7 @@ export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
 
   totalPagesBinding: "meta.total_pages",
 
-  setPage: function(page) {
-    this.set('page', page);
-    this.set('promise', this.fetchContent());
-  }
+  pageChanged: function() {
+    this.set("content", this.fetchContent());
+  }.observes("page")
 });
