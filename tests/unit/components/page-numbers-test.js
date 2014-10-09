@@ -15,7 +15,7 @@ var paramTest = function(name,ops,f) {
       });
     });
 
-    f(subject);
+    f.call(this,subject);
   });
 };
 
@@ -53,4 +53,8 @@ var makePagedArray = function(list) {
 
 paramTest("create with content", {content: makePagedArray([1,2,3,4,5])}, function(s) {
   equal(s.get('totalPages'),3);
+});
+
+paramTest("template smoke", {content: makePagedArray([1,2,3,4,5])}, function(s) {
+  equal(this.$().find(".page-number").length,3);
 });
