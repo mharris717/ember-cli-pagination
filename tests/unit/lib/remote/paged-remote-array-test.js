@@ -3,6 +3,7 @@ import { test } from 'ember-qunit';
 import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 import PagedLocalArray from 'ember-cli-pagination/local/paged-array';
 import Util from 'ember-cli-pagination/util';
+import toArray from '../../../helpers/to-array';
 
 module("PagedRemoteArray");
 
@@ -18,19 +19,6 @@ var paramTest = function(name,ops,f) {
 
     f(subject);
   });
-};
-
-var toArray = function(a) {
-  var res = [];
-  if (a.forEach) {
-    a.forEach(function(obj) {
-      res.push(obj);
-    });
-  }
-  else {
-    res = a;
-  }
-  return res;
 };
 
 var equalArray = function(a,b) {

@@ -8,16 +8,17 @@ export default function(contentProperty,ops) {
     var pagedOps = {content: this.get(contentProperty)};
     pagedOps.parent = this;
 
-    if (ops.perPage) {
-      pagedOps.perPage = ops.perPage;
-    }
+    var getVal = function(key,val) {
+      if (key.match(/Binding$/)) {
+        return "parent."+val;
+      }
+      else {
+        return val;
+      }
+    };
 
-    if (ops.page) {
-      pagedOps.page = ops.page;
-    }
-
-    if (ops.pageBinding) {
-      pagedOps.pageBinding = "parent."+ops.pageBinding;
+    for (var key in ops) {
+      pagedOps[key] = getVal(key,ops[key]);
     }
 
     return PagedArray.create(pagedOps);

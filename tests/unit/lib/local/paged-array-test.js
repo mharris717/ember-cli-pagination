@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
+import toArray from '../../../helpers/to-array';
 
 module("PagedArray");
 
@@ -14,19 +15,6 @@ var paramTest = function(name,ops,f) {
 
     f(subject);
   });
-};
-
-var toArray = function(a) {
-  var res = [];
-  if (a.forEach) {
-    a.forEach(function(obj) {
-      res.push(obj);
-    });
-  }
-  else {
-    res = a;
-  }
-  return res;
 };
 
 paramTest("smoke", {page: 1, perPage: 2, content: [1,2,3,4,5]}, function(s) {
