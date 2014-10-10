@@ -4,7 +4,7 @@ import PagedArray from 'ember-cli-pagination/local/paged-array';
 export default function(contentProperty,ops) {
   ops = ops || {};
 
-  return Ember.computed(contentProperty,function() {
+  return Ember.computed(contentProperty+".@each",function() {
     var pagedOps = {content: this.get(contentProperty)};
     pagedOps.parent = this;
 
