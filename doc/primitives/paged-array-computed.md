@@ -1,11 +1,11 @@
-## pagedArray computed helper
+## `pagedArray` Computed Helper
 
 Creates a computed property representing a PagedArray. 
 
 Takes two arguments:
 
 * A `contentProperty` argument, representing the name of the "all objects" property on the source object.
-* An `options` hash. Currently the only allowed options are page and perPage, both integers.
+* An optional `options` hash. Currently the only allowed options are page and perPage, both integers
 
 A PagedArray has several properties you may find useful:
 

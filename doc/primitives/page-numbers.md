@@ -1,4 +1,4 @@
-## page-numbers component
+## `page-numbers` Component
 
 Displays pagination controls.
 
