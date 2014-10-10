@@ -17,10 +17,11 @@ A PagedArray has several properties you may find useful:
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 Ember.Object.extend({
-  // the property that contains all objects
+  // The property that contains all objects
+  // In a real app, often set by the route
   content: [1,2,3,4,5,6,7,8,9,10],
 
-  // the paged array
+  // the PagedArray
   pagedContent: pagedArray('content', {perPage: 5})
 });
 
