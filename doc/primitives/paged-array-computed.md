@@ -28,10 +28,10 @@ Ember.Object.extend({
 });
 ```
 
-The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details. 
-
 In this example, these properties will be available:
 
 * `pagedContent.page`
 * `pagedContent.perPage`
 * `pagedContent.totalPages`
+
+The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details. 
