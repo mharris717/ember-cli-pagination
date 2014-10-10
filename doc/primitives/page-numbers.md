@@ -56,3 +56,15 @@ Ember.Object.extend({
 Clicking a page number will:
 
 * Update the `page` property to the clicked page.
+
+### Customization
+
+You can use your own template for the pagination controls. Create it in your app at app/templates/components/page-numbers.hbs and it will be used automatically.
+
+See [the default template](https://github.com/mharris717/ember-cli-pagination/blob/master/app/templates/components/page-numbers.hbs) for an example.
+
+### Future Additions
+
+* Don't show links for every page if there are a large number of pages. 
+* <</>> links to move more than one page at a time.
+* Configuration settings to change behavior, remove arrows, etc.
