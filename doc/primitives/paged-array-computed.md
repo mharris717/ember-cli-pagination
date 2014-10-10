@@ -2,6 +2,8 @@
 
 Creates a computed property representing a PagedArray. 
 
+A PagedArray acts just like a normal array containing only the records on the current page.
+
 Takes two arguments:
 
 * A `contentProperty` argument, representing the name of the "all objects" property on the source object.
@@ -24,8 +26,12 @@ Ember.Object.extend({
   // the PagedArray
   pagedContent: pagedArray('content', {perPage: 5})
 });
-
-// In this example, the properties pagedContent.page, pagedContent.perPage and pagedContent.totalPages will be available.
 ```
+
+In this example, these properties will be available:
+
+* `pagedContent.page`
+* `pagedContent.perPage`
+* `pagedContent.totalPages`
 
 The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details. 
