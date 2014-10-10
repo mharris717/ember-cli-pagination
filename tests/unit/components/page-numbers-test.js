@@ -15,7 +15,7 @@ var paramTest = function(name,ops,f) {
       });
     });
 
-    f.call(this,subject);
+    f.call(this,subject,ops);
   });
 };
 
@@ -51,8 +51,25 @@ var makePagedArray = function(list) {
   return PagedArray.create({content: list, perPage: 2, page: 1});
 };
 
-paramTest("create with content", {content: makePagedArray([1,2,3,4,5])}, function(s) {
+paramTest("create with content", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
   equal(s.get('totalPages'),3);
+  equal(ops.content.get('totalPages'),3);
+});
+
+paramTest("create with content - changing array.content changes component", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
+  equal(s.get('totalPages'),3);
+  Ember.run(function() {
+    ops.content.pushObjects([6,7]);
+  });
+  equal(s.get('totalPages'),4);
+});
+
+paramTest("create with content - changing page changes content value", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
+  equal(s.get('totalPages'),3);
+  Ember.run(function() {
+    ops.content.set("page",2);
+  });
+  equal(s.get('currentPage'),2);
 });
 
 paramTest("template smoke", {content: makePagedArray([1,2,3,4,5])}, function(s) {
