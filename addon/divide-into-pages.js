@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import Util from 'ember-cli-pagination/util';
 
 export default Ember.Object.extend({
   objsForPage: function(page) {
@@ -10,16 +9,7 @@ export default Ember.Object.extend({
   totalPages: function() {
     var allLength = parseFloat(this.get('all.length'));
     var perPage = parseFloat(this.get('perPage'));
-
-    var res = (allLength + perPage-0.01) / perPage;
-    res = parseInt(res);
-
-    if (allLength === 0) {
-      res = 0;
-    }
-    
-    Util.log("DivideIntoPages#totalPages, allLength " + allLength + ", perPage " + perPage + ", res " + res);
-    return res;
+    return Math.ceil(allLength/perPage);
   },
 
   range: function(page) {
