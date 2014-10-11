@@ -13,7 +13,9 @@ class Entry
   end
 
   fattr(:heading) do
-    body.split("\n").first[3..-1].strip
+    line = body.split("\n").first.strip
+    raise line unless line =~ /^## (.+)$/
+    $1
   end
 
   fattr(:anchor) do
