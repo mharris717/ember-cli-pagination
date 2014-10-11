@@ -4,7 +4,7 @@
 * [`pagedArray` Computed Helper](#`pagedArray` Computed Helper]
 * [PagedRemoteArray](#PagedRemoteArray]
 * [Google](http://google.com)
-* [Including](#Stuff-Here)
+* [Including](#stuff-here)
 
 ## `page-numbers` Component
 
