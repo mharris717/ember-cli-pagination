@@ -2,7 +2,7 @@
 
 PagedRemoteArray represents a page of records fetched from a remote pagination-enabled API.
 
-It takes four arguments at creation, in a standard args hash:
+It takes four arguments at creation, in a standard options hash passed to PagedRemoteArray#create:
 
 * modelName - singular
 * store
