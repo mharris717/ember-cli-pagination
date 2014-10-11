@@ -1,4 +1,4 @@
-## PagedRemoteArray Object
+## PagedRemoteArray
 
 PagedRemoteArray represents a page of records fetched from a remote pagination-enabled API.
 

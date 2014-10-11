@@ -1,10 +1,31 @@
-# Primitives
+# Table of Contents
 
-* [`page-numbers` Component](#`page-numbers` Component]
-* [`pagedArray` Computed Helper](#`pagedArray` Computed Helper]
-* [PagedRemoteArray](#PagedRemoteArray]
-* [Google](http://google.com)
-* [Including](#stuff-here)
+#### Scenarios
+
+* [Local Store](#local-store)
+* [Remote Paginated API](#remote-paginated-api)
+
+#### Primitives
+
+* [`page-numbers` Component](#page-numbers-component)
+* [`pagedArray` Computed Helper](#pagedarray-computed-helper)
+* [PagedRemoteArray](#pagedremotearray)
+
+# Scenarios
+
+## Local Store
+
+Lots of stuff goes here, blah blah blah.
+
+--------------
+
+## Remote Paginated API
+
+More stuff goes here
+
+HAVE FUN!!!
+
+# Primitives
 
 ## `page-numbers` Component
 
@@ -77,6 +98,7 @@ See [the default template](https://github.com/mharris717/ember-cli-pagination/bl
 * <</>> links to move more than one page at a time.
 * Configuration settings to change behavior, remove arrows, etc.
 
+--------------
 
 ## `pagedArray` Computed Helper
 
@@ -116,6 +138,7 @@ In this example, these properties will be available:
 
 The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details. 
 
+--------------
 
 ## PagedRemoteArray
 
@@ -147,10 +170,6 @@ Ember.Route.extend({
   }
 });
 ```
-
-### Stuff Here
-
-Wheee
 
 ### Updating
 
