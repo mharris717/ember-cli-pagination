@@ -2,6 +2,7 @@ import Ember from 'ember';
 import Application from '../../app';
 import Router from '../../router';
 import config from '../../config/environments/test';
+import PaginationAssertions from './assertions';
 
 export default function startApp(attrs) {
   var App;

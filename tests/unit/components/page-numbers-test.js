@@ -15,46 +15,8 @@ var paramTest = function(name,ops,f) {
       });
     });
 
-    f.call(this,subject);
+    f.call(this,subject,ops);
   });
-};
-
-Ember.Test.registerAsyncHelper('hasActivePage', function(app, num, context) {
-  var i = 0;
-  findWithAssert(".pagination li.page-number", context).each(function() {
-    var li = $(this);
-    var active = num - 1 === i;
-    equal(li.hasClass('active'), active, "Has active page");
-    i += 1;
-  });
-});
-
-var hasButtons = function(ops) {
-  for (var name in ops) {
-    var present = ops[name];
-
-    if(present) {
-      equal(find(".pagination ." + name + ".enabled-arrow").length, 1);
-    } else {
-      equal(find(".pagination ." + name + ".disabled").length, 1);
-    }
-  }
-};
-
-var hasTodos = function(l) {
-  equal(find("table tr.todo").length, l);
-};
-
-var hasPages = function(l) {
-  equal(find(".pagination li.page-number").length, l, "Expected "+l+" Pages");
-};
-
-var clickPage = function(i) {
-  if (i === "prev" || i === "next") {
-    click(".pagination ." + i + " a");
-  } else {
-    click(".pagination li.page-number:eq(" + (i - 1) + ") a");
-  }
 };
 
 test("canStepBackwards", function() {
@@ -89,8 +51,25 @@ var makePagedArray = function(list) {
   return PagedArray.create({content: list, perPage: 2, page: 1});
 };
 
-paramTest("create with content", {content: makePagedArray([1,2,3,4,5])}, function(s) {
+paramTest("create with content", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
   equal(s.get('totalPages'),3);
+  equal(ops.content.get('totalPages'),3);
+});
+
+paramTest("create with content - changing array.content changes component", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
+  equal(s.get('totalPages'),3);
+  Ember.run(function() {
+    ops.content.pushObjects([6,7]);
+  });
+  equal(s.get('totalPages'),4);
+});
+
+paramTest("create with content - changing page changes content value", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
+  equal(s.get('totalPages'),3);
+  Ember.run(function() {
+    ops.content.set("page",2);
+  });
+  equal(s.get('currentPage'),2);
 });
 
 paramTest("template smoke", {content: makePagedArray([1,2,3,4,5])}, function(s) {

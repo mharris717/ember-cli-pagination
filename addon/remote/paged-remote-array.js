@@ -2,13 +2,13 @@ import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
 
 var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
-  then: function(f) {
+  then: function(success,failure) {
     var promise = this.get('promise');
     var me = this;
 
     promise.then(function() {
-      f(me);
-    });
+      success(me);
+    }, failure);
   }
 });
 
@@ -36,6 +36,8 @@ export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
     res.then(function(rows) {
       Util.log("PagedRemoteArray#fetchContent in res.then " + rows);
       return me.set("meta", rows.meta);
+    }, function(error) {
+      Util.log("PagedRemoteArray#fetchContent error " + error);
     });
 
     return res;
@@ -44,6 +46,6 @@ export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
   totalPagesBinding: "meta.total_pages",
 
   pageChanged: function() {
-    this.set("content", this.fetchContent());
+    this.set("promise", this.fetchContent());
   }.observes("page")
 });

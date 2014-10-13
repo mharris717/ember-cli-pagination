@@ -47,7 +47,11 @@
     "currentPath",
     "currentRouteName",
     "Pretender",
-    "hasActivePage"
+    "hasActivePage",
+    "hasPages",
+    "clickPage",
+    "hasTodos",
+    "hasButtons"
   ],
   "node": false,
   "browser": false,
