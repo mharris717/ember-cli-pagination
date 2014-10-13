@@ -41,11 +41,12 @@ class Entry
     end
 
     fattr(:scenarios) do
-      get(:scenarios)
+      sort_order = ["local-store","remote-paginated-api","remote-unpaginated-api","paginating-a-filtered-list"]
+      get(:scenarios).sort_by { |x| sort_order.index(x.dash_name) || (raise "nothing for #{x.dash_name}") }
     end
 
-    def all
-      primitives + scenarios
+    fattr(:others) do
+      get(:other)
     end
   end
 end
@@ -54,17 +55,21 @@ class TableOfContents
   include FromHash
   fattr(:primitives) { Entry.primitives }
   fattr(:scenarios) { Entry.scenarios }
+  fattr(:others) { Entry.others }
 
   def to_s
     prim = primitives.map { |x| "* #{x.link}" }.join("\n")
     scen = scenarios.map { |x| "* #{x.link}" }.join("\n")
+    other = others.map { |x| "* #{x.link}" }.join("\n")
 
     res = []
-    res << "# Table of Contents"
+    res << "# Usage"
     res << '#### Scenarios'
     res << scen
     res << '#### Primitives'
     res << prim
+    res << '#### Other'
+    res << other
     
     res.join("\n\n")
   end
@@ -74,6 +79,7 @@ class Body
   include FromHash
   fattr(:primitives) { Entry.primitives }
   fattr(:scenarios) { Entry.scenarios }
+  fattr(:others) { Entry.others }
 
   def to_s
     rule = "\n\n--------------\n\n"
@@ -83,6 +89,8 @@ class Body
     res << scenarios.join(rule)
     res << "# Primitives"
     res << primitives.join(rule)
+    res << "# Other"
+    res << others.join(rule)
 
     res.join("\n\n")
   end

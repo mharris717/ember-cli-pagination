@@ -13,7 +13,7 @@ Once the data is loaded, you may iterate over a PagedRemoteArray as you would a 
 
 The object acts as a promise, with a working `then` method. If you are manually iterating over records outside of the standard workflow, make sure to use `then` with standard promise semantics, just as you would an object returned from a normal `store.find` call. 
 
-```
+```javascript
 import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 
 Ember.Route.extend({
@@ -33,7 +33,7 @@ Ember.Route.extend({
 
 A PagedRecordArray will make a new remote call to update records when the page property is changed. Again, standard promise usage applies here. 
 
-```
+```javascript
 // pagedArray represents a PagedRemoteArray, already created and loaded with data, with page=1
 // var pagedArray = ....
 
@@ -54,7 +54,7 @@ You may bind PagedRemoteArray#page like any property.
 
 To update records when a page property changes:
 
-```
+```javascript
 Ember.ArrayController.extend({
   // the content property represents a paged array
 

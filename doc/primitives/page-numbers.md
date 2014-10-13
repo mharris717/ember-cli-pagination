@@ -19,13 +19,13 @@ There are two ways to use this component.
 
 This is the easier and most common way.
 
-```
+```javascript
 Ember.ArrayController.extend({
   pagedContent: pagedArray('content')
 });
 ```
 
-```
+```handlebars
 {{#each pagedContent}}
   {{! your app's display logic}}
 {{/each}}
@@ -42,14 +42,14 @@ See the pagedArray doc for more information on the pagedArray helper.
 
 #### Bind `currentPage` and `totalPages` to your properties directly
 
-```
+```javascript
 Ember.Object.extend({
   page: 1,
   totalPages: 10
 });
 ```
 
-```
+```handlebars
 {{page-numbers currentPage=page totalPages=totalPages}}
 ``` 
 

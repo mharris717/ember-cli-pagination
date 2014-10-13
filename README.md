@@ -28,117 +28,419 @@ npm install ember-cli-pagination --save-dev
 
 ## Usage
 
-`ember-cli-pagination` can paginate an array of models backed by an `ArrayController`. Let's say you have a `PostsRoute` whose `model` hook looks something like this
+#### Scenarios
 
-```js
-model: function() {
-  return this.store.find('post');
-}
-```
+* [Local Store](#local-store)
+* [Remote Paginated API](#remote-paginated-api)
+* [Remote Unpaginated API](#remote-unpaginated-api)
+* [Paginating a Filtered List](#paginating-a-filtered-list)
 
-This returns 1,000 posts, too many to show at once. You'd like to paginate the results.
+#### Primitives
 
-### Route Mixin
+* [`page-numbers` Component](#page-numbers-component)
+* [`pagedArray` Computed Helper](#pagedarray-computed-helper)
+* [PagedLocalArray](#pagedlocalarray)
+* [PagedRemoteArray](#pagedremotearray)
 
-First, add the Route Mixin. This Mixin adds a `findPaged(modelName, params)` method to your route, which will
-return a `PagedArray`:
+#### Other
+
+* [Setup Paginated Rails API](#setup-paginated-rails-api)
+* [Testing](#testing)
+
+# Scenarios
+
+## Local Store
+
+This scenario applies if:
+
+* Have all of your records already loaded client-side.
+* Wish to display one page of records at a time.
+* Want to have a page query parameter (optional).
 
 ```javascript
-// routes/posts.js
-import PageFactory from 'ember-cli-pagination/factory';
-import config from '../config/environment';
+import Ember from 'ember';
+import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.Route.extend(PageFactory.routeMixin(config), {
+Ember.ArrayController.extend({
+  // setup our query params
+  queryParams: ["page", "perPage"],
+
+  // can be called anything, I've called it pagedContent
+  // remember to iterate over pagedContent in your template
+  pagedContent: pagedArray('content'),
+
+  // binding the property on the paged array 
+  // to the query params on the controller
+  pageBinding: "pagedContent.page",
+  perPageBinding: "pagedContent.perPage",
+  totalPagesBinding: "pagedContent.totalPages"
+});
+```
+
+```handlebars
+{{#each pagedContent}}
+  {{! your app's display logic}}
+{{/each}}
+
+{{page-numbers content=pagedContent}}
+```
+
+If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work. 
+
+#### Notes
+
+* There is no need to touch the route in this scenario.
+* There used to be route and controller mixins, and they may return in the future. For now, they were too much overhead, and they were too much magic. If you think getting rid of the mixins is a mistake, please open an issue and let me know. 
+
+--------------
+
+## Remote Paginated API
+
+This scenario applies if:
+
+* Loading your records from a remote pagination-enabled API.
+* Wish to display one page of records at a time.
+* Want to have a page query parameter (optional).
+
+```javascript
+import Ember from 'ember';
+import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
+
+export default Ember.Route.extend(RouteMixin, {
   model: function(params) {
-    return this.findPaged('post', params);
+
+    // todo is your model name
+    // returns a PagedRemoteArray
+    return this.findPaged('todo',params);
   }
 });
 ```
 
-> Note: be sure to pass the `params`, even if you're not using them currently
-
-### Controller Mixin
-
-Next, add the Controller Mixin. This mixin does several things:  
-
- - Adds a `page` query param
- - Sets the default page to `1`
- - Adds a `pageChanged` method that observes the `page` property
-
 ```javascript
-// controllers/posts.js
-import PageFactory from 'ember-cli-pagination/factory';
-import config from '../config/environment';
+import Ember from 'ember';
 
-export default Ember.ArrayController.extend(PageFactory.controllerMixin(config), {
-  // your controller code...
+Ember.ArrayController.extend({
+  // setup our query params
+  queryParams: ["page", "perPage"],
+
+  // binding the property on the paged array 
+  // to the query params on the controller
+  pageBinding: "content.page",
+  perPageBinding: "content.perPage",
+  totalPagesBinding: "content.totalPages"
 });
 ```
 
-### Page-Numbers Component
-
-With the `PagedArray` backing your mixed-in controller, you can now use the `page-numbers`
-component in your template:
-
 ```handlebars
-{{!-- templates/posts.hbs --}}
-{{#each post in controller}}
-  <p>{{post.title}}<p>
+{{#each this}}
+  {{! your app's display logic}}
 {{/each}}
 
-{{page-numbers currentPage=page totalPages=totalPages}}
+{{page-numbers content=content}}
 ```
 
-The default template for `page-numbers` will render, and the pagination interface will control
-which page of models renders in the `each` code block.
+If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work. 
 
-You can also create a custom template for the `page-numbers` component. Create your new template here
+#### Notes
 
-```
-app/templates/components/page-numbers.hbs
-```
+* There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know. 
+* Related: [Setup a Paginated Rails API](#setup-paginated-rails-api)
 
-and use [the default template](https://github.com/mharris717/ember-cli-pagination/blob/master/app/templates/components/page-numbers.hbs) as an guide. You'll want to use the `currentPage` and `totalPages` variables passed in from your controller.
+--------------
 
-### Pagination Types
+## Remote Unpaginated API
 
-There are two types of pagination: Local and Remote.
+This scenario applies if:
 
-* `Local` - All records are loaded at the start, or are already present client-side. 
-* `Remote` - Only records for the current page are loaded client-side. New records are loaded when the page changes.
+* Loading your records from a remote API that is not pagination-enabled.
+* You are ok with loading all records from the API in order to display one page at a time.
+* Wish to display one page of records at a time.
+* Want to have a page query parameter (optional).
 
-How to set your pagination type is covered in [Setting Configuration Values](#setting-configuration-values)
+This scenario is identical to the [Local Store](#local-store) scenario. 
 
-##### Cases for `Local` Pagination:
+--------------
 
-* All records are stored in a local database (PouchDB, localState, etc).
-* You are using the FixtureAdapter.
-* You are querying a backend for records (possible with ActiveModelAdapter), but it does not support pagination, meaning it will return all records. 
+## Paginating a Filtered List
 
-##### Cases for `Remote` Pagination:
+This scenario applies if:
 
-* You are querying a backend that supports pagination. A backend Rails app with Kaminari would fit here.
-* You are using an Ember Data adapter that mimics a pagination-supporting backend by implementing findQuery. 
-
-### Setting Configuration Values
-
-Set your pagination type in your environment.js file. It must be either `local` or `remote`
-
-You may also set a default perPage value here, although it is not required.
+* Have all of your records already loaded client-side.
+* You are filtering those records down to create a subset for display
+* Wish to display one page of records at a time.
+* Want to have a page query parameter (optional).
 
 ```javascript
-module.exports = function(environment) {
-  var ENV = {
-    pagination: {
-      type: "remote",
-      perPage: 10
-    }
-    // ....
+import Ember from 'ember';
+import pagedArray from 'ember-cli-pagination/computed/paged-array';
+
+Ember.ArrayController.extend({
+  // setup our query params
+  queryParams: ["page", "perPage"],
+
+  // only want records that are not completed
+  filteredContent: Ember.computed.filterBy('content', 'isCompleted', false),
+
+  // can be called anything, I've called it pagedContent
+  // remember to iterate over pagedContent in your template
+  pagedContent: pagedArray('filteredContent'),
+
+  // binding the property on the paged array 
+  // to the query params on the controller
+  pageBinding: "pagedContent.page",
+  perPageBinding: "pagedContent.perPage",
+  totalPagesBinding: "pagedContent.totalPages"
+});
 ```
 
-The old method of setting paginationType (instead of a nested pagination.type) still works for now.
+```handlebars
+{{#each pagedContent}}
+  {{! your app's display logic}}
+{{/each}}
 
-### Using Kaminari in Rails
+{{page-numbers content=pagedContent}}
+```
+
+If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work. 
+
+#### Notes
+
+* There is no need to touch the route in this scenario.
+
+# Primitives
+
+## `page-numbers` Component
+
+Displays pagination controls.
+
+![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png) 
+
+Features:
+
+* A clickable link for each page.
+* Previous and next buttons, disabled when appropriate.
+* The link to the current page receives the .active class.
+* Styling with bootstrap, if included.
+
+### Including in your template
+
+There are two ways to use this component. 
+
+#### Backed by a PagedArray
+
+This is the easier and most common way.
+
+```javascript
+Ember.ArrayController.extend({
+  pagedContent: pagedArray('content')
+});
+```
+
+```handlebars
+{{#each pagedContent}}
+  {{! your app's display logic}}
+{{/each}}
+
+{{page-numbers content=pagedContent}}
+```
+
+Clicking a page number will:
+
+* Display the rows on the clicked page.
+* Update `pagedContent.page` to the clicked page.
+
+See the pagedArray doc for more information on the pagedArray helper.
+
+#### Bind `currentPage` and `totalPages` to your properties directly
+
+```javascript
+Ember.Object.extend({
+  page: 1,
+  totalPages: 10
+});
+```
+
+```handlebars
+{{page-numbers currentPage=page totalPages=totalPages}}
+``` 
+
+Clicking a page number will:
+
+* Update the `page` property to the clicked page.
+
+### Customization
+
+You can use your own template for the pagination controls. Create it in your app at app/templates/components/page-numbers.hbs and it will be used automatically.
+
+See [the default template](https://github.com/mharris717/ember-cli-pagination/blob/master/app/templates/components/page-numbers.hbs) for an example.
+
+### Future Additions
+
+* Don't show links for every page if there are a large number of pages. 
+* <</>> links to move more than one page at a time.
+* Configuration settings to change behavior, remove arrows, etc.
+
+--------------
+
+## `pagedArray` Computed Helper
+
+Creates a computed property representing a PagedArray. 
+
+A PagedArray acts just like a normal array containing only the records on the current page.
+
+Takes two arguments:
+
+* A `contentProperty` argument, representing the name of the "all objects" property on the source object.
+* An optional `options` hash. Currently the only allowed options are page and perPage, both integers
+
+A PagedArray has several properties you may find useful:
+
+* `page`: the current page (Default: 1)
+* `perPage`: how many records to have on each page (Default: 10)
+* `totalPages`: the total number of pages
+
+```javascript
+import pagedArray from 'ember-cli-pagination/computed/paged-array';
+
+Ember.Object.extend({
+  // The property that contains all objects
+  // In a real app, often set by the route
+  content: [1,2,3,4,5,6,7,8,9,10],
+
+  // the PagedArray
+  pagedContent: pagedArray('content', {perPage: 5})
+});
+```
+
+In this example, these properties will be available:
+
+* `pagedContent.page`
+* `pagedContent.perPage`
+* `pagedContent.totalPages`
+
+The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details. 
+
+--------------
+
+## PagedLocalArray
+
+PagedLocalArray represents a page of records from the list of all records.  
+
+All records must be loaded client-side in order to use PagedArray.
+
+It takes three arguments at creation, in a standard options hash passed to PagedArray#create:
+
+* content - list of all records
+* page - Optional (Default 1)
+* perPage - Optional (Default 10)
+
+Once the data is loaded, you may iterate over a PagedArray as you would a normal array.
+
+The object acts as a promise, with a working `then` method.
+
+```javascript
+import PagedArray from 'ember-cli-pagination/local/paged-array';
+
+var all = Ember.A([1,2,3,4,5]);
+var paged = PagedArray.create(content: all, perPage: 2);
+
+equal(paged.get('length'),2);
+deepEqual(paged.toArray(),[1,2]);
+
+paged.set("page",3);
+deepEqual(paged.toArray(),[5]);
+
+all.pushObject(6);
+deepEqual(paged.toArray(),[5,6]);
+```
+
+### Updating
+
+A Paged will be updated when the page property is changed.
+
+### Binding
+
+You may bind PagedArray#page like any property. 
+
+To update records when a page property changes:
+
+```javascript
+Ember.ArrayController.extend({
+  // the content property represents a paged array
+
+  pageBinding: "content.page"
+});
+```
+
+--------------
+
+## PagedRemoteArray
+
+PagedRemoteArray represents a page of records fetched from a remote pagination-enabled API.
+
+It takes four arguments at creation, in a standard options hash passed to PagedRemoteArray#create:
+
+* modelName - singular
+* store
+* page
+* perPage
+
+Once the data is loaded, you may iterate over a PagedRemoteArray as you would a normal array.
+
+The object acts as a promise, with a working `then` method. If you are manually iterating over records outside of the standard workflow, make sure to use `then` with standard promise semantics, just as you would an object returned from a normal `store.find` call. 
+
+```javascript
+import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
+
+Ember.Route.extend({
+  model: function(params) {
+    // possible params are params.page and params.per_page
+    // Ember's query param logic converts perPage to per_page at some point, for now just dealing with it.
+
+    return PagedRemoteArray.create({modelName: 'post', 
+                                    store: this.store,
+                                    page: params.page || 1,
+                                    perPage: params.per_page || 10});
+  }
+});
+```
+
+### Updating
+
+A PagedRecordArray will make a new remote call to update records when the page property is changed. Again, standard promise usage applies here. 
+
+```javascript
+// pagedArray represents a PagedRemoteArray, already created and loaded with data, with page=1
+// var pagedArray = ....
+
+// this will trigger the remote call for new data
+pagedArray.set("page",2);
+
+pagedArray.then(function() {
+  // the data is loaded.
+  pagedArray.forEach(function(obj) {
+    // your logic
+  });
+});
+```
+
+### Binding
+
+You may bind PagedRemoteArray#page like any property. 
+
+To update records when a page property changes:
+
+```javascript
+Ember.ArrayController.extend({
+  // the content property represents a paged array
+
+  pageBinding: "content.page"
+});
+```
+
+# Other
+
+## Setup Paginated Rails API
 
 ```ruby
 # Gemfile
@@ -158,8 +460,9 @@ class TodosController < ApplicationController
 end
 ```
 
+--------------
 
-### Testing
+## Testing
 
 We include some helpers to make testing pagination easier. 
 

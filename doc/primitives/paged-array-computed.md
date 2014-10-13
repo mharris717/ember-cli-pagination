@@ -15,7 +15,7 @@ A PagedArray has several properties you may find useful:
 * `perPage`: how many records to have on each page (Default: 10)
 * `totalPages`: the total number of pages
 
-```
+```javascript
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 Ember.Object.extend({

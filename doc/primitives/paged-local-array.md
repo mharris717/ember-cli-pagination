@@ -14,7 +14,7 @@ Once the data is loaded, you may iterate over a PagedArray as you would a normal
 
 The object acts as a promise, with a working `then` method.
 
-```
+```javascript
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 
 var all = Ember.A([1,2,3,4,5]);
@@ -40,7 +40,7 @@ You may bind PagedArray#page like any property.
 
 To update records when a page property changes:
 
-```
+```javascript
 Ember.ArrayController.extend({
   // the content property represents a paged array
 

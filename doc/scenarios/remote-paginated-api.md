@@ -6,7 +6,7 @@ This scenario applies if:
 * Wish to display one page of records at a time.
 * Want to have a page query parameter (optional).
 
-```
+```javascript
 import Ember from 'ember';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
@@ -20,7 +20,7 @@ export default Ember.Route.extend(RouteMixin, {
 });
 ```
 
-```
+```javascript
 import Ember from 'ember';
 
 Ember.ArrayController.extend({
@@ -35,7 +35,7 @@ Ember.ArrayController.extend({
 });
 ```
 
-```
+```handlebars
 {{#each this}}
   {{! your app's display logic}}
 {{/each}}
@@ -45,6 +45,7 @@ Ember.ArrayController.extend({
 
 If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work. 
 
-### Notes
+#### Notes
 
-* There used to be a controller mixin, and they may return in the future. For now, they were too much overhead, and they were too much magic. If you think getting rid of the mixins is a mistake, please open an issue and let me know. 
+* There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know. 
+* Related: [Setup a Paginated Rails API](#setup-paginated-rails-api)
