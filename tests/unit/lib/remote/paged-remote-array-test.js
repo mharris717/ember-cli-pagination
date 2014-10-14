@@ -4,6 +4,7 @@ import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 import PagedLocalArray from 'ember-cli-pagination/local/paged-array';
 import Util from 'ember-cli-pagination/util';
 import toArray from '../../../helpers/to-array';
+import equalArray from '../../../helpers/equal-array';
 
 var RunSet = Ember.Mixin.create({
   runSet: function(k,v) {
@@ -30,13 +31,6 @@ var paramTest = function(name,ops,f) {
 
     f(subject);
   });
-};
-
-var equalArray = function(a,b) {
-  a = toArray(a);
-  b = toArray(b);
-
-  deepEqual(a,b);
 };
 
 var FakeStore = Ember.Object.extend({
@@ -134,5 +128,43 @@ asyncTest("remote error", function() {
   }, function() {
     equalArray(paged,[]);
     QUnit.start();
+  });
+});
+
+var MyArrayObserver = Ember.Object.extend({
+  arrayWillChangeCount: 0,
+  arrayDidChangeCount: 0,
+
+  arrayWillChange: function(observedObj, start, removeCount, addCount) {
+    this.incrementProperty("arrayWillChangeCount");
+  },
+
+  arrayDidChange: function(observedObj, start, removeCount, addCount) {
+    this.incrementProperty("arrayDidChangeCount");
+  }
+});
+
+asyncTest("notifies observer", function() {
+  var store = FakeStore.create({all: [1,2,3,4,5]});
+  var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2});
+
+  var observer = MyArrayObserver.create();
+  paged.addArrayObserver(observer);
+
+  paged.then(function() {
+    QUnit.start();
+
+    equalArray(paged,[1,2]);
+    // not sure if I want this to be 0
+    equal(observer.get('arrayDidChangeCount'),1);
+
+    QUnit.stop();
+
+    paged.set("page",2);
+    paged.then(function() {
+      QUnit.start();
+      equalArray(paged,[3,4]);
+      equal(observer.get('arrayDidChangeCount'),2);
+    });
   });
 });
