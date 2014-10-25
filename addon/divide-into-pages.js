@@ -7,14 +7,14 @@ export default Ember.Object.extend({
   },
 
   totalPages: function() {
-    var allLength = parseFloat(this.get('all.length'));
-    var perPage = parseFloat(this.get('perPage'));
+    var allLength = parseInt(this.get('all.length'));
+    var perPage = parseInt(this.get('perPage'));
     return Math.ceil(allLength/perPage);
   },
 
   range: function(page) {
-    var perPage = this.get('perPage');
-    var s = (page - 1) * perPage;
+    var perPage = parseInt(this.get('perPage'));
+    var s = (parseInt(page) - 1) * perPage;
     var e = s + perPage - 1;
 
     return {start: s, end: e};
