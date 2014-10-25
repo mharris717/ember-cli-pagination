@@ -47,5 +47,5 @@ export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
 
   pageChanged: function() {
     this.set("promise", this.fetchContent());
-  }.observes("page")
+  }.observes("page", "perPage")
 });
