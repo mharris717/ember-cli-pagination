@@ -2,12 +2,13 @@
 
 PagedRemoteArray represents a page of records fetched from a remote pagination-enabled API.
 
-It takes four arguments at creation, in a standard options hash passed to PagedRemoteArray#create:
+It takes five arguments at creation, in a standard options hash passed to PagedRemoteArray#create:
 
 * modelName - singular
 * store
 * page
 * perPage
+* otherParams - optional. If provided, will be passed on to server at same level as page and perPage
 
 Once the data is loaded, you may iterate over a PagedRemoteArray as you would a normal array.
 
@@ -60,4 +61,14 @@ Ember.ArrayController.extend({
 
   pageBinding: "content.page"
 });
+```
+
+### `otherParams`
+
+PagedRemoteArray takes an optional otherParams arg. These params will be passed to the server when the request is made.
+
+```javascript
+var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2, otherParams: {name: "Adam"}});
+
+// server will receive params page=1, perPage=2, name=Adam
 ```

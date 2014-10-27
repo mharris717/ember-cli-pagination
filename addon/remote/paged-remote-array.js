@@ -30,6 +30,13 @@ export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
       ops.per_page = perPage;
     }
 
+    var otherOps = this.get('otherParams') || {};
+    for (var key in otherOps) {
+      Util.log("otherOps key " + key);
+      var val = otherOps[key];
+      ops[key] = val;
+    }
+
     var res = store.find(modelName, ops);
     var me = this;
 
