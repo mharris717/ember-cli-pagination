@@ -7,10 +7,13 @@ export default Ember.Mixin.create({
   startingPage: 1,
 
   model: function(params) {
-    var modelName = Ember.String.singularize(
-      Ember.String.camelize(this.get('routeName'))
-    );
-    return this.findPaged(modelName, params);
+    return this.findPaged(this._findModelName(this.get('routeName')), params);
+  },
+
+  _findModelName: function(routeName) {
+      return Ember.String.singularize(
+        Ember.String.camelize(routeName)
+      );
   },
 
   findPaged: function(name, params) {
