@@ -6,6 +6,16 @@ export default Ember.Mixin.create({
   perPage: 10,
   startingPage: 1,
 
+  model: function(params) {
+    return this.findPaged(this._findModelName(this.get('routeName')), params);
+  },
+
+  _findModelName: function(routeName) {
+      return Ember.String.singularize(
+        Ember.String.camelize(routeName)
+      );
+  },
+
   findPaged: function(name, params) {
     var mainOps = {
       page: params.page || this.get('startingPage'),

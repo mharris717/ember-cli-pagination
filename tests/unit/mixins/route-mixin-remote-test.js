@@ -24,3 +24,29 @@ test("thing", function() {
   equal(findArgs[0].modelName,"todo");
   equal(findArgs[0].params.name,"Adam");
 });
+
+test("default model name", function() {  
+  var Route = Ember.Object.extend(RouteMixin, {});  
+  var route = Route.create();
+
+  equal('route', route._findModelName('route'));
+  equal('route', route._findModelName('routes'));
+  equal('routeName', route._findModelName('route-name'));
+  equal('routeName', route._findModelName('route-names'));
+});
+
+test("arguments passed to findPaged", function() {
+  var store = MockStore.create();
+
+  var Something = Ember.Object.extend(RouteMixin, {});
+  var something = Something.create({store: store});
+  something.set('routeName', 'todo');
+
+  something.model({name: "Adam"});
+  var findArgs = store.get('findArgs');
+
+  console.debug(findArgs);
+  equal(findArgs.length,1);
+  equal(findArgs[0].modelName,"todo");
+  equal(findArgs[0].params.name,"Adam");
+});
