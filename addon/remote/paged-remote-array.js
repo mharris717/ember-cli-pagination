@@ -42,13 +42,15 @@ export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
 
     res.then(function(rows) {
       Util.log("PagedRemoteArray#fetchContent in res.then " + rows);
-      return me.set("meta", rows.meta);
+      var newMeta = {};
+      for (var i in rows.meta) { newMeta[i] = rows.meta[i]; }      
+      return me.set("meta", newMeta);
     }, function(error) {
       Util.log("PagedRemoteArray#fetchContent error " + error);
     });
 
     return res;
-  },
+  },  
 
   totalPagesBinding: "meta.total_pages",
 
