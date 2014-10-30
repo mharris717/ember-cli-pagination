@@ -19,12 +19,12 @@ var paramTest = function(name,ops,f) {
   });
 };
 
-test("canStepBackwards", function() {
+test("canStepBackward", function() {
   var s = this.subject();
   Ember.run(function() {
     s.set("currentPage",1);
   });
-  equal(s.get('canStepBackwards',false));
+  equal(s.get('canStepBackward'),false);
 });
 
 paramTest("first page", {currentPage: 1, totalPages: 10}, function(s) {
