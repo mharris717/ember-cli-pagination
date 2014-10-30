@@ -90,6 +90,17 @@ paramTest("template smoke 2", {content: makePagedArray([1,2,3,4,5])}, function(s
   });
 });
 
+paramTest("arrows and pages in right order", {content: makePagedArray([1,2,3,4,5])}, function(s) {
+  var pageItems = this.$().find("ul.pagination li");
+  equal(pageItems.length,5);
+
+  equal(pageItems.eq(0).hasClass("prev"),true);
+  equal(pageItems.eq(1).text(),1);
+  equal(pageItems.eq(2).text(),2);
+  equal(pageItems.eq(3).text(),3);
+  equal(pageItems.eq(4).hasClass("next"),true);
+});
+
 paramTest("truncation", {currentPage: 2, totalPages: 10}, function(s) {
   var pages = s.get('pageItems').map(function(obj) {
     return obj.page;
