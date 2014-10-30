@@ -1,6 +1,6 @@
 # Ember CLI Pagination
 
-[![Build Status](https://travis-ci.org/mharris717/ember-cli-pagination.svg?branch=master)](https://travis-ci.org/mharris717/ember-cli-pagination)
+[![Build Status](https://travis-ci.org/venkatesh/ember-cli-pagination.svg?branch=master)](https://travis-ci.org/mharris717/ember-cli-pagination)
 
 Simple pagination addon for your Ember CLI app.
 
