@@ -5,6 +5,10 @@ import PageItems from 'ember-cli-pagination/lib/page-items';
 export default Ember.Component.extend({
   currentPageBinding: "content.page",
   totalPagesBinding: "content.totalPages",
+  
+  isVisible: function () {
+    return this.get('totalPages') !== 0;
+  }.property('totalPages'),
 
   truncatePages: true,
   numPagesToShowBefore: 5,
