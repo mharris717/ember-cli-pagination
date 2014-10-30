@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
+import PageItems from 'ember-cli-pagination/lib/page-items';
 
 export default Ember.Component.extend({
   currentPageBinding: "content.page",
@@ -9,20 +10,22 @@ export default Ember.Component.extend({
     return this.get('totalPages') !== 0;
   }.property('totalPages'),
 
-  pageItems: function() {
-    var currentPage = Number(this.get("currentPage"));
-    var totalPages = Number(this.get("totalPages"));
-    Util.log("PageNumbers#pageItems, currentPage " + currentPage + ", totalPages " + totalPages);
+  truncatePages: true,
+  numPagesToShowBefore: 5,
+  numPagesToShowAfter: 5,
 
-    var res = [];
-    for(var i=1; i<=totalPages; i++) {
-      res.push({
-        page: i,
-        current: currentPage == i
-      });
-    }
-    return res;
-  }.property("currentPage", "totalPages"),
+  pageItemsObj: function() {
+    return PageItems.create({
+      parent: this,
+      currentPageBinding: "parent.currentPage",
+      totalPagesBinding: "parent.totalPages",
+      truncatePagesBinding: "parent.truncatePages",
+      numPagesToShowBeforeBinding: "parent.numPagesToShowBefore",
+      numPagesToShowAfterBinding: "parent.numPagesToShowAfter"
+    });
+  }.property(),
+
+  pageItemsBinding: "pageItemsObj.pageItems",
 
   canStepForward: (function() {
     var page = Number(this.get("currentPage"));

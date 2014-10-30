@@ -47,6 +47,22 @@ Ember.ArrayController.extend({
 
 If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work. 
 
+### Passing other params to findPaged
+
+If your params object has other params, they will be passed to your backend.
+
+```javascript
+Ember.Route.extend({
+  model: function(params) {
+    // params is {page: 1, name: "Adam"}
+
+    return this.findPaged("post",params);
+
+    // server will receive params page=1, name=Adam
+  }
+});
+```
+
 #### Notes
 
 * There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know. 

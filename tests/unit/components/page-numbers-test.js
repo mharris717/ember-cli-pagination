@@ -89,3 +89,19 @@ paramTest("template smoke 2", {content: makePagedArray([1,2,3,4,5])}, function(s
     hasActivePage(2);
   });
 });
+
+paramTest("truncation", {currentPage: 2, totalPages: 10}, function(s) {
+  var pages = s.get('pageItems').map(function(obj) {
+    return obj.page;
+  });
+
+  deepEqual(pages,[1,2,3,4,5,6,7,10]);
+});
+
+paramTest("truncation ops", {currentPage: 2, totalPages: 10, numPagesToShowAfter: 1}, function(s) {
+  var pages = s.get('pageItems').map(function(obj) {
+    return obj.page;
+  });
+
+  deepEqual(pages,[1,2,3,10]);
+});

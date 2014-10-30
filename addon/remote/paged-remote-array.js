@@ -30,22 +30,31 @@ export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
       ops.per_page = perPage;
     }
 
+    var otherOps = this.get('otherParams') || {};
+    for (var key in otherOps) {
+      Util.log("otherOps key " + key);
+      var val = otherOps[key];
+      ops[key] = val;
+    }
+
     var res = store.find(modelName, ops);
     var me = this;
 
     res.then(function(rows) {
       Util.log("PagedRemoteArray#fetchContent in res.then " + rows);
-      return me.set("meta", rows.meta);
+      var newMeta = {};
+      for (var i in rows.meta) { newMeta[i] = rows.meta[i]; }      
+      return me.set("meta", newMeta);
     }, function(error) {
       Util.log("PagedRemoteArray#fetchContent error " + error);
     });
 
     return res;
-  },
+  },  
 
   totalPagesBinding: "meta.total_pages",
 
   pageChanged: function() {
     this.set("promise", this.fetchContent());
-  }.observes("page")
+  }.observes("page", "perPage")
 });
