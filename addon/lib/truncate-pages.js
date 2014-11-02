@@ -19,7 +19,7 @@ export default Ember.Object.extend({
     var numPages = parseInt(this.get('numPagesToShow'));
     var currentPage = parseInt(this.get('currentPage'));
     var totalPages = parseInt(this.get('totalPages'));
-    var showFL = parseInt(this.get('showFL'));
+    var showFL = this.get('showFL');
     
     var before = parseInt(numPages / 2);    
     if ((currentPage - before) < 1 ) {
