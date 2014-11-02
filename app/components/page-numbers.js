@@ -7,8 +7,7 @@ export default Ember.Component.extend({
   totalPagesBinding: "content.totalPages",
 
   truncatePages: true,
-  numPagesToShowBefore: 5,
-  numPagesToShowAfter: 5,
+  numPagesToShow: 10,
 
   pageItemsObj: function() {
     return PageItems.create({
@@ -16,8 +15,7 @@ export default Ember.Component.extend({
       currentPageBinding: "parent.currentPage",
       totalPagesBinding: "parent.totalPages",
       truncatePagesBinding: "parent.truncatePages",
-      numPagesToShowBeforeBinding: "parent.numPagesToShowBefore",
-      numPagesToShowAfterBinding: "parent.numPagesToShowAfter"
+      numPagesToShowBinding: "parent.numPagesToShow"
     });
   }.property(),
 

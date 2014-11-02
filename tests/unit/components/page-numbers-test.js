@@ -101,18 +101,18 @@ paramTest("arrows and pages in right order", {content: makePagedArray([1,2,3,4,5
   equal(pageItems.eq(4).hasClass("next"),true);
 });
 
-paramTest("truncation", {currentPage: 2, totalPages: 10}, function(s) {
+paramTest("truncation", {currentPage: 2, totalPages: 10, numPagesToShow: 5}, function(s) {
   var pages = s.get('pageItems').map(function(obj) {
     return obj.page;
   });
 
-  deepEqual(pages,[1,2,3,4,5,6,7,10]);
+  deepEqual(pages,[1,2,3,4,5]);
 });
 
-paramTest("truncation ops", {currentPage: 2, totalPages: 10, numPagesToShowAfter: 1}, function(s) {
-  var pages = s.get('pageItems').map(function(obj) {
-    return obj.page;
-  });
+// paramTest("truncation ops", {currentPage: 2, totalPages: 10, numPagesToShow: 5}, function(s) {
+//   var pages = s.get('pageItems').map(function(obj) {
+//     return obj.page;
+//   });
 
-  deepEqual(pages,[1,2,3,10]);
-});
+//   deepEqual(pages,[1,2,3,10]);
+// });
