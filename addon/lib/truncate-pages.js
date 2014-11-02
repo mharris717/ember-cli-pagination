@@ -1,8 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Object.extend({
-  numPagesToShowBefore: 5,
-  numPagesToShowAfter: 5,
+  numPagesToShow: 10,
+  showFL: false,
   currentPage: null,
   totalPages: null,
 
@@ -16,11 +16,21 @@ export default Ember.Object.extend({
   pagesToShow: function() {
     var res = [];
 
-    var before = parseInt(this.get('numPagesToShowBefore'));
-    var after = parseInt(this.get('numPagesToShowAfter'));
+    var numPages = parseInt(this.get('numPagesToShow'));
     var currentPage = parseInt(this.get('currentPage'));
     var totalPages = parseInt(this.get('totalPages'));
-
+    var showFL = parseInt(this.get('showFL'));
+    
+    var before = parseInt(numPages / 2);    
+    if ((currentPage - before) < 1 ) {
+      before = currentPage - 1;
+    }
+    var after = numPages - before - 1;
+    if ((totalPages - currentPage) < after) {
+      after = totalPages - currentPage;
+      before = numPages - after -1;
+    }
+    
     // add each prior page
     for(var i=before;i>0;i--) {
       var possiblePage = currentPage-i;
@@ -40,19 +50,21 @@ export default Ember.Object.extend({
     }
 
     // add first and last page
-    if (res.length > 0) {
+    if (showFL) {
+      if (res.length > 0) {
 
-      // add first page if not already there
-      if (res[0] !== 1) {
-        res = [1].concat(res);
-      }
+        // add first page if not already there
+        if (res[0] !== 1) {
+          res = [1].concat(res);
+        }
 
-      // add last page if not already there
-      if (res[res.length-1] !== totalPages) {
-        res.push(totalPages);
+        // add last page if not already there
+        if (res[res.length-1] !== totalPages) {
+          res.push(totalPages);
+        }
       }
     }
-
+    
     return res;
 
   }.property("numPagesToShowBefore","numPagesToShowAfter","currentPage","totalPages")
