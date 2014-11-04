@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Object.extend({
   numPagesToShow: 10,
-  showFL: false,
+  showFL: true,
   currentPage: null,
   totalPages: null,
 
@@ -28,7 +28,17 @@ export default Ember.Object.extend({
     var after = numPages - before - 1;
     if ((totalPages - currentPage) < after) {
       after = totalPages - currentPage;
-      before = numPages - after -1;
+      before = numPages - after - 1;
+    }
+
+    // add one page if no first or last is added
+    if (showFL) {
+      if ((currentPage - before) < 2 ) {
+        after++;
+      }
+      if ((totalPages - currentPage - 1) < after) {
+        before++;
+      }      
     }
     
     // add each prior page
