@@ -116,3 +116,68 @@ paramTest("truncation ops", {currentPage: 2, totalPages: 10, numPagesToShowAfter
 
   deepEqual(pages,[1,2,3,10]);
 });
+
+paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
+  var actionCounter = 0;
+  var clickedPage = null;
+  var containingObject = {
+    doThing: function(n) {
+      actionCounter++;
+      clickedPage = n;
+    }
+  };
+
+  s.set('targetObject',containingObject);
+  s.set('action','doThing');
+
+  equal(s.get('totalPages'),3);
+  Ember.run(function() {
+    s.send('pageClicked',2);
+  });
+  equal(s.get('currentPage'),2);
+  equal(actionCounter,1);
+  equal(clickedPage,2);
+});
+
+paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
+  var actionCounter = 0;
+  var clickedPage = null;
+  var containingObject = {
+    doThing: function(n) {
+      actionCounter++;
+      clickedPage = n;
+    }
+  };
+
+  s.set('targetObject',containingObject);
+  s.set('action','doThing');
+
+  equal(s.get('totalPages'),3);
+  Ember.run(function() {
+    s.send('incrementPage',1);
+  });
+  equal(s.get('currentPage'),2);
+  equal(actionCounter,1);
+  equal(clickedPage,2);
+});
+
+paramTest("invalid incrementPage does not send default event", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
+  var actionCounter = 0;
+  var clickedPage = null;
+  var containingObject = {
+    doThing: function(n) {
+      actionCounter++;
+      clickedPage = n;
+    }
+  };
+
+  s.set('targetObject',containingObject);
+  s.set('action','doThing');
+
+  equal(s.get('totalPages'),3);
+  Ember.run(function() {
+    s.send('incrementPage',-1);
+  });
+  equal(s.get('currentPage'),1);
+  equal(actionCounter,0);
+});

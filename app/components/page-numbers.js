@@ -38,6 +38,7 @@ export default Ember.Component.extend({
     pageClicked: function(number) {
       Util.log("PageNumbers#pageClicked number " + number);
       this.set("currentPage", number);
+      this.sendAction('action',number);
     },
     incrementPage: function(num) {
       var currentPage = Number(this.get("currentPage")),
@@ -46,6 +47,9 @@ export default Ember.Component.extend({
       if(currentPage === totalPages && num === 1) { return false; }
       if(currentPage <= 1 && num === -1) { return false; }
       this.incrementProperty('currentPage', num);
+
+      var newPage = this.get('currentPage');
+      this.sendAction('action',newPage);
     }
   }
 });
