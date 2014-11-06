@@ -106,5 +106,34 @@ class Full
   end
 end
 
+class Readme
+  include FromHash
+  fattr(:filename) do
+    "README.md"
+  end
+
+  fattr(:full) do
+    res = Full.new.to_s
+    res.gsub("# Usage",'## Usage')
+  end
+
+  def source
+    File.read(filename)
+  end
+
+  fattr(:final_body) do
+    res = source
+    reg = /<!--- FULL DOC START -->.+<!--- FULL DOC END -->/m
+    raise "bad" unless res =~ reg
+    res = res.gsub(reg,"<!--- FULL DOC START -->\n#{full}\n<!--- FULL DOC END -->")
+    res
+  end
+
+  def write!
+    File.create filename, final_body
+  end
+end
+
 full = Full.new
 File.create("doc/full.md",full.to_s)
+Readme.new.write!
