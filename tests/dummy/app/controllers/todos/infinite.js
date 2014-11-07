@@ -1,12 +1,9 @@
 import Ember from 'ember';
-import PagedInfiniteArray from 'ember-cli-pagination/infinite/paged-infinite-array';
+import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default Ember.ArrayController.extend({
   needs: ["todos"],
-  pagedContent: function() {
-    var base = this.get('controllers.todos.pagedContent');
-    return PagedInfiniteArray.create({all: base});
-  }.property(),
+  pagedContent: pagedArray('controllers.todos.pagedContent', {infinite: true}),
 
   actions: {
     loadNext: function() {
