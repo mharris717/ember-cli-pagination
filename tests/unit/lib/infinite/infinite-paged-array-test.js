@@ -21,8 +21,12 @@ var pushPromiseObjects = function(base,promise) {
   return promise;
 };
 
-var InfiniteBase = Ember.Object.extend({
+var InfiniteBase = Ember.ArrayProxy.extend({
   page: 1,
+
+  arrangedContent: function() {
+    return this.get('content');
+  }.property('content.@each'),
 
   init: function() {
     this.set('content',[]);
@@ -33,10 +37,6 @@ var InfiniteBase = Ember.Object.extend({
     this.incrementProperty('page');
     var page = this.get('page');
     return this.addRecordsForPage(page);
-  },
-
-  forEach: function(f) {
-    this.get('content').forEach(f);
   },
 
   addRecordsForPage: function(page) {
@@ -56,9 +56,8 @@ var InfinitePagedArray = InfiniteBase.extend({
     return c;
   },
 
-  then: function(f) {
-    this.get('all').then(f);
-    //f(this);
+  then: function(f,f2) {
+    this.get('all').then(f,f2);
   }
 });
 
@@ -74,6 +73,7 @@ asyncTest("smoke", function() {
   var s = InfinitePagedArray.create({all: makeAllPaged()});
   s.then(function() {
     equalArray(s,[1,2]);
+    equal(s.get('length'),2);
     QUnit.start();
   });
 });
@@ -84,17 +84,6 @@ test("add next page", function() {
   s.moveToNextPage();
   equalArray(s,[1,2,3,4]);
 });
-
-// asyncTest("page 1", function() {
-//   var store = FakeStore.create({all: [1,2,3,4,5]});
-
-//   var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2});
-
-//   paged.then(function() {
-//     equalArray(paged,[1,2]);
-//     QUnit.start();
-//   });
-// });
 
 import Util from 'ember-cli-pagination/util';
 
