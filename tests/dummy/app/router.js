@@ -6,7 +6,9 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.resource('todos');
+  this.resource('todos', function() {
+    this.route("infinite");
+  });
 });
 
 export default Router;
