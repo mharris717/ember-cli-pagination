@@ -18,6 +18,7 @@ var pushPromiseObjects = function(base,promise) {
   promise.then(function(r) {
     base.pushObjects(toArray(r));
   });
+  return promise;
 };
 
 var InfiniteBase = Ember.Object.extend({
@@ -31,7 +32,7 @@ var InfiniteBase = Ember.Object.extend({
   moveToNextPage: function() {
     this.incrementProperty('page');
     var page = this.get('page');
-    this.addRecordsForPage(page);
+    return this.addRecordsForPage(page);
   },
 
   forEach: function(f) {
@@ -40,7 +41,7 @@ var InfiniteBase = Ember.Object.extend({
 
   addRecordsForPage: function(page) {
     var arr = this.getRecordsForPage(page);
-    pushPromiseObjects(this.get('content'),arr);
+    return pushPromiseObjects(this.get('content'),arr);
   },
 
   getRecordsForPage: function(page) {
@@ -122,6 +123,20 @@ asyncTest("remote smoke", function() {
     s.moveToNextPage();
 
     s.then(function() {
+      equalArray([1,2,3,4],s);
+      QUnit.start();
+    });
+  });
+});
+
+asyncTest("remote smoke - call then on moveToNextPage", function() {
+  var store = FakeStore.create({all: [1,2,3,4,5]});
+  var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2});
+
+  var s = InfinitePagedArray.create({all: paged});
+  s.then(function() {
+    equalArray(s,[1,2]);
+    s.moveToNextPage().then(function() {
       equalArray([1,2,3,4],s);
       QUnit.start();
     });
