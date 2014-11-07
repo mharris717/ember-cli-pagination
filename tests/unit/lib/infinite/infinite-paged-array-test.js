@@ -6,26 +6,34 @@ import toArray from '../../../helpers/to-array';
 
 module("InfinitePagedArray");
 
-var allPaged = PagedArray.create({
-  perPage: 2,
-  content: [1,2,3,4,5]
-});
+var makeAllPaged = function() {
+  return PagedArray.create({
+    perPage: 2,
+    content: [1,2,3,4,5]
+  });
+};
 
-var InfinitePagedArray = Ember.ArrayProxy.extend({
+var InfinitePagedArray = Ember.Object.extend({
   page: 1,
 
+  forEach: function(f) {
+    this.get('arrangedContent').forEach(f);
+  },
+
   init: function() {
-    this.set('content',[]);
+    this.set('arrangedContent',[]);
     this.addRecordsForPage(1);
   },
 
   getRecordsForPage: function(page) {
-    allPaged.set('page',page);
-    return toArray(allPaged);
+    var c = this.get('content');
+    c.set('page',page);
+    return toArray(c);
   },
 
   addRecordsForPage: function(page) {
     var arr = this.getRecordsForPage(page);
+    //console.log("addRecordsForPage "+page+" arr length "+arr.length);
     this.get('arrangedContent').pushObjects(arr);
   },
 
@@ -57,12 +65,13 @@ var InfinitePagedArray = Ember.ArrayProxy.extend({
 // });
 
 test("smoke", function() {
-  var s = InfinitePagedArray.create();
+  var s = InfinitePagedArray.create({content: makeAllPaged()});
   equalArray(s,[1,2]);
 });
 
 test("add next page", function() {
-  var s = InfinitePagedArray.create();
+  var s = InfinitePagedArray.create({content: makeAllPaged()});
+  equalArray(s,[1,2]);
   s.moveToNextPage();
   equalArray(s,[1,2,3,4]);
 });
