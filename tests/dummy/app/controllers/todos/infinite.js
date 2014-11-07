@@ -7,7 +7,7 @@ export default Ember.ArrayController.extend({
 
   actions: {
     loadNext: function() {
-      this.get('pagedContent').moveToNextPage();
+      this.get('pagedContent').loadNextPage();
     }
   }
 });

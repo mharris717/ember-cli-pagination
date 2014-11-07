@@ -35,7 +35,7 @@ asyncTest("smoke", function() {
 test("add next page", function() {
   var s = InfinitePagedArray.create({all: makeAllPaged()});
   equalArray(s,[1,2]);
-  s.moveToNextPage();
+  s.loadNextPage();
   equalArray(s,[1,2,3,4]);
 });
 
@@ -63,7 +63,7 @@ asyncTest("remote smoke", function() {
   var s = InfinitePagedArray.create({all: paged});
   s.then(function() {
     equalArray(s,[1,2]);
-    s.moveToNextPage();
+    s.loadNextPage();
 
     s.then(function() {
       equalArray([1,2,3,4],s);
@@ -79,7 +79,7 @@ asyncTest("remote smoke - call then on moveToNextPage", function() {
   var s = InfinitePagedArray.create({all: paged});
   s.then(function() {
     equalArray(s,[1,2]);
-    s.moveToNextPage().then(function() {
+    s.loadNextPage().then(function() {
       equalArray([1,2,3,4],s);
       QUnit.start();
     });
