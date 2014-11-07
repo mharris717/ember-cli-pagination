@@ -13,64 +13,49 @@ var makeAllPaged = function() {
   });
 };
 
-var InfinitePagedArray = Ember.Object.extend({
+var InfiniteBase = Ember.Object.extend({
   page: 1,
 
-  forEach: function(f) {
-    this.get('arrangedContent').forEach(f);
-  },
-
   init: function() {
-    this.set('arrangedContent',[]);
+    this.set('content',[]);
     this.addRecordsForPage(1);
-  },
-
-  getRecordsForPage: function(page) {
-    var c = this.get('content');
-    c.set('page',page);
-    return toArray(c);
-  },
-
-  addRecordsForPage: function(page) {
-    var arr = this.getRecordsForPage(page);
-    //console.log("addRecordsForPage "+page+" arr length "+arr.length);
-    this.get('arrangedContent').pushObjects(arr);
   },
 
   moveToNextPage: function() {
     this.incrementProperty('page');
     var page = this.get('page');
     this.addRecordsForPage(page);
+  },
+
+  forEach: function(f) {
+    this.get('content').forEach(f);
+  },
+
+  addRecordsForPage: function(page) {
+    var arr = this.getRecordsForPage(page);
+    this.get('content').pushObjects(arr);
+  },
+
+  getRecordsForPage: function(page) {
+    throw "Not Implemented";
   }
 });
 
-// var paramTest = function(name,ops,f) {
-//   test(name, function() {
-//     var subject = null;
-
-//     Ember.run(function() {
-//       subject = InfinitePagedArray.create(ops);
-//     });
-
-//     f(subject);
-//   });
-// };
-
-// paramTest("smoke", {page: 1, perPage: 2, content: [1,2,3,4,5]}, function(s) {
-//   equal(s.get('totalPages'),3);
-//   equalArray(s,[1,2]);
-
-//   s.set('page',2);
-//   equalArray(s,[3,4]);
-// });
+var InfinitePagedArray = InfiniteBase.extend({
+  getRecordsForPage: function(page) {
+    var c = this.get('all');
+    c.set('page',page);
+    return toArray(c);
+  }
+});
 
 test("smoke", function() {
-  var s = InfinitePagedArray.create({content: makeAllPaged()});
+  var s = InfinitePagedArray.create({all: makeAllPaged()});
   equalArray(s,[1,2]);
 });
 
 test("add next page", function() {
-  var s = InfinitePagedArray.create({content: makeAllPaged()});
+  var s = InfinitePagedArray.create({all: makeAllPaged()});
   equalArray(s,[1,2]);
   s.moveToNextPage();
   equalArray(s,[1,2,3,4]);
