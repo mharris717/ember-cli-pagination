@@ -69,12 +69,10 @@ Ember.ArrayController.extend({
 
   // can be called anything, I've called it pagedContent
   // remember to iterate over pagedContent in your template
-  pagedContent: pagedArray('content'),
+  pagedContent: pagedArray('content', {pageBinding: "page", perPageBinding: "perPage"}),
 
   // binding the property on the paged array 
-  // to the query params on the controller
-  pageBinding: "pagedContent.page",
-  perPageBinding: "pagedContent.perPage",
+  // to a property on the controller
   totalPagesBinding: "pagedContent.totalPages"
 });
 ```
