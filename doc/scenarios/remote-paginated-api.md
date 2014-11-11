@@ -63,6 +63,28 @@ Ember.Route.extend({
 });
 ```
 
+### Using other names for page/perPage/total_pages
+
+You may pass an optional paramMapping arg. This is a hash that allows you to change the param names for page/perPage/total_pages.
+
+Note that the default param name for perPage is per_page.
+
+`page` and `perPage` control what is sent to the backend. `total_pages` controls where we expect to find the total pages value in the response from the backend. 
+
+```javascript
+import Ember from 'ember';
+import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
+
+export default Ember.Route.extend(RouteMixin, {
+  model: function(params) {
+    params.paramMapping = {page: "pageNum",
+                           perPage: "limit",
+                           total_pages: "num_pages"};
+    return this.findPaged('todo',params);
+  }
+});
+```
+
 #### Notes
 
 * There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know. 
