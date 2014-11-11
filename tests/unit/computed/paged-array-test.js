@@ -102,3 +102,31 @@ test("pagedArray is locked to range by default", function() {
   // deepEqual(toArray(object.get('pagedContent')),[5,6]);
 });
 
+test("infinite smoke", function() {
+  var Something = Ember.Object.extend({
+    pagedContent: pagedArray("content", {perPage: 2}),
+    infiniteContent: pagedArray("pagedContent", {infinite: true})
+  });
+
+  var object = Something.create({content: [1,2,3,4,5]});
+
+  deepEqual(toArray(object.get('infiniteContent')),[1,2]);
+
+  object.get('infiniteContent').loadNextPage();
+
+  deepEqual(toArray(object.get('infiniteContent')),[1,2,3,4]);
+});
+
+test("infinite smoke", function() {
+  var Something = Ember.Object.extend({
+    infiniteContent: pagedArray("content", {infinite: {source: "unpaged"}, perPage: 2})
+  });
+
+  var object = Something.create({content: [1,2,3,4,5]});
+
+  deepEqual(toArray(object.get('infiniteContent')),[1,2]);
+
+  object.get('infiniteContent').loadNextPage();
+
+  deepEqual(toArray(object.get('infiniteContent')),[1,2,3,4]);
+});
