@@ -80,3 +80,25 @@ test("pagedArray value changes when parent content property is modified", functi
   object.get("content").pushObject(6);
   deepEqual(toArray(object.get('pagedContent')),[5,6]);
 });
+
+test("pagedArray is locked to range by default", function() {
+  var Something = Ember.Object.extend({
+    pagedContent: pagedArray("content", {perPage: 2})
+  });
+
+  var object = Something.create({
+    content: Ember.A([1,2,3,4,5])
+  });
+
+  deepEqual(toArray(object.get('pagedContent')),[1,2]);
+
+  Ember.run(function() {
+    object.get('pagedContent').set('page',99);
+  });
+
+  deepEqual(object.get('pagedContent.page'),3);
+
+  // object.get("content").pushObject(6);
+  // deepEqual(toArray(object.get('pagedContent')),[5,6]);
+});
+

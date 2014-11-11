@@ -38,3 +38,38 @@ paramTest("working then method", {page: 1, perPage: 2, content: [1,2,3,4,5]}, fu
     equalArray(res,[3,4]);
   });
 });
+
+paramTest("page oob event test", {page: 1, perPage: 2, content: [1,2,3,4,5]}, function(s) {
+  var events = [];
+  s.on('invalidPage', function(page) {
+    events.push(page);
+  });
+
+  Ember.run(function() {
+    s.set('page',20);
+  });
+
+  equal(events.length,1);
+  equal(events[0].page,20);
+
+  Ember.run(function() {
+    s.set('page',2);
+  });
+  equal(events.length,1);
+});
+
+import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
+paramTest("LockToRange", {page: 1, perPage: 2, content: [1,2,3,4,5]}, function(s) {
+  LockToRange.watch(s);
+  Ember.run(function() {
+    s.set('page',20);
+  });
+
+  equalArray(s,[5]);
+
+  Ember.run(function() {
+    s.set('page',-10);
+  });
+
+  equalArray(s,[1,2]);
+});

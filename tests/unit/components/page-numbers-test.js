@@ -181,3 +181,24 @@ paramTest("invalid incrementPage does not send default event", {content: makePag
   equal(s.get('currentPage'),1);
   equal(actionCounter,0);
 });
+
+paramTest("invalid page send invalidPage component action", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
+  var actionCounter = 0;
+  var pageEvent = null;
+  var containingObject = {
+    doThing: function(n) {
+      actionCounter++;
+      pageEvent = n;
+    }
+  };
+
+  s.set('targetObject',containingObject);
+  s.set('invalidPageAction','doThing');
+
+  equal(s.get('totalPages'),3);
+  Ember.run(function() {
+    s.get('content').set('page',99);
+  });
+  equal(pageEvent.page,99);
+  equal(actionCounter,1);
+});

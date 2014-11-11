@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
 import DivideIntoPages from 'ember-cli-pagination/divide-into-pages';
+import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
 
-export default Ember.ArrayProxy.extend({
+export default Ember.ArrayProxy.extend(Ember.Evented, {
   page: 1,
   perPage: 10,
 
@@ -26,6 +27,17 @@ export default Ember.ArrayProxy.extend({
     return this.set('page', page);
   },
 
+  watchPage: function() {
+    var page = this.get('page');
+    var totalPages = this.get('totalPages');
+
+    this.trigger('pageChanged',page);
+
+    if (page < 1 || page > totalPages) {
+      this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
+    }
+  }.observes('page','totalPages'),
+
   then: function(success,failure) {
     var content = this.get('content');
     var me = this;
@@ -38,5 +50,9 @@ export default Ember.ArrayProxy.extend({
     else {
       success(this);
     }
+  },
+
+  lockToRange: function() {
+    LockToRange.watch(this);
   }
 });

@@ -21,6 +21,8 @@ export default function(contentProperty,ops) {
       pagedOps[key] = getVal(key,ops[key]);
     }
 
-    return PagedArray.create(pagedOps);
+    var paged = PagedArray.create(pagedOps);
+    paged.lockToRange();
+    return paged;
   });
 }

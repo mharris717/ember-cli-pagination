@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
+import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
 
 var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
   then: function(success,failure) {
@@ -12,7 +13,7 @@ var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
   }
 });
 
-export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
+export default Ember.ArrayProxy.extend(Ember.Evented, ArrayProxyPromiseMixin, {
   page: 1,
 
   init: function() {
@@ -56,5 +57,23 @@ export default Ember.ArrayProxy.extend(ArrayProxyPromiseMixin, {
 
   pageChanged: function() {
     this.set("promise", this.fetchContent());
-  }.observes("page", "perPage")
+  }.observes("page", "perPage"),
+
+  lockToRange: function() {
+    LockToRange.watch(this);
+  },
+
+  watchPage: function() {
+    var page = this.get('page');
+    var totalPages = this.get('totalPages');
+    if (parseInt(totalPages) <= 0) {
+      return;
+    }
+
+    this.trigger('pageChanged',page);
+
+    if (page < 1 || page > totalPages) {
+      this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
+    }
+  }.observes('page','totalPages')
 });

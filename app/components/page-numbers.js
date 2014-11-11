@@ -6,6 +6,16 @@ export default Ember.Component.extend({
   currentPageBinding: "content.page",
   totalPagesBinding: "content.totalPages",
 
+  watchInvalidPage: function() {
+    var me = this;
+    var c = this.get('content');
+    if (c && c.on) {
+      c.on('invalidPage', function(e) {
+        me.sendAction('invalidPageAction',e);
+      });
+    }
+  }.observes("content"),
+
   truncatePages: true,
   numPagesToShowBefore: 5,
   numPagesToShowAfter: 5,
