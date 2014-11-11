@@ -24,7 +24,11 @@ export default Ember.Mixin.create({
       store: this.store
     };
 
-    var otherOps = Util.paramsOtherThan(params,["page","perPage"]);
+    if (params.paramMapping) {
+      mainOps.paramMapping = params.paramMapping;
+    }
+
+    var otherOps = Util.paramsOtherThan(params,["page","perPage","paramMapping"]);
     mainOps.otherParams = otherOps;
 
     return PagedRemoteArray.create(mainOps);

@@ -50,3 +50,17 @@ test("arguments passed to findPaged", function() {
   equal(findArgs[0].modelName,"todo");
   equal(findArgs[0].params.name,"Adam");
 });
+
+test("can pass param mappings", function() {
+  var store = MockStore.create();
+
+  var Something = Ember.Object.extend(RouteMixin, {});
+  var something = Something.create({store: store});
+
+  something.findPaged("todo",{paramMapping: {page: "current_page"}});
+  var findArgs = store.get('findArgs');
+
+  console.debug(findArgs);
+  equal(findArgs.length,1);
+  equal(findArgs[0].params.current_page,1);
+});
