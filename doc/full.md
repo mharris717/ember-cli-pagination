@@ -99,7 +99,12 @@ Ember.ArrayController.extend({
   // to the query params on the controller
   pageBinding: "content.page",
   perPageBinding: "content.perPage",
-  totalPagesBinding: "content.totalPages"
+  totalPagesBinding: "content.totalPages",
+  
+  // optional. Don't serialize default values
+  // into the URL
+  page: 1,
+  perPage: 10
 });
 ```
 
