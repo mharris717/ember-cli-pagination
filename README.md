@@ -28,6 +28,7 @@ npm install ember-cli-pagination --save-dev
 ```
 
 <!--- FULL DOC START -->
+
 ## Usage
 
 #### Scenarios
@@ -556,4 +557,5 @@ c = ->
 
 `export default c`
 ```
+
 <!--- FULL DOC END -->

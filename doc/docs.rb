@@ -125,7 +125,7 @@ class Readme
     res = source
     reg = /<!--- FULL DOC START -->.+<!--- FULL DOC END -->/m
     raise "bad" unless res =~ reg
-    res = res.gsub(reg,"<!--- FULL DOC START -->\n#{full}\n<!--- FULL DOC END -->")
+    res = res.gsub(reg,"<!--- FULL DOC START -->\n\n#{full}\n\n<!--- FULL DOC END -->")
     res
   end
 
