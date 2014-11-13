@@ -171,6 +171,11 @@ test("filtered", function() {
   });
   deepEqual(toArray(object.get('pagedContent')),[9,10]);
 
+  Ember.run(function() {
+    object.set('min',11);
+  });
+  deepEqual(toArray(object.get('pagedContent')),[]);
+
   // Ember.run(function() {
   //   object.get('pagedContent').set('page',99);
   // });
