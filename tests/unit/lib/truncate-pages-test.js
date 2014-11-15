@@ -25,22 +25,42 @@ paramTest("smoke", {currentPage: 2, totalPages: 4}, function(s) {
   deepEqual(s.get('pagesToShow'),[1,2,3,4]);
 });
 
-paramTest("truncate after pages, always shows last page", {currentPage: 2, totalPages: 10, numPagesToShowAfter: 1}, function(s) {
-  deepEqual(s.get('pagesToShow'),[1,2,3,10]);
+paramTest("truncate pages, no scroll", {currentPage: 2, totalPages: 10, numPagesToShow: 5}, function(s) {
+  deepEqual(s.get('pagesToShow'),[1,2,3,4,5]);
 });
 
-paramTest("smoke", {currentPage: 4, totalPages: 5, numPagesToShowBefore: 1}, function(s) {
-  deepEqual(s.get('pagesToShow'),[1,3,4,5]);
+paramTest("truncate pages, scroll", {currentPage: 4, totalPages: 10, numPagesToShow: 5}, function(s) {
+  deepEqual(s.get('pagesToShow'),[2,3,4,5,6]);
 });
 
-paramTest("negative numbers", {currentPage: 3, totalPages: 10, numPagesToShowBefore:-99, numPagesToShowAfter: 2}, function(s) {
-  deepEqual(s.get('pagesToShow'),[1,3,4,5,10]);
+paramTest("smoke", {currentPage: 4, totalPages: 5, numPagesToShow: 1}, function(s) {
+  deepEqual(s.get('pagesToShow'),[4]);
 });
 
-paramTest("zero before", {currentPage: 3, totalPages: 10, numPagesToShowBefore:0, numPagesToShowAfter: 2}, function(s) {
-  deepEqual(s.get('pagesToShow'),[1,3,4,5,10]);
+paramTest("negative numbers", {currentPage: 3, totalPages: 10, numPagesToShow:-99}, function(s) {
+  deepEqual(s.get('pagesToShow'),[3]);
 });
 
-paramTest("string before", {currentPage: 3, totalPages: 10, numPagesToShowBefore:0, numPagesToShowAfter: "2"}, function(s) {
-  deepEqual(s.get('pagesToShow'),[1,3,4,5,10]);
+paramTest("zero to show", {currentPage: 5, totalPages: 10, numPagesToShow:0}, function(s) {
+  deepEqual(s.get('pagesToShow'),[5]);
+});
+
+paramTest("string to show", {currentPage: 3, totalPages: 10, numPagesToShow:"2"}, function(s) {
+  deepEqual(s.get('pagesToShow'),[2,3]);
+});
+
+paramTest("truncate pages, no scroll, showFL", {currentPage: 2, totalPages: 10, numPagesToShow: 5, showFL: true}, function(s) {
+  deepEqual(s.get('pagesToShow'),[1,2,3,4,5,6,10]);
+});
+
+paramTest("truncate pages, scroll, ShowFL", {currentPage: 4, totalPages: 10, numPagesToShow: 5, showFL: true}, function(s) {
+  deepEqual(s.get('pagesToShow'),[1,2,3,4,5,6,10]);
+});
+
+paramTest("truncate pages, scroll, ShowFL", {currentPage: 8, totalPages: 10, numPagesToShow: 5, showFL: true}, function(s) {
+  deepEqual(s.get('pagesToShow'),[1,5,6,7,8,9,10]);
+});
+
+paramTest("truncate pages, scroll, ShowFL", {currentPage: 6, totalPages: 10, numPagesToShow: 5, showFL: true}, function(s) {
+  deepEqual(s.get('pagesToShow'),[1,4,5,6,7,8,10]);
 });
