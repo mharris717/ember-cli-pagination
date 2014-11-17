@@ -45,7 +45,7 @@ export default Ember.ArrayProxy.extend(Ember.Evented, ArrayProxyPromiseMixin, {
     for (var key in otherOps) {
       Util.log("otherOps key " + key);
       var val = otherOps[key];
-      ops[key] = val;
+      ops[key.underscore()] = val;
     }
 
     return ops;

@@ -83,7 +83,7 @@ asyncTest("change page", function() {
   paged.then(function() {
     QUnit.start();
     equalArray(paged,[1,2]);
-    
+
     paged.runSet("page",2);
 
     paged.then(function() {
@@ -211,8 +211,12 @@ test("paramsForBackend with param mapping", function() {
   deepEqual(res,{currentPage: 1, per_page: 2});
 });
 
-
-
+test("paramsForBackend with otherParams converted to snakecased", function () {
+  var store = MockStore.create();
+  var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2, otherParams: {firstName: "Adam"}});
+  var res = paged.get('paramsForBackend');
+  deepEqual(res,{page: 1, per_page: 2, first_name: "Adam"});
+});
 
 asyncTest("basic meta", function() {
   var store = FakeStore.create({all: [1,2,3,4,5]});
