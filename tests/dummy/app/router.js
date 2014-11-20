@@ -8,6 +8,9 @@ var Router = Ember.Router.extend({
 Router.map(function() {
   this.resource('todos', function() {
     this.route("infinite");
+    this.route('infinite-remote');
+    this.route("remote");
+    this.route("local");
   });
 });
 

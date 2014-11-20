@@ -2,10 +2,7 @@ import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default Ember.ArrayController.extend({
-  queryParams: ["page"],
-  page: 1,
-  
-  pagedContent: pagedArray('content', {infinite: "unpaged"}),
+  pagedContent: pagedArray("content", {infinite: true}),
 
   actions: {
     loadNext: function() {

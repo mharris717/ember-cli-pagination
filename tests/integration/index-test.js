@@ -17,7 +17,7 @@ module('Integration - Todo Index', {
 });
 
 test('Should showo todos', function() {
-  visit("/todos").then(function() {
+  visit("/todos/remote").then(function() {
     equal(find(".todo").length, 10);
   });
 });

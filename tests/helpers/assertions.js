@@ -6,7 +6,7 @@ var f = function() {
     findWithAssert(".pagination li.page-number", context).each(function() {
       var li = $(this);
       var active = num - 1 === i;
-      equal(li.hasClass('active'), active, "Has active page");
+      equal(li.hasClass('active'), active, "Page "+(i+1)+" should have active = "+active+", actual: "+li.hasClass('active'));
       i += 1;
     });
   });

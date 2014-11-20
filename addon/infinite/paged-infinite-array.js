@@ -16,6 +16,21 @@ var toArray = function(a) {
 };
 
 var pushPromiseObjects = function(base,promise) {
+  if (!base) {
+    throw "pushPromiseObjects no base";
+  }
+  if (!promise) {
+    throw "pushPromiseObjects no promise";
+  }
+
+  if (!promise.then) {
+    throw "pushPromiseObjects no promise.then";
+  }
+
+  if (!base.pushObjects) {
+    throw "pushPromiseObjects no base.pushObjects";
+  }
+
   promise.then(function(r) {
     base.pushObjects(toArray(r));
   });

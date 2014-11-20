@@ -10,6 +10,7 @@ function makeLocal(contentProperty,ops) {
     var getVal = function(key,val) {
       if (key.match(/Binding$/)) {
         return "parent."+val;
+        //return Ember.Binding.oneWay("parent."+val);
       }
       else {
         return val;
@@ -21,7 +22,7 @@ function makeLocal(contentProperty,ops) {
     }
 
     var paged = PagedArray.create(pagedOps);
-    paged.lockToRange();
+    // paged.lockToRange();
     return paged;
   });
 }

@@ -12,7 +12,10 @@ export default function() {
     return this.get("/todos", function(request) {
       request.queryParams.per_page = request.queryParams.per_page || (config.pagination || {}).perPage;
 
-      var paginationType = Factory.create({config: config}).paginationType();
+      var paginationType = "remote";
+      if (request.queryParams.page === 'all' || !request.queryParams.page) {
+        paginationType = "local";
+      }
 
       var getRes = function() {
         if (paginationType === "local") {
