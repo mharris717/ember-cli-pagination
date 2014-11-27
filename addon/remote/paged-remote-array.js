@@ -26,6 +26,7 @@ export default Ember.ArrayProxy.extend(Ember.Evented, ArrayProxyPromiseMixin, {
     var perPage = parseInt(this.get('perPage'));
     //var store = this.get('store');
     //var modelName = this.get('modelName');
+    var self = this;
 
     var ops = {};
 
@@ -33,7 +34,13 @@ export default Ember.ArrayProxy.extend(Ember.Evented, ArrayProxyPromiseMixin, {
     function setOp(key,val,defaultKey) {
       if (val) {
         key = me.get('paramMapping')[key] || defaultKey || key;
-        ops[key] = val;
+        if (Array.isArray(key)) {
+          var fn = key[1];
+          key = key[0];
+          ops[key] = fn.call(self, page, perPage);
+        } else {
+          ops[key] = val;
+        }
       }
     }
     
@@ -54,6 +61,8 @@ export default Ember.ArrayProxy.extend(Ember.Evented, ArrayProxyPromiseMixin, {
   fetchContent: function() {
     var store = this.get('store');
     var modelName = this.get('modelName');
+    var page = parseInt(this.get('page') || 1);
+    var perPage = parseInt(this.get('perPage'));
 
     var ops = this.get('paramsForBackend');
     var res = store.find(modelName, ops);
@@ -64,11 +73,22 @@ export default Ember.ArrayProxy.extend(Ember.Evented, ArrayProxyPromiseMixin, {
       Util.log("PagedRemoteArray#fetchContent in res.then " + rows);
       var newMeta = {};
       var totalPagesField = me.get('paramMapping').total_pages;
+      var fn;
+      
+      if (totalPagesField && Array.isArray(totalPagesField)) {
+        fn = totalPagesField[1];
+        totalPagesField = totalPagesField[0];
+      }
+      
       if (rows.meta) {
         for (var k in rows.meta) { 
           newMeta[k] = rows.meta[k]; 
           if (totalPagesField && totalPagesField === k) {
-            newMeta['total_pages'] = rows.meta[k];
+            if (fn) {
+              newMeta['total_pages'] = fn.call(this, rows.meta[k], page, perPage);
+            } else {
+              newMeta['total_pages'] = rows.meta[k];
+            }
           }
         }      
       }
