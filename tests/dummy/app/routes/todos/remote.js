@@ -4,7 +4,7 @@ import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 export default Ember.Route.extend(RouteMixin, {
   model: function(params) {
     var paged = this.findPaged('todo',params);
-    paged.lockToRange();
+    //paged.lockToRange();
     return paged;
   }
 });
