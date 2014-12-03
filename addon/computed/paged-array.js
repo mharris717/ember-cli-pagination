@@ -3,8 +3,8 @@ import PagedArray from 'ember-cli-pagination/local/paged-array';
 import PagedInfiniteArray from 'ember-cli-pagination/infinite/paged-infinite-array';
 
 function makeLocal(contentProperty,ops) {
-  return Ember.computed(contentProperty+".@each",function() {
-    var pagedOps = {content: this.get(contentProperty)};
+  return Ember.computed("",function() {
+    var pagedOps = {}; //{content: this.get(contentProperty)};
     pagedOps.parent = this;
 
     var getVal = function(key,val) {
@@ -21,7 +21,9 @@ function makeLocal(contentProperty,ops) {
       pagedOps[key] = getVal(key,ops[key]);
     }
 
-    var paged = PagedArray.create(pagedOps);
+    var paged = PagedArray.extend({
+      contentBinding: "parent."+contentProperty
+    }).create(pagedOps);
     // paged.lockToRange();
     return paged;
   });
