@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
 import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
+import Mapping from './mapping';
+import PageMixin from '../page-mixin';
 
 var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
   then: function(success,failure) {
@@ -13,86 +15,82 @@ var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
   }
 });
 
-export default Ember.ArrayProxy.extend(Ember.Evented, ArrayProxyPromiseMixin, {
+export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromiseMixin, {
   page: 1,
-  paramMapping: {},
+  paramMapping: function() {
+    return {};
+  }.property(''),
 
   init: function() {
-    this.set('promise', this.fetchContent());
+    var initCallback = this.get('initCallback');
+    if (initCallback) {
+      initCallback(this);
+    }
+
+    try {
+      this.get('promise');
+    }
+    catch (e) {
+      this.set('promise', this.fetchContent());
+    }
+  },
+
+  addParamMapping: function(key,mappedKey,mappingFunc) {
+    var paramMapping = this.get('paramMapping') || {};
+    if (mappingFunc) {
+      paramMapping[key] = [mappedKey,mappingFunc];
+    }
+    else {
+      paramMapping[key] = mappedKey;
+    }
+    this.set('paramMapping',paramMapping);
+    this.incrementProperty('paramsForBackendCounter');
+    //this.pageChanged();
+  },
+
+  addQueryParamMapping: function(key,mappedKey,mappingFunc) {
+    return this.addParamMapping(key,mappedKey,mappingFunc);
+  },
+
+  addMetaResponseMapping: function(key,mappedKey,mappingFunc) {
+    return this.addParamMapping(key,mappedKey,mappingFunc);
   },
 
   paramsForBackend: function() {
-    var page = parseInt(this.get('page') || 1);
-    var perPage = parseInt(this.get('perPage'));
-    //var store = this.get('store');
-    //var modelName = this.get('modelName');
-    var self = this;
-
-    var ops = {};
-
-    var me = this;
-    function setOp(key,val,defaultKey) {
-      if (val) {
-        key = me.get('paramMapping')[key] || defaultKey || key;
-        if (Array.isArray(key)) {
-          var fn = key[1];
-          key = key[0];
-          ops[key] = fn.call(self, page, perPage);
-        } else {
-          ops[key] = val;
-        }
-      }
-    }
-    
-    setOp("page",page);
-    setOp("perPage",perPage,"per_page");
+    var paramsObj = Mapping.QueryParamsForBackend.create({page: this.getPage(), 
+                                                          perPage: this.getPerPage(), 
+                                                          paramMapping: this.get('paramMapping')});
+    var ops = paramsObj.make();
 
     // take the otherParams hash and add the values at the same level as page/perPage
-    var otherOps = this.get('otherParams') || {};
-    for (var key in otherOps) {
-      Util.log("otherOps key " + key);
-      var val = otherOps[key];
-      ops[key] = val;
-    }
+    ops = Util.mergeHashes(ops,this.get('otherParams')||{});
 
     return ops;
-  }.property('page','perPage','paramMapping'),
+  }.property('page','perPage','paramMapping','paramsForBackendCounter'),
 
-  fetchContent: function() {
+  rawFindFromStore: function() {
     var store = this.get('store');
     var modelName = this.get('modelName');
-    var page = parseInt(this.get('page') || 1);
-    var perPage = parseInt(this.get('perPage'));
 
     var ops = this.get('paramsForBackend');
     var res = store.find(modelName, ops);
+
+    return res;
+  },
+
+  fetchContent: function() {
+    var res = this.rawFindFromStore();
     this.incrementProperty("numRemoteCalls");
     var me = this;
 
     res.then(function(rows) {
-      Util.log("PagedRemoteArray#fetchContent in res.then " + rows);
-      var newMeta = {};
-      var totalPagesField = me.get('paramMapping').total_pages;
-      var fn;
+      var metaObj = Mapping.ChangeMeta.create({paramMapping: me.get('paramMapping'),
+                                               meta: rows.meta,
+                                               page: me.getPage(),
+                                               perPage: me.getPerPage()});
+
+      return me.set("meta", metaObj.make());
       
-      if (totalPagesField && Array.isArray(totalPagesField)) {
-        fn = totalPagesField[1];
-        totalPagesField = totalPagesField[0];
-      }
-      
-      if (rows.meta) {
-        for (var k in rows.meta) { 
-          newMeta[k] = rows.meta[k]; 
-          if (totalPagesField && totalPagesField === k) {
-            if (fn) {
-              newMeta['total_pages'] = fn.call(this, rows.meta[k], page, perPage);
-            } else {
-              newMeta['total_pages'] = rows.meta[k];
-            }
-          }
-        }      
-      }
-      return me.set("meta", newMeta);
     }, function(error) {
       Util.log("PagedRemoteArray#fetchContent error " + error);
     });

@@ -57,7 +57,11 @@ test("can pass param mappings", function() {
   var Something = Ember.Object.extend(RouteMixin, {});
   var something = Something.create({store: store});
 
-  something.findPaged("todo",{paramMapping: {page: "current_page"}});
+  something.findPaged("todo",{},function(remote) {
+    remote.addQueryParamMapping('page','current_page');
+  });
+
+  //paramMapping: {page: "current_page"}}
   var findArgs = store.get('findArgs');
 
   console.debug(findArgs);

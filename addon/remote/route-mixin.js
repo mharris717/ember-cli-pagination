@@ -16,7 +16,7 @@ export default Ember.Mixin.create({
       );
   },
 
-  findPaged: function(name, params) {
+  findPaged: function(name, params, callback) {
     var mainOps = {
       page: params.page || this.get('startingPage'),
       perPage: params.perPage || this.get('perPage'),
@@ -30,6 +30,8 @@ export default Ember.Mixin.create({
 
     var otherOps = Util.paramsOtherThan(params,["page","perPage","paramMapping"]);
     mainOps.otherParams = otherOps;
+
+    mainOps.initCallback = callback;
 
     return PagedRemoteArray.create(mainOps);
   }
