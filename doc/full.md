@@ -37,6 +37,11 @@ Ember.ArrayController.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
+  // set default values, can cause problems if left out
+  // if value matches default, it won't display in the URL
+  page: 1,
+  perPage: 10,
+
   // can be called anything, I've called it pagedContent
   // remember to iterate over pagedContent in your template
   pagedContent: pagedArray('content', {pageBinding: "page", perPageBinding: "perPage"}),
@@ -101,8 +106,8 @@ Ember.ArrayController.extend({
   perPageBinding: "content.perPage",
   totalPagesBinding: "content.totalPages",
   
-  // optional. Don't serialize default values
-  // into the URL
+  // set default values, can cause problems if left out
+  // if value matches default, it won't display in the URL
   page: 1,
   perPage: 10
 });
@@ -192,6 +197,11 @@ import pagedArray from 'ember-cli-pagination/computed/paged-array';
 Ember.ArrayController.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
+
+  // set default values, can cause problems if left out
+  // if value matches default, it won't display in the URL
+  page: 1,
+  perPage: 10,
 
   // only want records that are not completed
   filteredContent: Ember.computed.filterBy('content', 'isCompleted', false),
