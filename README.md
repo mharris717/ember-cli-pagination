@@ -12,9 +12,9 @@ Features:
   - Local
   - Remote
   - Infinite
- - Default pagination template - but you can write your own
- - Current page bound to the `page` query param
- - Compatible with the Kaminari API Rails gem
+- Default pagination template - but you can write your own
+- Current page bound to the `page` query param
+- Compatible with the Kaminari API Rails gem
 
 
 **Questions?**
