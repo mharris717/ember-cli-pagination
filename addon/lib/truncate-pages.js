@@ -1,6 +1,7 @@
 import Ember from 'ember';
+import SafeGet from '../util/safe-get';
 
-export default Ember.Object.extend({
+export default Ember.Object.extend(SafeGet, {
   numPagesToShow: 10,
   showFL: false,
   currentPage: null,
@@ -8,7 +9,7 @@ export default Ember.Object.extend({
 
   isValidPage: function(page) {
     page = parseInt(page);
-    var totalPages = parseInt(this.get('totalPages'));
+    var totalPages = this.getInt('totalPages');
 
     return page > 0 && page <= totalPages;
   },
@@ -16,9 +17,9 @@ export default Ember.Object.extend({
   pagesToShow: function() {
     var res = [];
 
-    var numPages = parseInt(this.get('numPagesToShow'));
-    var currentPage = parseInt(this.get('currentPage'));
-    var totalPages = parseInt(this.get('totalPages'));
+    var numPages = this.getInt('numPagesToShow');
+    var currentPage = this.getInt('currentPage');
+    var totalPages = this.getInt('totalPages');
     var showFL = this.get('showFL');
     
     var before = parseInt(numPages / 2);    

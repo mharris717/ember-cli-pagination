@@ -1,4 +1,6 @@
 import Ember from 'ember';
+import Validate from '../validate';
+import Util from '../util';
 
 var exports = {};
 
@@ -102,7 +104,15 @@ exports.ChangeMeta = Ember.Object.extend({
       }
     }
 
+    this.validate(res);
+
     return res;
+  },
+
+  validate: function(meta) {
+    if (Util.isBlank(meta.total_pages)) {
+      Validate.internalError("no total_pages in meta response",meta);
+    }
   }
 });
 

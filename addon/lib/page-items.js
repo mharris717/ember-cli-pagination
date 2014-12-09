@@ -1,11 +1,12 @@
 import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
 import TruncatePages from './truncate-pages';
+import SafeGet from '../util/safe-get';
 
-export default Ember.Object.extend({
+export default Ember.Object.extend(SafeGet, {
   pageItemsAll: function() {
-    var currentPage = Number(this.get("currentPage"));
-    var totalPages = Number(this.get("totalPages"));
+    var currentPage = this.getInt("currentPage");
+    var totalPages = this.getInt("totalPages");
     Util.log("PageNumbers#pageItems, currentPage " + currentPage + ", totalPages " + totalPages);
 
     var res = [];
@@ -19,10 +20,9 @@ export default Ember.Object.extend({
   }.property("currentPage", "totalPages"),
 
   pageItemsTruncated: function() {
-    var currentPage = parseInt(this.get('currentPage'));
-    var totalPages = parseInt(this.get('totalPages'));
-
-    var toShow = this.get('numPagesToShow');
+    var currentPage = this.getInt('currentPage');
+    var totalPages = this.getInt("totalPages");
+    var toShow = this.getInt('numPagesToShow');
 
     var t = TruncatePages.create({currentPage: currentPage, totalPages: totalPages, 
                                   numPagesToShow: toShow});

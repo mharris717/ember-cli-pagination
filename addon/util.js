@@ -5,6 +5,10 @@ var Util = Ember.Object.extend();
 Util.reopenClass({
   log: function() {},
 
+  isBlank: function(obj) {
+    return !obj || (obj === "");
+  },
+
   keysOtherThan: function(params,excludeKeys) {
     var res = [];
     for (var key in params) {

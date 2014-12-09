@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
 import TruncatePages from 'ember-cli-pagination/lib/truncate-pages';
+import Validate from 'ember-cli-pagination/validate';
 
 module("TruncatePages");
 
@@ -63,4 +64,9 @@ paramTest("truncate pages, scroll, ShowFL", {currentPage: 8, totalPages: 10, num
 
 paramTest("truncate pages, scroll, ShowFL", {currentPage: 6, totalPages: 10, numPagesToShow: 5, showFL: true}, function(s) {
   deepEqual(s.get('pagesToShow'),[1,4,5,6,7,8,10]);
+});
+
+paramTest("if total pages is missing", {currentPage: 6}, function(s) {
+  deepEqual(s.get('pagesToShow'),[6]);
+  equal(Validate.getLastInternalError(),"no int for totalPages val is null");
 });
