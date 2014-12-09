@@ -14,12 +14,12 @@ Features:
 
 **Questions?**
 
-This is a new project, but several people are already using it successfully. If you have any trouble, open an issue, and you should get help quickly.
+This is a new project, but many people are already using it successfully. If you have any trouble, open an issue, and you should get help quickly.
 
 ## Requirements
 
-- ember-cli 0.0.39 or higher
-- ember-cli-pagination 0.3.0 or higher (to match current docs)
+- ember-cli 0.0.46 or higher (untested with earlier versions, but it might work)
+- ember-cli-pagination 0.6.0 or higher (to match current docs)
 
 ## Installation
 
