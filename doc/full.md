@@ -6,6 +6,8 @@
 * [Remote Paginated API](#remote-paginated-api)
 * [Remote Unpaginated API](#remote-unpaginated-api)
 * [Paginating a Filtered List](#paginating-a-filtered-list)
+* [Infinite Pagination with All Records Present Locally](#infinite-pagination-with-all-records-present-locally)
+* [Infinite Pagination with a Remote Paginated API](#infinite-pagination-with-a-remote-paginated-api)
 
 #### Primitives
 
@@ -231,6 +233,72 @@ If you don't want to have query params, you may leave them out, along with the 3
 #### Notes
 
 * There is no need to touch the route in this scenario.
+
+--------------
+
+## Infinite Pagination with All Records Present Locally
+
+The infinite pagination sections of the docs is not yet up to my preferred quality level. If you have any questions or problems, please do not hesitate to make an issue. 
+
+The example below does not use a page query param, although that is certainly possible. 
+
+Controller:
+
+```javascript
+import Ember from 'ember';
+import pagedArray from 'ember-cli-pagination/computed/paged-array';
+
+export default Ember.ArrayController.extend({
+  pagedContent: pagedArray('content', {infinite: "unpaged"}),
+
+  actions: {
+    loadNext: function() {
+      this.get('pagedContent').loadNextPage();
+    }
+  }
+});
+```
+
+`"unpaged"` in this example indicates the source array (the `content` property) is a regular (unpaged) array, as opposed to a PagedArray. 
+
+--------------
+
+## Infinite Pagination with a Remote Paginated API
+
+The example below does not use a page query param, although that is certainly possible. 
+
+```javascript
+// controller
+
+import Ember from 'ember';
+import pagedArray from 'ember-cli-pagination/computed/paged-array';
+
+export default Ember.ArrayController.extend({
+  pagedContent: pagedArray("content", {infinite: true}),
+
+  actions: {
+    loadNext: function() {
+      this.get('pagedContent').loadNextPage();
+    }
+  }
+});
+```
+
+ `{infinite: true}` in this example indicates the source array (the `content` property) is a paged array, in this case a PagedRemoteArray.
+
+```javascript
+// route
+
+import Ember from 'ember';
+import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
+
+export default Ember.Route.extend(RouteMixin, {
+  model: function(params) {
+    return this.findPaged('todo',params);
+  }
+});
+```
+
 
 # Primitives
 

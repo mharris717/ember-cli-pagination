@@ -42,7 +42,7 @@ class Entry
 
     fattr(:scenarios) do
       sort_order = ["local-store","remote-paginated-api","remote-unpaginated-api","paginating-a-filtered-list"]
-      get(:scenarios).sort_by { |x| sort_order.index(x.dash_name) || (raise "nothing for #{x.dash_name}") }
+      get(:scenarios).sort_by { |x| [sort_order.index(x.dash_name) || 99,x.dash_name] }
     end
 
     fattr(:others) do
