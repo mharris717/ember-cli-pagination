@@ -109,6 +109,14 @@ paramTest("truncation", {currentPage: 2, totalPages: 10, numPagesToShow: 5}, fun
   deepEqual(pages,[1,2,3,4,5]);
 });
 
+paramTest("truncation with showFL = true", {currentPage: 2, totalPages: 10, numPagesToShow: 5, showFL: true}, function(s) {
+  var pages = s.get('pageItems').map(function(obj) {
+    return obj.page;
+  });
+
+  deepEqual(pages,[1,2,3,4,5,6,10]);
+});
+
 paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,ops) {
   var actionCounter = 0;
   var clickedPage = null;

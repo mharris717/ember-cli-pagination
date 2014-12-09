@@ -35,7 +35,8 @@ export default Ember.Component.extend({
       currentPageBinding: "parent.currentPage",
       totalPagesBinding: "parent.totalPages",
       truncatePagesBinding: "parent.truncatePages",
-      numPagesToShowBinding: "parent.numPagesToShow"
+      numPagesToShowBinding: "parent.numPagesToShow",
+      showFLBinding: "parent.showFL"
     });
   }.property(),
 

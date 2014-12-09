@@ -63,8 +63,13 @@ You can use your own template for the pagination controls. Create it in your app
 
 See [the default template](https://github.com/mharris717/ember-cli-pagination/blob/master/app/templates/components/page-numbers.hbs) for an example.
 
+To always show the first and last pages (in addition to the pages that would be shown normally), set the showFL property
+
+```javascript
+{{page-numbers content=content showFL=true}}
+```
+
 ### Future Additions
 
-* Don't show links for every page if there are a large number of pages. 
 * <</>> links to move more than one page at a time.
 * Configuration settings to change behavior, remove arrows, etc.

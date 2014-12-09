@@ -23,9 +23,11 @@ export default Ember.Object.extend(SafeGet, {
     var currentPage = this.getInt('currentPage');
     var totalPages = this.getInt("totalPages");
     var toShow = this.getInt('numPagesToShow');
+    var showFL = this.get('showFL');
 
     var t = TruncatePages.create({currentPage: currentPage, totalPages: totalPages, 
-                                  numPagesToShow: toShow});
+                                  numPagesToShow: toShow,
+                                  showFL: showFL});
     var pages = t.get('pagesToShow');
 
     return pages.map(function(page) {
