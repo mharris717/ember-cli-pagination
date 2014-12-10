@@ -9,7 +9,7 @@ var todos = function() {
 
 export default function() {
   return new Pretender(function() {
-    return this.get("/todos", function(request) {
+    return this.get("/api/todos", function(request) {
       request.queryParams.per_page = request.queryParams.per_page || (config.pagination || {}).perPage;
 
       var paginationType = "remote";
