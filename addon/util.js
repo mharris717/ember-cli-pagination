@@ -6,6 +6,9 @@ Util.reopenClass({
   log: function() {},
 
   isBlank: function(obj) {
+    if (obj === 0) {
+      return false;
+    }
     return !obj || (obj === "");
   },
 
