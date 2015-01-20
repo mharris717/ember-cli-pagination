@@ -7,6 +7,8 @@ export default Ember.Component.extend({
   currentPageBinding: "content.page",
   totalPagesBinding: "content.totalPages",
 
+  hasPages: Ember.computed.gt('totalPages', 0),
+
   watchInvalidPage: function() {
     var me = this;
     var c = this.get('content');
