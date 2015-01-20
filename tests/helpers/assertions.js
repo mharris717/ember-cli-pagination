@@ -10,7 +10,7 @@ var f = function() {
       i += 1;
     });
   });
-  
+
   Ember.Test.registerAsyncHelper('hasButtons', function(app, ops, context) {
     for (var name in ops) {
       var present = ops[name];
