@@ -9,7 +9,7 @@ var paramTest = function(name,ops,f) {
     var subject = this.subject();
 
     Ember.run(function() {
-      Object.keys(ops).forEach(function (key) { 
+      Object.keys(ops).forEach(function (key) {
           var value = ops[key];
           subject.set(key,value);
       });
@@ -18,6 +18,21 @@ var paramTest = function(name,ops,f) {
     f.call(this,subject,ops);
   });
 };
+
+test('hasPages', function() {
+  expect(2);
+  var s = this.subject();
+
+  Ember.run(function() {
+    s.set('totalPages', 0);
+  });
+  equal(s.get('hasPages'),false);
+
+  Ember.run(function() {
+    s.set('totalPages', 1);
+  });
+  equal(s.get('hasPages'),true);
+});
 
 test("canStepBackward", function() {
   var s = this.subject();
@@ -80,7 +95,7 @@ paramTest("template smoke", {content: makePagedArray([1,2,3,4,5])}, function(s) 
 
 paramTest("template smoke 2", {content: makePagedArray([1,2,3,4,5])}, function(s) {
   this.append();
-  
+
   hasPages(3);
   hasActivePage(1);
 
