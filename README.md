@@ -54,8 +54,9 @@ npm install ember-cli-pagination --save-dev
 
 #### Other
 
-* [Setup Paginated Rails API](#setup-paginated-rails-api)
 * [Testing](#testing)
+* [Setup Paginated Rails API](#setup-paginated-rails-api)
+* [Contributors](#contributors)
 
 # Scenarios
 
@@ -602,6 +603,30 @@ var paged = PagedRemoteArray.create({/* ..., */
 
 # Other
 
+## Testing
+
+We include some helpers to make testing pagination easier. 
+
+The helper used here is responseHash, in the context of a Pretender definition.
+
+It takes the request, all fixtures, and the model name, and returns the appropriate response (with meta tag).
+
+```coffeescript
+`import Todo from '../../models/todo'`
+`import Helpers from 'ember-cli-pagination/test-helpers'`
+
+c = ->
+  server = new Pretender ->
+    @get "/todos", (request) ->
+      res = Helpers.responseHash(request,Todo.FIXTURES,'todo')
+      
+      [200, {"Content-Type": "application/json"}, JSON.stringify(res)]
+
+`export default c`
+```
+
+--------------
+
 ## Setup Paginated Rails API
 
 ```ruby
@@ -624,26 +649,19 @@ end
 
 --------------
 
-## Testing
+## Contributors
 
-We include some helpers to make testing pagination easier. 
+You guys rock!
 
-The helper used here is responseHash, in the context of a Pretender definition.
-
-It takes the request, all fixtures, and the model name, and returns the appropriate response (with meta tag).
-
-```coffeescript
-`import Todo from '../../models/todo'`
-`import Helpers from 'ember-cli-pagination/test-helpers'`
-
-c = ->
-  server = new Pretender ->
-    @get "/todos", (request) ->
-      res = Helpers.responseHash(request,Todo.FIXTURES,'todo')
-      
-      [200, {"Content-Type": "application/json"}, JSON.stringify(res)]
-
-`export default c`
-```
+* @broerse
+* @robdel12
+* @samselikoff
+* @pedrokiefer
+* @gcollazo
+* @johanneswuerback
+* @tonycoco
+* @dlameri
+* @piotrpalek
+* @robertleib
 
 <!--- FULL DOC END -->

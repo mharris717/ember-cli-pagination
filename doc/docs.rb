@@ -46,7 +46,13 @@ class Entry
     end
 
     fattr(:others) do
-      get(:other)
+      get(:other).sort_by do |entry|
+        if entry.dash_name == 'contributors'
+          999
+        else
+          1
+        end
+      end
     end
   end
 end
@@ -106,6 +112,12 @@ class Full
   end
 end
 
+def replace_comment_block(source,comment)
+  reg = /<!--- #{comment} START -->.+<!--- #{comment} END -->/m
+  raise "bad" unless source =~ reg
+  source.gsub(reg,"<!--- #{comment} START -->\n\n#{full}\n\n<!--- #{comment} END -->")
+end
+
 class Readme
   include FromHash
   fattr(:filename) do
@@ -122,11 +134,7 @@ class Readme
   end
 
   fattr(:final_body) do
-    res = source
-    reg = /<!--- FULL DOC START -->.+<!--- FULL DOC END -->/m
-    raise "bad" unless res =~ reg
-    res = res.gsub(reg,"<!--- FULL DOC START -->\n\n#{full}\n\n<!--- FULL DOC END -->")
-    res
+    replace_comment_block source, "FULL DOC"
   end
 
   def write!
