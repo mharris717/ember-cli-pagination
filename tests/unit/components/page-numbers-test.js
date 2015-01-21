@@ -24,12 +24,12 @@ test('hasPages', function() {
   var s = this.subject();
 
   Ember.run(function() {
-    s.set('totalPages', 0);
+    s.set('totalPages', 1);
   });
   equal(s.get('hasPages'),false);
 
   Ember.run(function() {
-    s.set('totalPages', 1);
+    s.set('totalPages', 2);
   });
   equal(s.get('hasPages'),true);
 });
