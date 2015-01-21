@@ -120,5 +120,15 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     if (page < 1 || page > totalPages) {
       this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
     }
-  }.observes('page','totalPages')
+  }.observes('page','totalPages'),
+
+  setOtherParam: function(k,v) {
+    if (!this.get('otherParams')) {
+      this.set('otherParams',{});
+    }
+
+    this.get('otherParams')[k] = v;
+    this.incrementProperty('paramsForBackendCounter');
+    Ember.run.once(this,"pageChanged");
+  }
 });

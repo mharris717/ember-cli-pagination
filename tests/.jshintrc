@@ -50,6 +50,7 @@
     "hasPages",
     "clickPage",
     "hasTodos",
+    "hasTodo",
     "hasButtons"
   ],
   "node": false,

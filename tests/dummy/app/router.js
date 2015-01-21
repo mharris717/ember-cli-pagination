@@ -11,6 +11,7 @@ Router.map(function() {
     this.route('infinite-remote');
     this.route("remote");
     this.route("local");
+    this.route("remote-sorted");
   });
 });
 
