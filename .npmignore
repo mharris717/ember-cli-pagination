@@ -7,3 +7,6 @@ tests
 app-coffee
 tests-coffee
 addon-coffee
+doc
+coverage
+junk

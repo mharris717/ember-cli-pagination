@@ -39,7 +39,6 @@
     "findWithAssert",
     "wait",
     "DS",
-    "keyEvent",
     "isolatedContainer",
     "startApp",
     "andThen",
@@ -47,7 +46,11 @@
     "currentPath",
     "currentRouteName",
     "Pretender",
-    "hasActivePage"
+    "hasActivePage",
+    "hasPages",
+    "clickPage",
+    "hasTodos",
+    "hasButtons"
   ],
   "node": false,
   "browser": false,

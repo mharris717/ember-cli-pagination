@@ -1,120 +1,163 @@
+
 import startApp from '../helpers/start-app';
 import pretenderServer from '../helpers/pretender-server';
 import Todo from '../../models/todo';
 import Ember from 'ember';
-var App, clickPage, hasButtons, hasPages, hasTodos, server, todosTest;
 
-App = null;
+var App = null;
+var server = null;
 
-server = null;
+var todosTestRemote = function(name, f, initialPage) {
+  test(name, function() {
+    var url = "/todos/remote";
+    if (initialPage) {
+      url += "?page="+initialPage;
+    }
+    visit(url).then(f);
+  });
+};
 
-module('Integration - Pagination', {
+var todosTestLocal = function(name, f, initialPage) {
+  test(name, function() {
+    var url = "/todos/local";
+    if (initialPage) {
+      url += "?page="+initialPage;
+    }
+    visit(url).then(f);
+  });
+};
+
+// commented out for now because it fails.
+// todosTest("numRemoteCalls", function() {
+//   equal(find(".numRemoteCalls").text().trim(), "1");
+// });
+
+var createTests = function(todosTest,todosUrl) {
+  todosTest("page links", function() {
+    equal(find(".pagination").length, 1);
+    hasPages(4);
+  });
+
+  todosTest("first page is active at start", function() {
+    hasActivePage(1);
+  });
+
+  todosTest("clicking page 2", function() {
+    clickPage(2);
+    andThen(function() {
+      hasTodos(10);
+      hasActivePage(2);
+    });
+  });
+
+  todosTest("clicking page 4", function() {
+    clickPage(4);
+    andThen(function() {
+      hasTodos(3);
+      hasActivePage(4);
+
+      hasButtons({
+        prev: true,
+        next: false
+      });
+    });
+  });
+
+  todosTest("passing in page 2 query param", function() {
+    andThen(function() {
+      hasTodos(10);
+      hasActivePage(2);
+
+      equal(currentURL(), todosUrl+"?page=2");
+    });
+  },2);
+
+  todosTest("next button - proper buttons visible", function() {
+    hasActivePage(1);
+    hasButtons({
+      prev: false,
+      next: true
+    });
+  });
+
+  todosTest("click next", function() {
+    clickPage("next");
+    andThen(function() {
+      hasButtons({
+        prev: true,
+        next: true
+      });
+      hasTodos(10);
+      hasActivePage(2);
+    });
+  });
+
+  todosTest("click prev", function() {
+    clickPage(2);
+    andThen(function() {
+      clickPage("prev");
+    });
+    andThen(function() {
+      hasButtons({
+        prev: false,
+        next: true
+      });
+      hasTodos(10);
+      hasActivePage(1);
+    });
+  });
+
+  todosTest("click next on last page and not increment", function() {
+    clickPage(4);
+    andThen(function() {
+      clickPage("next");
+    });
+    andThen(function() {
+      clickPage("next");
+    });
+    andThen(function() {
+      hasTodos(3);
+      equal(currentURL(), todosUrl+"?page=4");
+      notEqual(currentURL(), todosUrl+"?page=5");
+      hasActivePage(4);
+    });
+  });
+
+  todosTest("click prev on first page and not decrement", function() {
+    clickPage("prev");
+    andThen(function() {
+      clickPage("prev");
+    });
+    andThen(function() {
+      hasTodos(10);
+      equal(currentURL(), todosUrl);
+      notEqual(currentURL(), todosUrl+"?page=-1");
+      hasActivePage(1);
+    });
+  });
+};
+
+module('Integration - Pagination Remote', {
   setup: function() {
     App = startApp();
-    return server = pretenderServer();
+    server = pretenderServer();
   },
   teardown: function() {
     Ember.run(App, 'destroy');
-    return server.shutdown();
+    server.shutdown();
   }
 });
 
-todosTest = function(name, f) {
-  return test(name, function() {
-    return visit("/todos").then(f);
-  });
-};
+createTests(todosTestRemote,"/todos/remote");
 
-Ember.Test.registerAsyncHelper('hasActivePage', function(app, num, context) {
-  var i;
-  i = 0;
-  return findWithAssert(".pagination li.page-number", context).each(function() {
-    var active, li;
-    li = $(this);
-    active = num - 1 === i;
-    equal(li.hasClass('active'), active);
-    return i += 1;
-  });
-});
-
-hasTodos = function(l) {
-  return equal(find("table tr.todo").length, l);
-};
-
-hasPages = function(l) {
-  return equal(find(".pagination li.page-number").length, l);
-};
-
-clickPage = function(i) {
-  if(i === "prev" || i === "next") {
-    return click(".pagination li." + i + " a");
-  } else {
-    return click(".pagination li:eq(" + i + ") a");
+module('Integration - Pagination Local', {
+  setup: function() {
+    App = startApp();
+    server = pretenderServer();
+  },
+  teardown: function() {
+    Ember.run(App, 'destroy');
+    server.shutdown();
   }
-};
-
-todosTest("page links", function() {
-  equal(find(".pagination").length, 1);
-  return hasPages(2);
 });
-
-todosTest("first page is active at start", function() {
-  return hasActivePage(1);
-});
-
-todosTest("clicking page 2", function() {
-  clickPage(2);
-  return andThen(function() {
-    hasTodos(1);
-    return hasActivePage(2);
-  });
-});
-
-
-todosTest("click next", function() {
-  clickPage("next");
-  return andThen(function() {
-    hasTodos(1);
-    return hasActivePage(2);
-  });
-});
-
-todosTest("click prev", function() {
-  clickPage(2);
-  andThen(function() {
-    return clickPage("prev");
-  });
-  return andThen(function() {
-    hasTodos(2);
-    return hasActivePage(1);
-  });
-});
-
-todosTest("click next on last page and not increment", function() {
-  clickPage(2);
-  andThen(function() {
-    return clickPage("next");
-  });
-  andThen(function() {
-    return clickPage("next");
-  });
-  return andThen(function() {
-    hasTodos(1);
-    equal(currentURL(), "/todos?page=2");
-    notEqual(currentURL(), "/todos?page=3");
-    return hasActivePage(2);
-  });
-});
-
-todosTest("click prev on first page and not decrement", function() {
-  clickPage("prev");
-  andThen(function() {
-    return clickPage("prev");
-  });
-  return andThen(function() {
-    hasTodos(2);
-    equal(currentURL(), "/todos");
-    notEqual(currentURL(), "/todos?page=-1");
-    return hasActivePage(1);
-  });
-});
+createTests(todosTestLocal,"/todos/local");

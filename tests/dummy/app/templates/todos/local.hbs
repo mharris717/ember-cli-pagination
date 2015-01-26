@@ -1,0 +1,25 @@
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Completed</th>
+  </tr>
+
+  {{#each pagedContent}}
+    <tr class="todo">
+      <td>{{name}}</td>
+      <td>
+        {{input type="checkbox" checked=completed}}
+      </td>
+    </tr>
+  {{/each}}
+</table>
+
+{{page-numbers content=pagedContent}}
+
+<button {{action "save"}}>Save</button>
+
+<div class="numRemoteCalls">
+  {{pagedContent.numRemoteCalls}}
+</div>
+
+{{outlet}}

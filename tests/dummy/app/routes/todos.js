@@ -1,13 +1,13 @@
 import Ember from 'ember';
-import Factory from 'ember-cli-pagination/factory';
-import config from '../config/environment';
-var c;
+// import config from '../config/environment';
+// import Factory from 'ember-cli-pagination/factory';
 
-c = Ember.Route.extend(Factory.routeMixin(config), {
-  model: function(params) {
-    params.perPage = params.perPage || 2;
-    return this.findPaged('todo', params);
-  }
-});
+// export default Ember.Route.extend(Factory.routeMixin(config), {
+//   model: function(params) {
+//     var paged = this.findPaged('todo',params);
+//     paged.lockToRange();
+//     return paged;
+//   }
+// });
 
-export default c;
+export default Ember.Route.extend();
