@@ -1,4 +1,3 @@
-
 import startApp from '../helpers/start-app';
 import pretenderServer from '../helpers/pretender-server';
 import Todo from '../../models/todo';
