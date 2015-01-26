@@ -2,9 +2,7 @@ import Ember from 'ember';
 import Validate from '../validate';
 import Util from '../util';
 
-var exports = {};
-
-exports.QueryParamsForBackend = Ember.Object.extend({
+export var QueryParamsForBackend = Ember.Object.extend({
   defaultKeyFor: function(key) {
     if (key === 'perPage') {
       return 'per_page';
@@ -51,7 +49,7 @@ exports.QueryParamsForBackend = Ember.Object.extend({
   }
 });
 
-exports.ChangeMeta = Ember.Object.extend({
+export var ChangeMeta = Ember.Object.extend({
   getSuppliedParamMapping: function(targetVal) {
     var h = this.get('paramMapping') || {};
 
@@ -115,5 +113,3 @@ exports.ChangeMeta = Ember.Object.extend({
     }
   }
 });
-
-export default exports;

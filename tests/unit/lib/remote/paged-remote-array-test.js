@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
-import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
+import BasePagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 import PagedLocalArray from 'ember-cli-pagination/local/paged-array';
 import Util from 'ember-cli-pagination/util';
 import toArray from '../../../helpers/to-array';
@@ -17,7 +17,7 @@ var RunSet = Ember.Mixin.create({
   }
 });
 
-PagedRemoteArray = PagedRemoteArray.extend(RunSet);
+var PagedRemoteArray = BasePagedRemoteArray.extend(RunSet);
 
 module("PagedRemoteArray");
 

@@ -1,8 +1,6 @@
 import Ember from 'ember';
-import Mapping from 'ember-cli-pagination/remote/mapping';
+import { ChangeMeta } from 'ember-cli-pagination/remote/mapping';
 import Validate from 'ember-cli-pagination/validate';
-
-var ChangeMeta = Mapping.ChangeMeta;
 
 module("change-meta");
 
