@@ -1,4 +1,3 @@
-
 import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
 import PageItems from 'ember-cli-pagination/lib/page-items';
