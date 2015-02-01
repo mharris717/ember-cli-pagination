@@ -42,7 +42,7 @@ export default Ember.Object.extend(SafeGet, {
       next = page + 1;
       return h;
     });
-  }.property('currentPage','totalPages','numPagesToShow'),
+  }.property('currentPage','totalPages','numPagesToShow','showFL'),
 
   pageItems: function() {
     if (this.get('truncatePages')) {
