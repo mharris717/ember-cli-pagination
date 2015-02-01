@@ -323,6 +323,25 @@ export default Ember.ArrayController.extend({
 
  `{infinite: true}` in this example indicates the source array (the `content` property) is a paged array, in this case a PagedRemoteArray.
 
+ To reload an infinite paginated remote collection when query params are changed, you can add property bindings onto `pagedArray`:
+
+```javascript
+// controller
+
+import Ember from 'ember';
+import pagedArray from 'ember-cli-pagination/computed/paged-array';
+
+export default Ember.ArrayController.extend({
+  queryParams: ["searchQuery"],
+
+  searchQuery: null,
+
+  pagedContent: pagedArray("content", {
+    infinite: true
+  }).property("searchQuery"),
+});
+```
+
 ```javascript
 // route
 
