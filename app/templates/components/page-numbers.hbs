@@ -11,6 +11,11 @@
     {{/if}}
 
     {{#each item in pageItems}}
+      {{#if item.dots}}
+        <li class="dots disabled">
+          <span>...</span>
+        </li>
+      {{/if}} 
       {{#if item.current}}
         <li class="active page-number">
           <a>{{item.page}}</a>
