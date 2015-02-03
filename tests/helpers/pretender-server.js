@@ -4,7 +4,11 @@ import Factory from 'ember-cli-pagination/factory';
 import config from '../../config/environment';
 
 var todos = function() {
-  return Todo.FIXTURES;
+  var res = [];
+  Todo.FIXTURES.forEach(function(todo) {
+    res.push(todo);
+  });
+  return res;
 };
 
 export default function() {
@@ -16,6 +20,9 @@ export default function() {
       if (request.queryParams.page === 'all' || !request.queryParams.page) {
         paginationType = "local";
       }
+      else if (request.queryParams.sortByField === 'name') {
+        paginationType = 'remote-sorted';
+      }
 
       var getRes = function() {
         if (paginationType === "local") {
@@ -24,6 +31,17 @@ export default function() {
           };
         } else if (paginationType === "remote") {
           return Helpers.responseHash(request, todos(), 'todo');
+        }
+        else if (paginationType === 'remote-sorted') {
+          var list = todos();
+          // list = _.sortBy(list,function(todo) {
+          //   return todo.name;
+          // });
+
+          list = list.sort(function(a,b) {
+            return a.name.localeCompare(b.name);
+          });
+          return Helpers.responseHash(request, list, 'todo');
         } else {
           throw "unknown pagination type";
         }
