@@ -72,7 +72,7 @@ This scenario applies if:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-Ember.ArrayController.extend({
+export default Ember.ArrayController.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -135,7 +135,7 @@ export default Ember.Route.extend(RouteMixin, {
 ```javascript
 import Ember from 'ember';
 
-Ember.ArrayController.extend({
+export default Ember.ArrayController.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -233,7 +233,7 @@ This scenario applies if:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-Ember.ArrayController.extend({
+export default Ember.ArrayController.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -437,7 +437,7 @@ A PagedArray has several properties you may find useful:
 ```javascript
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-Ember.Object.extend({
+export default Ember.Object.extend({
   // The property that contains all objects
   // In a real app, often set by the route
   content: [1,2,3,4,5,6,7,8,9,10],
@@ -529,7 +529,7 @@ The object acts as a promise, with a working `then` method. If you are manually 
 ```javascript
 import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 
-Ember.Route.extend({
+export default Ember.Route.extend({
   model: function(params) {
     // possible params are params.page and params.per_page
     // Ember's query param logic converts perPage to per_page at some point, for now just dealing with it.
