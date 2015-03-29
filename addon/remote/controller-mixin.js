@@ -8,5 +8,7 @@ export default Ember.Mixin.create({
 
   totalPagesBinding: "content.totalPages",
 
+  totalCountBinding: "content.totalCount",
+
   pagedContentBinding: "content"
 });

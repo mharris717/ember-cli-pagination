@@ -217,7 +217,8 @@ Ember.ArrayController.extend({
   // to the query params on the controller
   pageBinding: "pagedContent.page",
   perPageBinding: "pagedContent.perPage",
-  totalPagesBinding: "pagedContent.totalPages"
+  totalPagesBinding: "pagedContent.totalPages",
+  totalCountBinding: "pagedContent.totalCount"
 });
 ```
 
