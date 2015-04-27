@@ -121,6 +121,14 @@ import Ember from 'ember';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
 export default Ember.Route.extend(RouteMixin, {
+  // Tells the route to make a new request
+  // to the server when the page changes
+  queryParams: {
+    page: {
+      refreshModel: true
+    }
+  },
+
   // optional. default is 10
   perPage: 25,
 
