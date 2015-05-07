@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Util from 'ember-cli-pagination/util';
 import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
-import Mapping from './mapping';
+import { QueryParamsForBackend, ChangeMeta } from './mapping';
 import PageMixin from '../page-mixin';
 
 var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
@@ -57,9 +57,9 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
   },
 
   paramsForBackend: function() {
-    var paramsObj = Mapping.QueryParamsForBackend.create({page: this.getPage(), 
-                                                          perPage: this.getPerPage(), 
-                                                          paramMapping: this.get('paramMapping')});
+    var paramsObj = QueryParamsForBackend.create({page: this.getPage(), 
+                                                  perPage: this.getPerPage(), 
+                                                  paramMapping: this.get('paramMapping')});
     var ops = paramsObj.make();
 
     // take the otherParams hash and add the values at the same level as page/perPage
@@ -84,10 +84,10 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     var me = this;
 
     res.then(function(rows) {
-      var metaObj = Mapping.ChangeMeta.create({paramMapping: me.get('paramMapping'),
-                                               meta: rows.meta,
-                                               page: me.getPage(),
-                                               perPage: me.getPerPage()});
+      var metaObj = ChangeMeta.create({paramMapping: me.get('paramMapping'),
+                                       meta: rows.meta,
+                                       page: me.getPage(),
+                                       perPage: me.getPerPage()});
 
       return me.set("meta", metaObj.make());
       
@@ -120,5 +120,15 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     if (page < 1 || page > totalPages) {
       this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
     }
-  }.observes('page','totalPages')
+  }.observes('page','totalPages'),
+
+  setOtherParam: function(k,v) {
+    if (!this.get('otherParams')) {
+      this.set('otherParams',{});
+    }
+
+    this.get('otherParams')[k] = v;
+    this.incrementProperty('paramsForBackendCounter');
+    Ember.run.once(this,"pageChanged");
+  }
 });

@@ -27,6 +27,10 @@ var f = function() {
     equal(find("table tr.todo").length, l);
   });
 
+  Ember.Test.registerAsyncHelper('hasTodo', function(app, num, name, context) {
+    equal(find("table tr.todo:eq("+num+") td.name").text().trim(), name);
+  });
+
   Ember.Test.registerAsyncHelper('hasPages', function(app, l, context) {
     equal(find(".pagination li.page-number").length, l);
   });

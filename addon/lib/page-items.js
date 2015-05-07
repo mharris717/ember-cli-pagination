@@ -10,10 +10,12 @@ export default Ember.Object.extend(SafeGet, {
     Util.log("PageNumbers#pageItems, currentPage " + currentPage + ", totalPages " + totalPages);
 
     var res = [];
+    
     for(var i=1; i<=totalPages; i++) {
       res.push({
         page: i,
-        current: currentPage === i
+        current: currentPage === i,
+        dots: false
       });
     }
     return res;
@@ -29,14 +31,18 @@ export default Ember.Object.extend(SafeGet, {
                                   numPagesToShow: toShow,
                                   showFL: showFL});
     var pages = t.get('pagesToShow');
-
+    var next = pages[0];
+    
     return pages.map(function(page) {
-      return {
+      var h = {
         page: page,
-        current: (currentPage === page)
+        current: (currentPage === page),
+        dots: (next !== page)
       };
+      next = page + 1;
+      return h;
     });
-  }.property('currentPage','totalPages','numPagesToShow'),
+  }.property('currentPage','totalPages','numPagesToShow','showFL'),
 
   pageItems: function() {
     if (this.get('truncatePages')) {
