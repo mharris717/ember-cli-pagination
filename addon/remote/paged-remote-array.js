@@ -66,7 +66,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     ops = Util.mergeHashes(ops,this.get('otherParams')||{});
 
     return ops;
-  }.property('page','perPage','paramMapping','paramsForBackendCounter'),
+  }.property('page','perPage','paramMapping', 'otherParams', 'paramsForBackendCounter'),
 
   rawFindFromStore: function() {
     var store = this.get('store');
