@@ -6,11 +6,11 @@ import toArray from '../../helpers/to-array';
 import equalArray from '../../helpers/equal-array';
 import MockStore from '../../helpers/mock-store';
 
-module("Remote Route Mixin");
+//module("Remote Route Mixin");
 
 var Promise = Ember.RSVP.Promise;
 
-test("thing", function() {
+test("thing", function(assert) {
   var store = MockStore.create();
 
   var Something = Ember.Object.extend(RouteMixin, {});
@@ -20,22 +20,22 @@ test("thing", function() {
   var findArgs = store.get('findArgs');
 
   console.debug(findArgs);
-  equal(findArgs.length,1);
-  equal(findArgs[0].modelName,"todo");
-  equal(findArgs[0].params.name,"Adam");
+  assert.equal(findArgs.length,1);
+  assert.equal(findArgs[0].modelName,"todo");
+  assert.equal(findArgs[0].params.name,"Adam");
 });
 
-test("default model name", function() {  
+test("default model name", function(assert) {  
   var Route = Ember.Object.extend(RouteMixin, {});  
   var route = Route.create();
 
-  equal('route', route._findModelName('route'));
-  equal('route', route._findModelName('routes'));
-  equal('routeName', route._findModelName('route-name'));
-  equal('routeName', route._findModelName('route-names'));
+  assert.equal('route', route._findModelName('route'));
+  assert.equal('route', route._findModelName('routes'));
+  assert.equal('routeName', route._findModelName('route-name'));
+  assert.equal('routeName', route._findModelName('route-names'));
 });
 
-test("arguments passed to findPaged", function() {
+test("arguments passed to findPaged", function(assert) {
   var store = MockStore.create();
 
   var Something = Ember.Object.extend(RouteMixin, {});
@@ -45,13 +45,12 @@ test("arguments passed to findPaged", function() {
   something.model({name: "Adam"});
   var findArgs = store.get('findArgs');
 
-  console.debug(findArgs);
-  equal(findArgs.length,1);
-  equal(findArgs[0].modelName,"todo");
-  equal(findArgs[0].params.name,"Adam");
+  assert.equal(findArgs.length,1);
+  assert.equal(findArgs[0].modelName,"todo");
+  assert.equal(findArgs[0].params.name,"Adam");
 });
 
-test("can pass param mappings", function() {
+test("can pass param mappings", function(assert) {
   var store = MockStore.create();
 
   var Something = Ember.Object.extend(RouteMixin, {});
@@ -64,7 +63,6 @@ test("can pass param mappings", function() {
   //paramMapping: {page: "current_page"}}
   var findArgs = store.get('findArgs');
 
-  console.debug(findArgs);
-  equal(findArgs.length,1);
-  equal(findArgs[0].params.current_page,1);
+  assert.equal(findArgs.length,1);
+  assert.equal(findArgs[0].params.current_page,1);
 });
