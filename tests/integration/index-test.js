@@ -1,6 +1,7 @@
 import startApp from '../helpers/start-app';
 import pretenderServer from '../helpers/pretender-server';
 import Ember from 'ember';
+import { test, module } from 'qunit';
 
 var App = null;
 var server = null;
@@ -16,8 +17,9 @@ module('Integration - Todo Index', {
   }
 });
 
-test('Should showo todos', function() {
+test('Should showo todos', function(assert) {
+  assert.expect(1);
   visit("/todos/remote").then(function() {
-    equal(find(".todo").length, 10);
+    assert.equal(find(".todo").length, 10);
   });
 });
