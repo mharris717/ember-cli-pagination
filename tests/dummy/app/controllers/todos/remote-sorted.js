@@ -2,9 +2,8 @@ import Ember from 'ember';
 
 export default Ember.ArrayController.extend({
   queryParams: ["page","perPage","sortByField"],
-  page: 1,
 
-  pageBinding: Ember.Binding.oneWay("content.page"),
+  page: Ember.computed.oneWay("content.page"),
 
   updatePaged: function() {
     var field = this.get('sortByField');
