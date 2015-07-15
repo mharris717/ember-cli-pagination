@@ -84,8 +84,27 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     var me = this;
 
     res.then(function(rows) {
+      var meta = rows.meta;
+      var metaPaginationMapping = me.get('paramMapping.meta');
+      
+      if (metaPaginationMapping != null) {
+        if (typeof metaPaginationMapping === 'object') {
+          while(typeof metaPaginationMapping === 'object') {
+            for (var key in metaPaginationMapping) {
+              if (metaPaginationMapping.hasOwnProperty(key) && typeof(key) !== 'function') {
+                metaPaginationMapping = metaPaginationMapping[key]
+                meta = meta[key];
+                break;
+              }
+            }
+          }
+        } else {
+          meta = meta[metaPaginationMapping];
+        }
+      }
+      
       var metaObj = ChangeMeta.create({paramMapping: me.get('paramMapping'),
-                                       meta: rows.meta,
+                                       meta: meta,
                                        page: me.getPage(),
                                        perPage: me.getPerPage()});
 
