@@ -173,7 +173,7 @@ test("filtered", function(assert) {
         });
       }
       return res;
-    }.property("content.@each","min"),
+    }.property("content.[]","min"),
 
     pagedContent: pagedArray("filteredContent", {perPage: 2, pageBinding: "page"})
   });
@@ -187,7 +187,7 @@ test("filtered", function(assert) {
   Ember.run(function() {
     object.set('min',8);
   });
-  
+
   assert.deepEqual(toArray(object.get('pagedContent')),[8,9]);
   Ember.run(function() {
     object.set('min',null);
