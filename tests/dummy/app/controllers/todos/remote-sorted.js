@@ -1,10 +1,19 @@
 import Ember from 'ember';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   queryParams: ["page","perPage","sortByField"],
   page: 1,
 
-  pageBinding: Ember.Binding.oneWay("content.page"),
+  pageBinding: Ember.computed.oneWay("ccontent.page"),
+
+  // arrangedContent: function() {
+  //   var field = this.get('sortByField');
+  //   return Ember.ArrayProxy.extend(Ember.SortableMixin).create({
+  //     sortProperties: [field],
+  //     sortAscending: true,
+  //     content: this.get('content')
+  //   });
+  // }.property('content'),
 
   updatePaged: function() {
     var field = this.get('sortByField');

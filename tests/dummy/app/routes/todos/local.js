@@ -2,7 +2,12 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   model: function() {
-    var paged = this.store.find('todo');
-    return paged;
+    return Ember.RSVP.hash({
+      content: this.store.findAll('todo')
+    });
+  },
+
+  setupController: function(controller, models) {
+    controller.setProperties(models);
   }
 });
