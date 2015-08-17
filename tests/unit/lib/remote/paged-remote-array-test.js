@@ -50,6 +50,10 @@ var FakeStore = Ember.Object.extend({
     return new Promise(function(success,failure) {
       success(res);
     });
+  },
+
+  query: function(name,params) {
+    return this.find(name,params);
   }
 });
 
@@ -86,7 +90,7 @@ asyncTest("change page", function(assert) {
 
   paged.then(function() {
     equalArray(assert,paged,[1,2]);
-    
+
     paged.runSet("page",2);
 
     paged.then(function() {
@@ -125,6 +129,10 @@ var ErrorStore = Ember.Object.extend({
     return new Promise(function(success,failure) {
       failure("Network Error");
     });
+  },
+
+  query: function(modelName,params) {
+    return this.find(modelName,params);
   }
 });
 
@@ -213,7 +221,7 @@ test("paramsForBackend with otherParams", function(assert) {
 test("paramsForBackend with param mapping", function(assert) {
   var store = MockStore.create();
   var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2});
-  
+
   //paged.set('paramMapping', {page: "currentPage"});
   paged.addQueryParamMapping('page','currentPage');
   var res = paged.get('paramsForBackend');

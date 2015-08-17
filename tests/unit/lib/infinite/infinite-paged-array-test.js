@@ -55,6 +55,10 @@ var FakeStore = Ember.Object.extend({
     return new Promise(function(success,failure) {
       success(res);
     });
+  },
+
+  query: function(name,params) {
+    return this.find(name,params);
   }
 });
 
