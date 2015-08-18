@@ -23,13 +23,19 @@ This is a new project, but many people are already using it successfully. If you
 
 ## Requirements
 
-- ember-cli 0.0.46 or higher (untested with earlier versions, but it might work)
-- ember-cli-pagination 0.6.1 or higher (to match current docs)
+- ember-cli 1.13.0 or higher (For earlier versions use ember-cli-pagination 0.6.6)
+- ember-cli-pagination 1.0.0 or higher for current docs.
 
 ## Installation
 
 ```
-npm install ember-cli-pagination --save-dev
+ember install ember-cli-pagination
+```
+
+For ember-cli < 1.13.0:
+
+```
+npm install ember-cli-pagination@0.6.6 --save-dev
 ```
 
 <!--- FULL DOC START -->
