@@ -42,8 +42,14 @@ var makeDivide = function() {
   };
 };
 
-var makePagedResponse = function(page) {
+var makePagedResponse = function(page,sortByField) {
   var all = makeAllFixtures();
+  if (sortByField == 'name') {
+    all = all.sort(function(a,b) {
+      return a[sortByField].localeCompare(b[sortByField]);
+    });
+  }
+  
   var divide = makeDivide();
   divide.set('page',1);
   divide.set('perPage',10);
@@ -62,7 +68,7 @@ var makePagedResponse = function(page) {
 
 var makeResponse = function(req) {
   if (req.query.page && req.query.page != 'all') {
-    return makePagedResponse(req.query.page);
+    return makePagedResponse(req.query.page,req.query.sortByField);
   }
   else {
     return {
