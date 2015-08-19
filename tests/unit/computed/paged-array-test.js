@@ -165,7 +165,7 @@ test("filtered", function() {
         });
       }
       return res;
-    }.property("content.@each","min"),
+    }.property("content.[]","min"),
 
     pagedContent: pagedArray("filteredContent", {perPage: 2, pageBinding: "page"})
   });
