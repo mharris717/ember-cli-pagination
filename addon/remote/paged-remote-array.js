@@ -57,8 +57,8 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
   },
 
   paramsForBackend: function() {
-    var paramsObj = QueryParamsForBackend.create({page: this.getPage(), 
-                                                  perPage: this.getPerPage(), 
+    var paramsObj = QueryParamsForBackend.create({page: this.getPage(),
+                                                  perPage: this.getPerPage(),
                                                   paramMapping: this.get('paramMapping')});
     var ops = paramsObj.make();
 
@@ -73,7 +73,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     var modelName = this.get('modelName');
 
     var ops = this.get('paramsForBackend');
-    var res = store.find(modelName, ops);
+    var res = store.query(modelName, ops);
 
     return res;
   },
@@ -90,13 +90,13 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
                                        perPage: me.getPerPage()});
 
       return me.set("meta", metaObj.make());
-      
+
     }, function(error) {
       Util.log("PagedRemoteArray#fetchContent error " + error);
     });
 
     return res;
-  },  
+  },
 
   totalPagesBinding: "meta.total_pages",
 
