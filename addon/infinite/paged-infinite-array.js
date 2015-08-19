@@ -42,7 +42,7 @@ var InfiniteBase = Ember.ArrayProxy.extend({
 
   arrangedContent: function() {
     return this.get('content');
-  }.property('content.@each'),
+  }.property('content.[]'),
 
   init: function() {
     this.set('content',[]);
