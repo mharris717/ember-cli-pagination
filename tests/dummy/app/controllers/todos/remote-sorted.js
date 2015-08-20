@@ -1,15 +1,15 @@
 import Ember from 'ember';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   queryParams: ["page","perPage","sortByField"],
   page: 1,
 
-  pageBinding: Ember.Binding.oneWay("content.page"),
+  pageBinding: Ember.computed.oneWay("content.page"),
 
   updatePaged: function() {
     var field = this.get('sortByField');
     var paged = this.get('content');
-    if (paged.setOtherParam) {
+    if (paged && paged.setOtherParam) {
       paged.setOtherParam('sortByField',field);
     }
   }.observes('sortByField')

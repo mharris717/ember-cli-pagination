@@ -6,7 +6,7 @@ Simple pagination addon for your Ember CLI app.
 
 ![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png)
 
-Features: 
+Features:
 
 - Supports multiple types of pagination:
   - Local
@@ -23,13 +23,19 @@ This is a new project, but many people are already using it successfully. If you
 
 ## Requirements
 
-- ember-cli 0.0.46 or higher (untested with earlier versions, but it might work)
-- ember-cli-pagination 0.6.1 or higher (to match current docs)
+- ember-cli 1.13.0 or higher (For earlier versions use ember-cli-pagination 0.6.6)
+- ember-cli-pagination 1.0.0 or higher for current docs.
 
 ## Installation
 
 ```
-npm install ember-cli-pagination --save-dev
+ember install ember-cli-pagination
+```
+
+For ember-cli < 1.13.0:
+
+```
+npm install ember-cli-pagination@0.6.6 --save-dev
 ```
 
 <!--- FULL DOC START -->
@@ -85,7 +91,7 @@ export default Ember.ArrayController.extend({
   // remember to iterate over pagedContent in your template
   pagedContent: pagedArray('content', {pageBinding: "page", perPageBinding: "perPage"}),
 
-  // binding the property on the paged array 
+  // binding the property on the paged array
   // to a property on the controller
   totalPagesBinding: "pagedContent.totalPages"
 });
@@ -99,12 +105,12 @@ export default Ember.ArrayController.extend({
 {{page-numbers content=pagedContent}}
 ```
 
-If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work. 
+If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
 
 #### Notes
 
 * There is no need to touch the route in this scenario.
-* There used to be route and controller mixins, and they may return in the future. For now, they were too much overhead, and they were too much magic. If you think getting rid of the mixins is a mistake, please open an issue and let me know. 
+* There used to be route and controller mixins, and they may return in the future. For now, they were too much overhead, and they were too much magic. If you think getting rid of the mixins is a mistake, please open an issue and let me know.
 
 --------------
 
@@ -139,12 +145,12 @@ export default Ember.ArrayController.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
-  // binding the property on the paged array 
+  // binding the property on the paged array
   // to the query params on the controller
   pageBinding: "content.page",
   perPageBinding: "content.perPage",
   totalPagesBinding: "content.totalPages",
-  
+
   // set default values, can cause problems if left out
   // if value matches default, it won't display in the URL
   page: 1,
@@ -160,7 +166,7 @@ export default Ember.ArrayController.extend({
 {{page-numbers content=content}}
 ```
 
-If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work. 
+If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
 
 ### Passing other params to findPaged
 
@@ -184,7 +190,7 @@ You may pass an optional paramMapping arg. This is a hash that allows you to cha
 
 Note that the default param name for perPage is per_page.
 
-`page` and `perPage` control what is sent to the backend. `total_pages` controls where we expect to find the total pages value in the response from the backend. 
+`page` and `perPage` control what is sent to the backend. `total_pages` controls where we expect to find the total pages value in the response from the backend.
 
 ```javascript
 import Ember from 'ember';
@@ -202,7 +208,7 @@ export default Ember.Route.extend(RouteMixin, {
 
 #### Notes
 
-* There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know. 
+* There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know.
 * Related: [Setup a Paginated Rails API](#setup-paginated-rails-api)
 
 --------------
@@ -216,7 +222,7 @@ This scenario applies if:
 * Wish to display one page of records at a time.
 * Want to have a page query parameter (optional).
 
-This scenario is identical to the [Local Store](#local-store) scenario. 
+This scenario is identical to the [Local Store](#local-store) scenario.
 
 --------------
 
@@ -249,7 +255,7 @@ export default Ember.ArrayController.extend({
   // remember to iterate over pagedContent in your template
   pagedContent: pagedArray('filteredContent'),
 
-  // binding the property on the paged array 
+  // binding the property on the paged array
   // to the query params on the controller
   pageBinding: "pagedContent.page",
   perPageBinding: "pagedContent.perPage",
@@ -265,7 +271,7 @@ export default Ember.ArrayController.extend({
 {{page-numbers content=pagedContent}}
 ```
 
-If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work. 
+If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
 
 #### Notes
 
@@ -275,9 +281,9 @@ If you don't want to have query params, you may leave them out, along with the 3
 
 ## Infinite Pagination with All Records Present Locally
 
-The infinite pagination sections of the docs is not yet up to my preferred quality level. If you have any questions or problems, please do not hesitate to make an issue. 
+The infinite pagination sections of the docs is not yet up to my preferred quality level. If you have any questions or problems, please do not hesitate to make an issue.
 
-The example below does not use a page query param, although that is certainly possible. 
+The example below does not use a page query param, although that is certainly possible.
 
 Controller:
 
@@ -296,13 +302,13 @@ export default Ember.ArrayController.extend({
 });
 ```
 
-`"unpaged"` in this example indicates the source array (the `content` property) is a regular (unpaged) array, as opposed to a PagedArray. 
+`"unpaged"` in this example indicates the source array (the `content` property) is a regular (unpaged) array, as opposed to a PagedArray.
 
 --------------
 
 ## Infinite Pagination with a Remote Paginated API
 
-The example below does not use a page query param, although that is certainly possible. 
+The example below does not use a page query param, although that is certainly possible.
 
 ```javascript
 // controller
@@ -343,7 +349,7 @@ export default Ember.Route.extend(RouteMixin, {
 
 Displays pagination controls.
 
-![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png) 
+![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png)
 
 Features:
 
@@ -354,7 +360,7 @@ Features:
 
 ### Including in your template
 
-There are two ways to use this component. 
+There are two ways to use this component.
 
 #### Backed by a PagedArray
 
@@ -392,7 +398,7 @@ Ember.Object.extend({
 
 ```handlebars
 {{page-numbers currentPage=page totalPages=totalPages}}
-``` 
+```
 
 Clicking a page number will:
 
@@ -419,7 +425,7 @@ To always show the first and last pages (in addition to the pages that would be 
 
 ## `pagedArray` Computed Helper
 
-Creates a computed property representing a PagedArray. 
+Creates a computed property representing a PagedArray.
 
 A PagedArray acts just like a normal array containing only the records on the current page.
 
@@ -453,7 +459,7 @@ In this example, these properties will be available:
 * `pagedContent.perPage`
 * `pagedContent.totalPages`
 
-The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details. 
+The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details.
 
 --------------
 
@@ -495,7 +501,7 @@ A Paged will be updated when the page property is changed.
 
 ### Binding
 
-You may bind PagedArray#page like any property. 
+You may bind PagedArray#page like any property.
 
 To update records when a page property changes:
 
@@ -524,7 +530,7 @@ It takes six arguments at creation, in a standard options hash passed to PagedRe
 
 Once the data is loaded, you may iterate over a PagedRemoteArray as you would a normal array.
 
-The object acts as a promise, with a working `then` method. If you are manually iterating over records outside of the standard workflow, make sure to use `then` with standard promise semantics, just as you would an object returned from a normal `store.find` call. 
+The object acts as a promise, with a working `then` method. If you are manually iterating over records outside of the standard workflow, make sure to use `then` with standard promise semantics, just as you would an object returned from a normal `store.find` call.
 
 ```javascript
 import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
@@ -534,7 +540,7 @@ export default Ember.Route.extend({
     // possible params are params.page and params.per_page
     // Ember's query param logic converts perPage to per_page at some point, for now just dealing with it.
 
-    return PagedRemoteArray.create({modelName: 'post', 
+    return PagedRemoteArray.create({modelName: 'post',
                                     store: this.store,
                                     page: params.page || 1,
                                     perPage: params.per_page || 10});
@@ -544,7 +550,7 @@ export default Ember.Route.extend({
 
 ### Updating
 
-A PagedRecordArray will make a new remote call to update records when the page property is changed. Again, standard promise usage applies here. 
+A PagedRecordArray will make a new remote call to update records when the page property is changed. Again, standard promise usage applies here.
 
 ```javascript
 // pagedArray represents a PagedRemoteArray, already created and loaded with data, with page=1
@@ -563,7 +569,7 @@ pagedArray.then(function() {
 
 ### Binding
 
-You may bind PagedRemoteArray#page like any property. 
+You may bind PagedRemoteArray#page like any property.
 
 To update records when a page property changes:
 
@@ -590,11 +596,11 @@ PagedRemoteArray takes an optional paramMapping arg. This is a hash that allows 
 
 Note that the default param name for perPage is per_page.
 
-`page` and `perPage` control what is sent to the backend. `total_pages` controls where we expect to find the total pages value in the response from the backend. 
+`page` and `perPage` control what is sent to the backend. `total_pages` controls where we expect to find the total pages value in the response from the backend.
 
 ```javascript
-// This will send a request with pageNum and limit params, 
-// and expect a response with a num_pages param in the meta. 
+// This will send a request with pageNum and limit params,
+// and expect a response with a num_pages param in the meta.
 var paged = PagedRemoteArray.create({/* ..., */
                                     paramMapping: {page: "pageNum",
                                                    perPage: "limit",
@@ -605,7 +611,7 @@ var paged = PagedRemoteArray.create({/* ..., */
 
 ## Testing
 
-We include some helpers to make testing pagination easier. 
+We include some helpers to make testing pagination easier.
 
 The helper used here is responseHash, in the context of a Pretender definition.
 
@@ -619,7 +625,7 @@ c = ->
   server = new Pretender ->
     @get "/todos", (request) ->
       res = Helpers.responseHash(request,Todo.FIXTURES,'todo')
-      
+
       [200, {"Content-Type": "application/json"}, JSON.stringify(res)]
 
 `export default c`
@@ -663,5 +669,7 @@ You guys rock!
 * @dlameri
 * @piotrpalek
 * @robertleib
+* @halfdan
+* @bschnelle
 
 <!--- FULL DOC END -->

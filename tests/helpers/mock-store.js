@@ -11,5 +11,9 @@ export default Ember.Object.extend({
       me.get("findArgs").pushObject({modelName: modelName, params: params});
       success([]);
     });
+  },
+
+  query: function(modelName,params) {
+    return this.find(modelName,params);
   }
 });

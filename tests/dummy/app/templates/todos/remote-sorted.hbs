@@ -8,11 +8,11 @@
     <th>Completed</th>
   </tr>
 
-  {{#each content}}
+  {{#each content as |content|}}
     <tr class="todo">
-      <td class="name">{{name}}</td>
+      <td class="name">{{content.name}}</td>
       <td>
-        {{input type="checkbox" checked=completed}}
+        {{input type="checkbox" checked=content.completed}}
       </td>
     </tr>
   {{/each}}

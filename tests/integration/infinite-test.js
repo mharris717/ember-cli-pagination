@@ -2,39 +2,39 @@ import startApp from '../helpers/start-app';
 import pretenderServer from '../helpers/pretender-server';
 import Todo from '../../models/todo';
 import Ember from 'ember';
+import { test, module } from 'qunit';
 
 var App = null;
 var server = null;
 
-
-
 var todosTestLocal = function(name, f) {
-  test(name, function() {
-    visit("/todos/infinite").then(f);
+  test(name, function(assert) {
+    visit("/todos/infinite").then(function() {
+      f(assert);
+    });
   });
 };
 
 var todosTestRemote = function(name, f) {
-  test(name, function() {
-    visit("/todos/infinite-remote").then(f);
+  test(name, function(assert) {
+    visit("/todos/infinite-remote").then(function() {
+      f(assert);
+    });
   });
 };
 
 var runTests = function(todosTest) {
-  todosTest("smoke", function() {
-    hasTodos(10);
+  todosTest("smoke", function(assert) {
+    hasTodos(assert,10);
   });
 
-  todosTest("next page", function() {
-    hasTodos(10);
+  todosTest("next page", function(assert) {
+    assert.expect(2);
+    hasTodos(assert,10);
 
     click(".infinite .next a");
     andThen(function() {
-      QUnit.stop();
-      setTimeout(function() {
-        equal(find('.infinite .todo').length,20);
-        QUnit.start();
-      },50);
+      assert.equal(find('.infinite .todo').length,20);
     });
   });
 };

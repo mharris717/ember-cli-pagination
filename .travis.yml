@@ -1,5 +1,7 @@
 ---
 language: node_js
+node_js:
+  - "0.12"
 
 sudo: false
 
@@ -8,21 +10,14 @@ cache:
     - node_modules
 
 before_install:
+  - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
   - "npm config set spin false"
   - "npm install -g npm@^2"
 
 install:
-  - npm install ember-cli@$EMBER_CLI_VERSION
   - npm install -g bower
   - npm install
   - bower install
 
 script:
   - npm test
-
-env:
-  - EMBER_CLI_VERSION=latest
-  - EMBER_CLI_VERSION=0.0.46
-  - EMBER_CLI_VERSION=0.0.44
-  - EMBER_CLI_VERSION=0.0.42
-  - STANDIN_VAR=nothing

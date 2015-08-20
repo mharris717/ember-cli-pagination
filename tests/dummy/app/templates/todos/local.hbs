@@ -4,11 +4,11 @@
     <th>Completed</th>
   </tr>
 
-  {{#each pagedContent}}
+  {{#each pagedContent as |content|}}
     <tr class="todo">
-      <td>{{name}}</td>
+      <td>{{content.name}}</td>
       <td>
-        {{input type="checkbox" checked=completed}}
+        {{input type="checkbox" checked=content.completed}}
       </td>
     </tr>
   {{/each}}
