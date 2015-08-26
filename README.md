@@ -24,7 +24,7 @@ This is a new project, but many people are already using it successfully. If you
 ## Requirements
 
 - ember-cli 1.13.0 or higher (For earlier versions use ember-cli-pagination 0.6.6)
-- ember-cli-pagination 1.0.0 or higher for current docs.
+- ember-cli-pagination 0.9.0 or higher for current docs.
 
 ## Installation
 
