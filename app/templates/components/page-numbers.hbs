@@ -2,6 +2,9 @@
   <ul class="pagination">
     {{#if canStepBackward}}
       <li class="arrow prev enabled-arrow">
+        <a href="#" {{action "firstPage"}}>&laquo;&laquo;</a>
+      </li>
+      <li class="arrow prev enabled-arrow">
         <a href="#" {{action "incrementPage" -1}}>&laquo;</a>
       </li>
     {{else}}
@@ -30,6 +33,9 @@
     {{#if canStepForward}}
       <li class="arrow next enabled-arrow">
         <a href="#" {{action "incrementPage" 1}}>&raquo;</a>
+      </li>
+      <li class="arrow next enabled-arrow">
+        <a href="#" {{action "lastPage"}}>&raquo;&raquo;</a>
       </li>
     {{else}}
       <li class="arrow next disabled">
