@@ -28,10 +28,10 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     }
 
     try {
-      this.get('promise');
+      return this.get('promise');
     }
     catch (e) {
-      this.set('promise', this.fetchContent());
+      return this.set('promise', this.fetchContent());
     }
   },
 
