@@ -108,7 +108,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
   pageChanged: function() {
     var page = this.get('page');
     var lastPage = this.get('lastPage');
-    if (lastPage != page) {
+    if (lastPage !== page) {
       this.set('lastPage', page);
       this.set("promise", this.fetchContent());
     }
