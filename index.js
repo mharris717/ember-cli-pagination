@@ -6,7 +6,8 @@ module.exports = {
   name: 'ember-cli-pagination',
   init: function() {
     var checker = new VersionChecker(this);
+    var dep = checker.for('ember-cli', 'npm');
 
-    checker.for('ember-cli', 'npm').assertAbove('1.13.0');
+    dep.assertAbove('1.13.0 || >2 || >2.2.0-beta');
   }
 };
