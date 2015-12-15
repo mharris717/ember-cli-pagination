@@ -18,6 +18,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "active-model-adapter": "2.0.3",
     "broccoli-asset-rev": "^2.2.0",
     "ember-ajax": "0.7.1",
     "ember-cli": "2.2.0-beta.1",
@@ -36,9 +37,9 @@
     "ember-export-application-global": "^1.0.4",
     "ember-resolver": "^2.0.3",
     "ember-try": "0.0.8",
+    "express": "^4.12.4",
     "glob": "^5.0.14",
-    "morgan": "^1.5.3",
-    "express": "^4.12.4"
+    "morgan": "^1.5.3"
   },
   "keywords": [
     "ember-addon"
