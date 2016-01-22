@@ -17,9 +17,9 @@ var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
 
 export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromiseMixin, {
   page: 1,
-  paramMapping: function() {
+  paramMapping: Ember.computed(() => {
     return {};
-  }.property(''),
+  }),
 
   init: function() {
     var initCallback = this.get('initCallback');
@@ -56,7 +56,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     return this.addParamMapping(key,mappedKey,mappingFunc);
   },
 
-  paramsForBackend: function() {
+  paramsForBackend: Ember.computed('page','perPage','paramMapping','paramsForBackendCounter', function() {
     var paramsObj = QueryParamsForBackend.create({page: this.getPage(), 
                                                   perPage: this.getPerPage(), 
                                                   paramMapping: this.get('paramMapping')});
@@ -66,7 +66,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     ops = Util.mergeHashes(ops,this.get('otherParams')||{});
 
     return ops;
-  }.property('page','perPage','paramMapping','paramsForBackendCounter'),
+  }),
 
   rawFindFromStore: function() {
     var store = this.get('store');
@@ -103,15 +103,15 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
 
   totalPagesBinding: "meta.total_pages",
 
-  pageChanged: function() {
+  pageChanged: Ember.observer("page", "perPage", function() {
     this.set("promise", this.fetchContent());
-  }.observes("page", "perPage"),
+  }),
 
   lockToRange: function() {
     LockToRange.watch(this);
   },
 
-  watchPage: function() {
+  watchPage: Ember.observer('page','totalPages', function() {
     var page = this.get('page');
     var totalPages = this.get('totalPages');
     if (parseInt(totalPages) <= 0) {
@@ -123,7 +123,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     if (page < 1 || page > totalPages) {
       this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
     }
-  }.observes('page','totalPages'),
+  }),
 
   setOtherParam: function(k,v) {
     if (!this.get('otherParams')) {

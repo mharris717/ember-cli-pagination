@@ -1,17 +1,17 @@
 import Ember from 'ember';
-import { test, moduleForModel } from 'ember-qunit';
+import { test } from 'ember-qunit';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 import toArray from '../../helpers/to-array';
 
 // COMMENTEDOUTTEST
-//moduleForModel("paged-array");
+//module("paged-array");
 
 test("passing perPage to pagedArray", function(assert) {
   var Something = Ember.Object.extend({
     pagedContent: pagedArray("content", {perPage: 2})
   });
 
-  var object = Something.create({content: [1,2,3,4,5]});
+  var object = Something.create({content: Ember.A([1,2,3,4,5])});
   var res = null;
   Ember.run(function() {
     res = toArray(object.get('pagedContent'));
@@ -27,7 +27,7 @@ test("passing perPage and page to pagedArray", function(assert) {
     pagedContent: pagedArray("content", {perPage: 2, page: 2})
   });
 
-  var object = Something.create({content: [1,2,3,4,5]});
+  var object = Something.create({content: Ember.A([1,2,3,4,5])});
 
   assert.deepEqual(toArray(object.get('pagedContent')),[3,4]);
 });
@@ -39,7 +39,7 @@ test("passing pageBinding to pagedArray", function(assert) {
   });
 
   var object = Something.create({
-    content: [1,2,3,4,5],
+    content: Ember.A([1,2,3,4,5]),
     page: 2
   });
 
@@ -54,7 +54,7 @@ test("doing binding the other way", function(assert) {
   });
 
   var object = Something.create({
-    content: [1,2,3,4,5],
+    content: Ember.A([1,2,3,4,5]),
     page: 2
   });
 
@@ -71,7 +71,7 @@ test("passing perPageBinding to pagedArray", function(assert) {
   });
 
   var object = Something.create({
-    content: [1,2,3,4,5],
+    content: Ember.A([1,2,3,4,5]),
     perPage: 3
   });
 
@@ -84,13 +84,13 @@ test("pagedArray value changes when parent content property changes", function(a
   });
 
   var object = Something.create({
-    content: [1,2,3,4,5]
+    content: Ember.A([1,2,3,4,5])
   });
 
   assert.deepEqual(toArray(object.get('pagedContent')),[1,2]);
 
   Ember.run(function() {
-    object.set("content",[6,7,8,9,10]);
+    object.set("content",Ember.A([6,7,8,9,10]));
   });
 
   assert.deepEqual(toArray(object.get('pagedContent')),[6,7]);
@@ -138,7 +138,7 @@ test("infinite smoke", function(assert) {
     infiniteContent: pagedArray("pagedContent", {infinite: true})
   });
 
-  var object = Something.create({content: [1,2,3,4,5]});
+  var object = Something.create({content: Ember.A([1,2,3,4,5])});
 
   assert.deepEqual(toArray(object.get('infiniteContent')),[1,2]);
 
@@ -152,7 +152,7 @@ test("infinite smoke", function(assert) {
     infiniteContent: pagedArray("content", {infinite: {source: "unpaged"}, perPage: 2})
   });
 
-  var object = Something.create({content: [1,2,3,4,5]});
+  var object = Something.create({content: Ember.A([1,2,3,4,5])});
 
   assert.deepEqual(toArray(object.get('infiniteContent')),[1,2]);
 
@@ -164,7 +164,7 @@ test("infinite smoke", function(assert) {
 test("filtered", function(assert) {
   var Something = Ember.Object.extend({
     page: 1,
-    filteredContent: function() {
+    filteredContent: Ember.computed("content.[]","min", function() {
       var min = this.get('min');
       var res = this.get('content');
       if (min) {
@@ -172,15 +172,14 @@ test("filtered", function(assert) {
           return num >= min;
         });
       }
-      return res;
-    }.property("content.[]","min"),
+      return Ember.A(res);
+    }),
 
     pagedContent: pagedArray("filteredContent", {perPage: 2, pageBinding: "page"})
   });
 
   var object = Something.create({
     content: Ember.A([1,2,3,4,5,6,7,8,9,10]),
-
   });
 
   assert.deepEqual(toArray(object.get('pagedContent')),[1,2]);

@@ -9,15 +9,14 @@ export default Ember.Component.extend({
 
   hasPages: Ember.computed.gt('totalPages', 1),
 
-  watchInvalidPage: function() {
-    var me = this;
-    var c = this.get('content');
+  watchInvalidPage: Ember.observer("content", function() {
+    const c = this.get('content');
     if (c && c.on) {
-      c.on('invalidPage', function(e) {
-        me.sendAction('invalidPageAction',e);
+      c.on('invalidPage', (e) => {
+        this.sendAction('invalidPageAction',e);
       });
     }
-  }.observes("content"),
+  }),
 
   truncatePages: true,
   numPagesToShow: 10,
@@ -31,7 +30,7 @@ export default Ember.Component.extend({
     }
   },
 
-  pageItemsObj: function() {
+  pageItemsObj: Ember.computed(function() {
     return PageItems.create({
       parent: this,
       currentPageBinding: "parent.currentPage",
@@ -40,25 +39,25 @@ export default Ember.Component.extend({
       numPagesToShowBinding: "parent.numPagesToShow",
       showFLBinding: "parent.showFL"
     });
-  }.property(),
+  }),
 
   //pageItemsBinding: "pageItemsObj.pageItems",
 
-  pageItems: function() {
+  pageItems: Ember.computed("pageItemsObj.pageItems","pageItemsObj", function() {
     this.validate();
     return this.get("pageItemsObj.pageItems");
-  }.property("pageItemsObj.pageItems","pageItemsObj"),
+  }),
 
-  canStepForward: (function() {
-    var page = Number(this.get("currentPage"));
-    var totalPages = Number(this.get("totalPages"));
+  canStepForward: Ember.computed("currentPage", "totalPages", function() {
+    const page = Number(this.get("currentPage"));
+    const totalPages = Number(this.get("totalPages"));
     return page < totalPages;
-  }).property("currentPage", "totalPages"),
+  }),
 
-  canStepBackward: (function() {
-    var page = Number(this.get("currentPage"));
+  canStepBackward: Ember.computed("currentPage", function() {
+    const page = Number(this.get("currentPage"));
     return page > 1;
-  }).property("currentPage"),
+  }),
 
   actions: {
     pageClicked: function(number) {
@@ -67,14 +66,14 @@ export default Ember.Component.extend({
       this.sendAction('action',number);
     },
     incrementPage: function(num) {
-      var currentPage = Number(this.get("currentPage")),
-          totalPages = Number(this.get("totalPages"));
+      const currentPage = Number(this.get("currentPage")),
+           totalPages = Number(this.get("totalPages"));
 
       if(currentPage === totalPages && num === 1) { return false; }
       if(currentPage <= 1 && num === -1) { return false; }
       this.incrementProperty('currentPage', num);
 
-      var newPage = this.get('currentPage');
+      const newPage = this.get('currentPage');
       this.sendAction('action',newPage);
     }
   }
