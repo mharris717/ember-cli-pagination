@@ -21,7 +21,7 @@ export default Ember.Mixin.create({
       page: params.page || this.get('startingPage'),
       perPage: params.perPage || this.get('perPage'),
       modelName: name,
-      store: this.store
+      store: this.get('store')
     };
 
     if (params.paramMapping) {
