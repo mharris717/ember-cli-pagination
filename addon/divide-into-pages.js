@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Object.extend({
   objsForPage: function(page) {
     var range = this.range(page);
-    return this.get('all').slice(range.start,range.end+1);
+    return Ember.A(this.get('all').slice(range.start,range.end+1));
   },
 
   totalPages: function() {
