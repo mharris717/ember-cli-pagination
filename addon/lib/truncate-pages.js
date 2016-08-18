@@ -14,7 +14,7 @@ export default Ember.Object.extend(SafeGet, {
     return page > 0 && page <= totalPages;
   },
 
-  pagesToShow: function() {
+  pagesToShow: Ember.computed("numPagesToShow","currentPage","totalPages", function() {
     var res = [];
 
     var numPages = this.getInt('numPagesToShow');
@@ -76,7 +76,7 @@ export default Ember.Object.extend(SafeGet, {
       }
     }
     
-    return res;
+    return Ember.A(res);
 
-  }.property("numPagesToShow","currentPage","totalPages")
+  })
 });

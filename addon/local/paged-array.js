@@ -14,20 +14,20 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
     });
   },
 
-  arrangedContent: function() {
+  arrangedContent: Ember.computed("content.[]", "page", "perPage", function() {
     return this.divideObj().objsForPage(this.get('page'));
-  }.property("content.[]", "page", "perPage"),
+  }),
 
-  totalPages: function() {
+  totalPages: Ember.computed("content.[]", "perPage", function() {
     return this.divideObj().totalPages();
-  }.property("content.[]", "perPage"),
+  }),
 
   setPage: function(page) {
     Util.log("setPage " + page);
     return this.set('page', page);
   },
 
-  watchPage: function() {
+  watchPage: Ember.observer('page','totalPages', function() {
     var page = this.get('page');
     var totalPages = this.get('totalPages');
 
@@ -36,10 +36,10 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
     if (page < 1 || page > totalPages) {
       this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
     }
-  }.observes('page','totalPages'),
+  }),
 
   then: function(success,failure) {
-    var content = this.get('content');
+    var content = Ember.A(this.get('content'));
     var me = this;
 
     if (content.then) {

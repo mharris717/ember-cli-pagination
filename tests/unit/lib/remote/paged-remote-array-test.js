@@ -38,7 +38,7 @@ var paramTest = function(name,ops,f) {
 var FakeStore = Ember.Object.extend({
   find: function(name,params) {
     Util.log("FakeStore#find params",params);
-    var all = this.get('all');
+    var all = Ember.A(this.get('all'));
     var paged = PagedLocalArray.create({page: params.page, perPage: params.per_page, content: all});
     var res = toArray(paged);
 
@@ -48,7 +48,7 @@ var FakeStore = Ember.Object.extend({
     res.meta[key] = totalPages;
 
     return new Promise(function(success,failure) {
-      success(res);
+      success(Ember.A(res));
     });
   },
 
