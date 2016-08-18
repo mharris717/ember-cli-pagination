@@ -1,7 +1,9 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { test, moduleFor } from 'ember-qunit';
 import { ChangeMeta } from 'ember-cli-pagination/remote/mapping';
 import Validate from 'ember-cli-pagination/validate';
+
+//moduleFor("sup 123");
 
 test("smoke", function(assert) {
   var meta = {total_pages: 4};

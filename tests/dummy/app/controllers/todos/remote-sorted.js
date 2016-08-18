@@ -6,11 +6,11 @@ export default Ember.Controller.extend({
 
   pageBinding: Ember.computed.oneWay("content.page"),
 
-  updatePaged: function() {
+  updatePaged: Ember.observer("sortByField", function() {
     var field = this.get('sortByField');
     var paged = this.get('content');
     if (paged && paged.setOtherParam) {
       paged.setOtherParam('sortByField',field);
     }
-  }.observes('sortByField')
+  })
 });

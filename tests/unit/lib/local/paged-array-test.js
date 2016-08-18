@@ -3,9 +3,12 @@ import { test } from 'ember-qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 import equalArray from '../../../helpers/equal-array';
 
-//module("PagedArray");
+//module("PagedArray abc");
 
 var paramTest = function(name,ops,f) {
+  if (ops.content) {
+    ops.content = Ember.A(ops.content);
+  }
   test(name, function(assert) {
     var subject = null;
 

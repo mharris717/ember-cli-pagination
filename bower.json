@@ -6,6 +6,7 @@
     "ember-cli-test-loader": "0.2.2",
     "ember-qunit-notifications": "0.1.0",
     "underscore": "~1.6.0",
-    "pretender": "trek/pretender#0.2.0"
+    "pretender": "~0.10.1",
+    "Faker": "~3.0.0"
   }
 }
