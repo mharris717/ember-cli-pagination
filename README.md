@@ -159,7 +159,7 @@ export default Ember.ArrayController.extend({
 ```
 
 ```handlebars
-{{#each this}}
+{{#each model}}
   {{! your app's display logic}}
 {{/each}}
 
