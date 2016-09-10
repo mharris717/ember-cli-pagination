@@ -103,7 +103,7 @@ asyncTest("change page", function(assert) {
 
 
 asyncTest("double start", function(assert) {
-  assert.expect(2);
+  var done = assert.async();
 
   var makePromise = function(res) {
     return new Promise(function(success) {
@@ -120,6 +120,7 @@ asyncTest("double start", function(assert) {
     var promise2 = makePromise(5);
     promise2.then(function(res2) {
       assert.equal(res2,5);
+      done()
     });
   });
 });
