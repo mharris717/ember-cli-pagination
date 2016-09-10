@@ -36,7 +36,7 @@ A Paged will be updated when the page property is changed.
 
 ### Binding
 
-You may bind PagedArray#page like any property. 
+You may bind PagedArray#page like any property.
 
 To update records when a page property changes:
 
@@ -44,6 +44,6 @@ To update records when a page property changes:
 Ember.ArrayController.extend({
   // the content property represents a paged array
 
-  pageBinding: "content.page"
+  page: Ember.computed.alias("content.page")
 });
 ```

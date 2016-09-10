@@ -509,7 +509,7 @@ To update records when a page property changes:
 Ember.ArrayController.extend({
   // the content property represents a paged array
 
-  pageBinding: "content.page"
+  page: Ember.computed.alias("content.page")
 });
 ```
 
@@ -577,7 +577,7 @@ To update records when a page property changes:
 Ember.ArrayController.extend({
   // the content property represents a paged array
 
-  pageBinding: "content.page"
+  page: Ember.computed.alias("content.page")
 });
 ```
 

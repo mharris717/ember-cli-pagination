@@ -50,7 +50,7 @@ test("doing binding the other way", function(assert) {
   var Something = Ember.Object.extend({
     pagedContent: pagedArray("content", {perPage: 2}),
 
-    pageBinding: "pagedContent.page"
+    page: Ember.computed.alias("pagedContent.page")
   });
 
   var object = Something.create({
@@ -206,4 +206,3 @@ test("filtered", function(assert) {
   // object.get("content").pushObject(6);
   // deepEqual(toArray(object.get('pagedContent')),[5,6]);
 });
-

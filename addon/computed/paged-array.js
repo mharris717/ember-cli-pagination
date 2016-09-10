@@ -3,26 +3,23 @@ import PagedArray from 'ember-cli-pagination/local/paged-array';
 import PagedInfiniteArray from 'ember-cli-pagination/infinite/paged-infinite-array';
 
 function makeLocal(contentProperty,ops) {
-  return Ember.computed("",function() {
+  return Ember.computed(function() {
     const pagedOps = {}; //{content: this.get(contentProperty)};
     pagedOps.parent = this;
 
-    const getVal = function(key,val) {
-      if (key.match(/Binding$/)) {
-        return "parent."+val;
-        //return Ember.Binding.oneWay("parent."+val);
-      }
-      else {
-        return val;
-      }
-    };
-
     for (var key in ops) {
-      pagedOps[key] = getVal(key,ops[key]);
+      var val = ops[key];
+
+      if (key.match(/Binding$/)) {
+        var keyWithoutBinding = key.substr(0, key.lastIndexOf("Binding"));
+        pagedOps[keyWithoutBinding] = Ember.computed.alias(`parent.${val}`);
+      } else {
+        pagedOps[key] = val;
+      }
     }
 
     const paged = PagedArray.extend({
-      contentBinding: "parent."+contentProperty
+      content: Ember.computed.alias(`parent.${contentProperty}`)
     }).create(pagedOps);
     // paged.lockToRange();
     return paged;

@@ -27,11 +27,11 @@ Ember.ArrayController.extend({
   // remember to iterate over pagedContent in your template
   pagedContent: pagedArray('filteredContent'),
 
-  // binding the property on the paged array 
+  // binding the property on the paged array
   // to the query params on the controller
-  pageBinding: "pagedContent.page",
-  perPageBinding: "pagedContent.perPage",
-  totalPagesBinding: "pagedContent.totalPages"
+  page: Ember.computed.alias("pagedContent.page"),
+  perPage: Ember.computed.alias("pagedContent.perPage"),
+  totalPages: Ember.computed.alias("pagedContent.totalPages")
 });
 ```
 
@@ -43,7 +43,7 @@ Ember.ArrayController.extend({
 {{page-numbers content=pagedContent}}
 ```
 
-If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work. 
+If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
 
 #### Notes
 
