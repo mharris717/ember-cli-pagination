@@ -8,14 +8,7 @@ function makeLocal(contentProperty,ops) {
     pagedOps.parent = this;
 
     for (var key in ops) {
-      var val = ops[key];
-
-      if (key.match(/Binding$/)) {
-        var keyWithoutBinding = key.substr(0, key.lastIndexOf("Binding"));
-        pagedOps[keyWithoutBinding] = Ember.computed.alias(`parent.${val}`);
-      } else {
-        pagedOps[key] = val;
-      }
+      pagedOps[key] = ops[key];
     }
 
     const paged = PagedArray.extend({

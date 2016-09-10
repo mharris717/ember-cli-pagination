@@ -35,7 +35,7 @@ test("passing perPage and page to pagedArray", function(assert) {
 
 test("passing pageBinding to pagedArray", function(assert) {
   var Something = Ember.Object.extend({
-    pagedContent: pagedArray("content", {perPage: 2, pageBinding: "page"})
+    pagedContent: pagedArray("content", {perPage: 2, page: Ember.computed.alias("parent.page")})
   });
 
   var object = Something.create({
@@ -67,7 +67,7 @@ test("doing binding the other way", function(assert) {
 
 test("passing perPageBinding to pagedArray", function(assert) {
   var Something = Ember.Object.extend({
-    pagedContent: pagedArray("content", {page: 1, perPageBinding: "perPage"})
+    pagedContent: pagedArray("content", {page: 1, perPage: Ember.computed.alias("parent.perPage")})
   });
 
   var object = Something.create({
