@@ -100,30 +100,6 @@ asyncTest("change page", function(assert) {
   });
 });
 
-
-
-asyncTest("double start", function(assert) {
-  assert.expect(2);
-
-  var makePromise = function(res) {
-    return new Promise(function(success) {
-      setTimeout(function() {
-        success(res);
-      },5);
-    });
-  };
-
-  var promise = makePromise(3);
-  promise.then(function(res) {
-    assert.equal(res,3);
-
-    var promise2 = makePromise(5);
-    promise2.then(function(res2) {
-      assert.equal(res2,5);
-    });
-  });
-});
-
 var ErrorStore = Ember.Object.extend({
   find: function() {
     return new Promise(function(success,failure) {

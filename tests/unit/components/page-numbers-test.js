@@ -24,12 +24,12 @@ test('hasPages', function(assert) {
   var s = this.subject();
 
   Ember.run(function() {
-    s.set('totalPages', 1);
+    s.set('content', {totalPages: 1});
   });
   assert.equal(s.get('hasPages'),false);
 
   Ember.run(function() {
-    s.set('totalPages', 2);
+    s.set('content', {totalPages: 2});
   });
   assert.equal(s.get('hasPages'),true);
 });
@@ -37,27 +37,27 @@ test('hasPages', function(assert) {
 test("canStepBackward", function(assert) {
   var s = this.subject();
   Ember.run(function() {
-    s.set("currentPage",1);
+    s.set("content", {currentPage: 1});
   });
   assert.equal(s.get('canStepBackward'),false);
 });
 
-paramTest("first page", {currentPage: 1, totalPages: 10}, function(s,assert) {
+paramTest("first page", {content: {page: 1, totalPages: 10}}, function(s,assert) {
   assert.equal(s.get('canStepBackward'),false);
   assert.equal(s.get('canStepForward'),true);
 });
 
-paramTest("last page page", {currentPage: 10, totalPages: 10}, function(s,assert) {
+paramTest("last page page", {content: {page: 10, totalPages: 10}}, function(s,assert) {
   assert.equal(s.get('canStepBackward'),true);
   assert.equal(s.get('canStepForward'),false);
 });
 
-paramTest("middle page", {currentPage: 5, totalPages: 10}, function(s,assert) {
+paramTest("middle page", {content: {page: 5, totalPages: 10}}, function(s,assert) {
   assert.equal(s.get('canStepBackward'),true);
   assert.equal(s.get('canStepForward'),true);
 });
 
-paramTest("only one page", {currentPage: 1, totalPages: 1}, function(s,assert) {
+paramTest("only one page", {content: {page: 1, totalPages: 1}}, function(s,assert) {
   assert.equal(s.get('canStepBackward'),false);
   assert.equal(s.get('canStepForward'),false);
 });
@@ -65,6 +65,7 @@ paramTest("only one page", {currentPage: 1, totalPages: 1}, function(s,assert) {
 
 var makePagedArray = function(list) {
   list = Ember.A(list);
+
   return PagedArray.create({content: list, perPage: 2, page: 1});
 };
 
@@ -121,7 +122,7 @@ paramTest("arrows and pages in right order", {content: makePagedArray([1,2,3,4,5
   assert.equal(pageItems.eq(4).hasClass("next"),true);
 });
 
-paramTest("truncation", {currentPage: 2, totalPages: 10, numPagesToShow: 5}, function(s,assert) {
+paramTest("truncation", {numPagesToShow: 5, content: {page: 2, totalPages: 10}}, function(s,assert) {
   var pages = s.get('pageItems').map(function(obj) {
     return obj.page;
   });
@@ -129,7 +130,7 @@ paramTest("truncation", {currentPage: 2, totalPages: 10, numPagesToShow: 5}, fun
   assert.deepEqual(pages,[1,2,3,4,5]);
 });
 
-paramTest("truncation with showFL = true", {currentPage: 2, totalPages: 10, numPagesToShow: 5, showFL: true}, function(s,assert) {
+paramTest("truncation with showFL = true", {showFL: true, numPagesToShow: 5, content: {page: 2, totalPages: 10}}, function(s,assert) {
   var pages = s.get('pageItems').map(function(obj) {
     return obj.page;
   });
