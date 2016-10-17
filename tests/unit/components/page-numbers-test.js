@@ -64,6 +64,7 @@ paramTest("only one page", {currentPage: 1, totalPages: 1}, function(s,assert) {
 
 
 var makePagedArray = function(list) {
+  list = Ember.A(list);
   return PagedArray.create({content: list, perPage: 2, page: 1});
 };
 

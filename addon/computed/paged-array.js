@@ -4,10 +4,10 @@ import PagedInfiniteArray from 'ember-cli-pagination/infinite/paged-infinite-arr
 
 function makeLocal(contentProperty,ops) {
   return Ember.computed("",function() {
-    var pagedOps = {}; //{content: this.get(contentProperty)};
+    const pagedOps = {}; //{content: this.get(contentProperty)};
     pagedOps.parent = this;
 
-    var getVal = function(key,val) {
+    const getVal = function(key,val) {
       if (key.match(/Binding$/)) {
         return "parent."+val;
         //return Ember.Binding.oneWay("parent."+val);
@@ -21,7 +21,7 @@ function makeLocal(contentProperty,ops) {
       pagedOps[key] = getVal(key,ops[key]);
     }
 
-    var paged = PagedArray.extend({
+    const paged = PagedArray.extend({
       contentBinding: "parent."+contentProperty
     }).create(pagedOps);
     // paged.lockToRange();
@@ -37,7 +37,11 @@ function makeInfiniteWithPagedSource(contentProperty /*, ops */) {
 
 function makeInfiniteWithUnpagedSource(contentProperty,ops) {
   return Ember.computed(function() {
-    ops.all = this.get(contentProperty);
+    let all = this.get(contentProperty);
+    if (all) {
+      all = Ember.A(all);
+    }
+    ops.all = all;
     return PagedInfiniteArray.createFromUnpaged(ops);
   });
 }

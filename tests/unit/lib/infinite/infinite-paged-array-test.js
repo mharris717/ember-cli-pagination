@@ -9,7 +9,7 @@ import InfinitePagedArray from 'ember-cli-pagination/infinite/paged-infinite-arr
 var makeAllPaged = function() {
   return PagedArray.create({
     perPage: 2,
-    content: [1,2,3,4,5]
+    content: Ember.A([1,2,3,4,5])
   });
 };
 
@@ -48,12 +48,12 @@ import Util from 'ember-cli-pagination/util';
 var FakeStore = Ember.Object.extend({
   find: function(name,params) {
     Util.log("FakeStore#find params",params);
-    var all = this.get('all');
+    var all = Ember.A(this.get('all'));
     var paged = PagedArray.create({page: params.page, perPage: params.per_page, content: all});
     var res = toArray(paged);
 
     return new Promise(function(success,failure) {
-      success(res);
+      success(Ember.A(res));
     });
   },
 

@@ -40,23 +40,23 @@ var pushPromiseObjects = function(base,promise) {
 var InfiniteBase = Ember.ArrayProxy.extend({
   page: 1,
 
-  arrangedContent: function() {
+  arrangedContent: Ember.computed('content.[]',function() {
     return this.get('content');
-  }.property('content.[]'),
+  }),
 
   init: function() {
-    this.set('content',[]);
+    this.set('content',Ember.A([]));
     this.addRecordsForPage(1);
   },
 
   loadNextPage: function() {
     this.incrementProperty('page');
-    var page = this.get('page');
+    const page = this.get('page');
     return this.addRecordsForPage(page);
   },
 
   addRecordsForPage: function(page) {
-    var arr = this.getRecordsForPage(page);
+    const arr = this.getRecordsForPage(page);
     return pushPromiseObjects(this.get('content'),arr);
   },
 
@@ -67,7 +67,7 @@ var InfiniteBase = Ember.ArrayProxy.extend({
 
 var c = InfiniteBase.extend({
   getRecordsForPage: function(page) {
-    var c = this.get('all');
+    const c = this.get('all');
     c.set('page',page);
     return c;
   },
@@ -79,7 +79,7 @@ var c = InfiniteBase.extend({
 
 c.reopenClass({
   createFromUnpaged: function(ops) {
-    var unpaged = ops.all;
+    var unpaged = Ember.A(ops.all);
     var perPage = ops.perPage || 10;
     var paged = PagedArray.create({perPage: perPage, content: unpaged});
     return this.create({all: paged});
