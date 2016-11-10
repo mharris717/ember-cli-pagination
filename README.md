@@ -672,6 +672,9 @@ You guys rock!
 * @halfdan
 * @bschnelle
 * @mcm-ham
+* @jcope2013
 * @thejchap
+* @sarupbanskota
+* @chrisccerami
 
 <!--- FULL DOC END -->
