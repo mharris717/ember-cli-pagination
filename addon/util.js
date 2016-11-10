@@ -16,7 +16,7 @@ Util.reopenClass({
     excludeKeys = Ember.A(excludeKeys);
     var res = [];
     for (var key in params) {
-      if (!excludeKeys.contains(key)) {
+      if (!excludeKeys.includes(key)) {
         res.push(key);
       }
     }

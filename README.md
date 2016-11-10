@@ -672,5 +672,6 @@ You guys rock!
 * @halfdan
 * @bschnelle
 * @mcm-ham
+* @thejchap
 
 <!--- FULL DOC END -->
