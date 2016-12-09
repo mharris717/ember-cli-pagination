@@ -10,7 +10,6 @@ function makeLocal(contentProperty,ops) {
     const getVal = function(key,val) {
       if (key.match(/Binding$/)) {
         return "parent."+val;
-        //return Ember.Binding.oneWay("parent."+val);
       }
       else {
         return val;
@@ -22,7 +21,7 @@ function makeLocal(contentProperty,ops) {
     }
 
     const paged = PagedArray.extend({
-      contentBinding: "parent."+contentProperty
+      content: Ember.computed.alias("parent."+contentProperty)
     }).create(pagedOps);
     // paged.lockToRange();
     return paged;
