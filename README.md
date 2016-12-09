@@ -589,6 +589,7 @@ PagedRemoteArray takes an optional otherParams arg. These params will be passed 
 var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2, otherParams: {name: "Adam"}});
 
 // server will receive params page=1, perPage=2, name=Adam
+```
 
 ### `paramMapping`
 
