@@ -78,7 +78,7 @@ This scenario applies if:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -89,11 +89,8 @@ export default Ember.ArrayController.extend({
 
   // can be called anything, I've called it pagedContent
   // remember to iterate over pagedContent in your template
-  pagedContent: pagedArray('content', {pageBinding: "page", perPageBinding: "perPage"}),
-
-  // binding the property on the paged array
-  // to a property on the controller
-  totalPagesBinding: "pagedContent.totalPages"
+  // put in your model's array below
+  pagedContent: pagedArray('model.myArray', {pageBinding: "page", perPageBinding: "perPage"}),
 });
 ```
 
@@ -141,15 +138,15 @@ export default Ember.Route.extend(RouteMixin, {
 ```javascript
 import Ember from 'ember';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
   // binding the property on the paged array
   // to the query params on the controller
-  pageBinding: "content.page",
-  perPageBinding: "content.perPage",
-  totalPagesBinding: "content.totalPages",
+  pageBinding: "model.page",
+  perPageBinding: "model.perPage",
+  totalPagesBinding: "model.totalPages",
 
   // set default values, can cause problems if left out
   // if value matches default, it won't display in the URL
@@ -163,7 +160,7 @@ export default Ember.ArrayController.extend({
   {{! your app's display logic}}
 {{/each}}
 
-{{page-numbers content=content}}
+{{page-numbers content=model}}
 ```
 
 If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
@@ -239,7 +236,7 @@ This scenario applies if:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -249,7 +246,7 @@ export default Ember.ArrayController.extend({
   perPage: 10,
 
   // only want records that are not completed
-  filteredContent: Ember.computed.filterBy('content', 'isCompleted', false),
+  filteredContent: Ember.computed.filterBy('model', 'isCompleted', false),
 
   // can be called anything, I've called it pagedContent
   // remember to iterate over pagedContent in your template
@@ -291,8 +288,8 @@ Controller:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.ArrayController.extend({
-  pagedContent: pagedArray('content', {infinite: "unpaged"}),
+export default Ember.Controller.extend({
+  pagedContent: pagedArray('model', {infinite: "unpaged"}),
 
   actions: {
     loadNext: function() {
@@ -316,8 +313,8 @@ The example below does not use a page query param, although that is certainly po
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.ArrayController.extend({
-  pagedContent: pagedArray("content", {infinite: true}),
+export default Ember.Controller.extend({
+  pagedContent: pagedArray("model", {infinite: true}),
 
   actions: {
     loadNext: function() {
@@ -367,8 +364,8 @@ There are two ways to use this component.
 This is the easier and most common way.
 
 ```javascript
-Ember.ArrayController.extend({
-  pagedContent: pagedArray('content')
+Ember.Controller.extend({
+  pagedContent: pagedArray('model')
 });
 ```
 
@@ -506,10 +503,10 @@ You may bind PagedArray#page like any property.
 To update records when a page property changes:
 
 ```javascript
-Ember.ArrayController.extend({
+Ember.Controller.extend({
   // the content property represents a paged array
 
-  pageBinding: "content.page"
+  pageBinding: "model.page"
 });
 ```
 
@@ -574,10 +571,10 @@ You may bind PagedRemoteArray#page like any property.
 To update records when a page property changes:
 
 ```javascript
-Ember.ArrayController.extend({
-  // the content property represents a paged array
+Ember.Controller.extend({
+  // the model property represents a paged array
 
-  pageBinding: "content.page"
+  pageBinding: "model.page"
 });
 ```
 
