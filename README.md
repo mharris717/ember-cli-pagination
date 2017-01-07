@@ -677,5 +677,8 @@ You guys rock!
 * @thejchap
 * @sarupbanskota
 * @chrisccerami
+* @potato20
+* @jeffreybiles
+* @fidlip
 
 <!--- FULL DOC END -->
