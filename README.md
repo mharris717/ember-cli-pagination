@@ -147,9 +147,9 @@ export default Ember.ArrayController.extend({
 
   // binding the property on the paged array
   // to the query params on the controller
-  pageBinding: "content.page",
-  perPageBinding: "content.perPage",
-  totalPagesBinding: "content.totalPages",
+  page: Ember.computed.alias("content.page"),
+  perPage: Ember.computed.alias("content.perPage"),
+  totalPages: Ember.computed.alias("content.totalPages"),
 
   // set default values, can cause problems if left out
   // if value matches default, it won't display in the URL
@@ -166,7 +166,7 @@ export default Ember.ArrayController.extend({
 {{page-numbers content=content}}
 ```
 
-If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
+If you don't want to have query params, you may leave them out, along with the 3 computed aliases. The rest will still work.
 
 ### Passing other params to findPaged
 
