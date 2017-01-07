@@ -17,3 +17,6 @@ npm-debug.log
 testem.log
 Rakefile
 Guardfile
+
+# ide
+.idea/

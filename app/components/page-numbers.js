@@ -73,6 +73,12 @@ export default Ember.Component.extend({
 
       const newPage = this.get('currentPage');
       this.sendAction('action',newPage);
+    },
+    firstPage() {
+      this.set('currentPage', 1);
+    },
+    lastPage() {
+      this.set('currentPage', this.get('totalPages'));
     }
   }
 });
