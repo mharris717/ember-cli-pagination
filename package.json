@@ -47,6 +47,7 @@
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.5",
+    "ember-cli-htmlbars": "^1.1.1",
     "ember-cli-version-checker": "^1.1.5"
   },
   "ember-addon": {
