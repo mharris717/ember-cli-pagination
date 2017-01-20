@@ -678,7 +678,10 @@ You guys rock!
 * @sarupbanskota
 * @chrisccerami
 * @potato20
+* @aleontiev
 * @jeffreybiles
 * @fidlip
+* @lancedikson
+* @marceloandrader
 
 <!--- FULL DOC END -->
