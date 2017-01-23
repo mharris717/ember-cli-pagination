@@ -41,15 +41,20 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
   then: function(success,failure) {
     var content = Ember.A(this.get('content'));
     var me = this;
+    var promise;
 
     if (content.then) {
-      content.then(function() {
+      promise = content.then(function() {
         success(me);
       },failure);
     }
     else {
-      success(this);
+      promise = new Ember.RSVP.Promise(function(resolve) {
+        resolve(success(me));
+      });
     }
+    
+    return promise;
   },
 
   lockToRange: function() {
