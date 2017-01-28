@@ -30,13 +30,13 @@ function makeLocal(contentProperty,ops) {
 }
 
 function makeInfiniteWithPagedSource(contentProperty /*, ops */) {
-  return Ember.computed(function() {
+  return Ember.computed(contentProperty, function() {
     return PagedInfiniteArray.create({all: this.get(contentProperty)});
   });
 }
 
 function makeInfiniteWithUnpagedSource(contentProperty,ops) {
-  return Ember.computed(function() {
+  return Ember.computed(contentProperty, function() {
     let all = this.get(contentProperty);
     if (all) {
       all = Ember.A(all);

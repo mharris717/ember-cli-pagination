@@ -2,11 +2,11 @@ import Ember from 'ember';
 
 
 export default Ember.Mixin.create({
-  queryParams: ["page", "perPage"],
-  
-  pageBinding: "content.page",
+  queryParams: ["perPage"],
 
-  totalPagesBinding: "content.totalPages",
+  page: Ember.computed.alias("content.page"),
 
-  pagedContentBinding: "content"
+  totalPages: Ember.computed.alias("content.totalPages"),
+
+  pagedContent: Ember.computed.alias("content")
 });

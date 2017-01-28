@@ -147,9 +147,9 @@ export default Ember.ArrayController.extend({
 
   // binding the property on the paged array
   // to the query params on the controller
-  pageBinding: "content.page",
-  perPageBinding: "content.perPage",
-  totalPagesBinding: "content.totalPages",
+  page: Ember.computed.alias("content.page"),
+  perPage: Ember.computed.alias("content.perPage"),
+  totalPages: Ember.computed.alias("content.totalPages"),
 
   // set default values, can cause problems if left out
   // if value matches default, it won't display in the URL
@@ -159,14 +159,14 @@ export default Ember.ArrayController.extend({
 ```
 
 ```handlebars
-{{#each this}}
+{{#each model}}
   {{! your app's display logic}}
 {{/each}}
 
 {{page-numbers content=content}}
 ```
 
-If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
+If you don't want to have query params, you may leave them out, along with the 3 computed aliases. The rest will still work.
 
 ### Passing other params to findPaged
 
@@ -292,7 +292,7 @@ import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default Ember.ArrayController.extend({
-  pagedContent: pagedArray('content', {infinite: "unpaged"}),
+  pagedContent: pagedArray('content', {infinite: "unpaged", perPage: 10}),
 
   actions: {
     loadNext: function() {
@@ -589,6 +589,7 @@ PagedRemoteArray takes an optional otherParams arg. These params will be passed 
 var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2, otherParams: {name: "Adam"}});
 
 // server will receive params page=1, perPage=2, name=Adam
+```
 
 ### `paramMapping`
 
@@ -672,5 +673,15 @@ You guys rock!
 * @halfdan
 * @bschnelle
 * @mcm-ham
+* @jcope2013
+* @thejchap
+* @sarupbanskota
+* @chrisccerami
+* @potato20
+* @aleontiev
+* @jeffreybiles
+* @fidlip
+* @lancedikson
+* @marceloandrader
 
 <!--- FULL DOC END -->

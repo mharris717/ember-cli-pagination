@@ -73,7 +73,7 @@ var c = InfiniteBase.extend({
   },
 
   then: function(f,f2) {
-    this.get('all').then(f,f2);
+    return this.get('all').then(f,f2);
   }
 });
 
