@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 
 export default Ember.Mixin.create({
-  queryParams: ["perPage"],
+  queryParams: ["page", "perPage"],
 
   page: Ember.computed.alias("content.page"),
 

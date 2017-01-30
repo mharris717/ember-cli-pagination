@@ -20,8 +20,6 @@ test("passing perPage to pagedArray", function(assert) {
   assert.deepEqual(res,[1,2]);
 });
 
-
-
 test("passing perPage and page to pagedArray", function(assert) {
   var Something = Ember.Object.extend({
     pagedContent: pagedArray("content", {perPage: 2, page: 2})
@@ -32,10 +30,9 @@ test("passing perPage and page to pagedArray", function(assert) {
   assert.deepEqual(toArray(object.get('pagedContent')),[3,4]);
 });
 
-
-test("passing pageBinding to pagedArray", function(assert) {
+test("passing page to pagedArray", function(assert) {
   var Something = Ember.Object.extend({
-    pagedContent: pagedArray("content", {perPage: 2, pageBinding: "page"})
+    pagedContent: pagedArray("content", {perPage: 2, page: 2})
   });
 
   var object = Something.create({
@@ -50,7 +47,7 @@ test("doing binding the other way", function(assert) {
   var Something = Ember.Object.extend({
     pagedContent: pagedArray("content", {perPage: 2}),
 
-    pageBinding: "pagedContent.page"
+    page: Ember.computed.alias("pagedContent.page")
   });
 
   var object = Something.create({
@@ -65,14 +62,13 @@ test("doing binding the other way", function(assert) {
   assert.deepEqual(toArray(object.get('pagedContent')),[3,4]);
 });
 
-test("passing perPageBinding to pagedArray", function(assert) {
+test("passing perPage to pagedArray", function(assert) {
   var Something = Ember.Object.extend({
-    pagedContent: pagedArray("content", {page: 1, perPageBinding: "perPage"})
+    pagedContent: pagedArray("content", {page: 1, perPage: 3})
   });
 
   var object = Something.create({
-    content: Ember.A([1,2,3,4,5]),
-    perPage: 3
+    content: Ember.A([1,2,3,4,5])
   });
 
   assert.deepEqual(toArray(object.get('pagedContent')),[1,2,3]);
@@ -110,27 +106,6 @@ test("pagedArray value changes when parent content property is modified", functi
   object.get("content").pushObject(6);
   assert.deepEqual(toArray(object.get('pagedContent')),[5,6]);
 });
-
-// test("pagedArray is locked to range by default", function() {
-//   var Something = Ember.Object.extend({
-//     pagedContent: pagedArray("content", {perPage: 2})
-//   });
-
-//   var object = Something.create({
-//     content: Ember.A([1,2,3,4,5])
-//   });
-
-//   deepEqual(toArray(object.get('pagedContent')),[1,2]);
-
-//   Ember.run(function() {
-//     object.get('pagedContent').set('page',99);
-//   });
-
-//   deepEqual(object.get('pagedContent.page'),3);
-
-//   // object.get("content").pushObject(6);
-//   // deepEqual(toArray(object.get('pagedContent')),[5,6]);
-// });
 
 test("infinite smoke", function(assert) {
   var Something = Ember.Object.extend({
@@ -175,7 +150,7 @@ test("filtered", function(assert) {
       return Ember.A(res);
     }),
 
-    pagedContent: pagedArray("filteredContent", {perPage: 2, pageBinding: "page"})
+    pagedContent: pagedArray("filteredContent", {"content.page": 2, perPage: 2})
   });
 
   var object = Something.create({
@@ -206,4 +181,3 @@ test("filtered", function(assert) {
   // object.get("content").pushObject(6);
   // deepEqual(toArray(object.get('pagedContent')),[5,6]);
 });
-
