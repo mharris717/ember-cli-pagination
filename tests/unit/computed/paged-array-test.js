@@ -43,10 +43,26 @@ test("passing page to pagedArray", function(assert) {
   assert.deepEqual(toArray(object.get('pagedContent')),[3,4]);
 });
 
-test("doing binding the other way", function(assert) {
+test("doing binding the old binding way", function(assert) {
+  var Something = Ember.Object.extend({
+    pagedContent: pagedArray("content", {pageBinding: 'page', perPage: 2})
+  });
+
+  var object = Something.create({
+    content: Ember.A([1,2,3,4,5]),
+    page: 2
+  });
+
+  Ember.run(function() {
+    object.set('page',2);
+  });
+
+  assert.deepEqual(toArray(object.get('pagedContent')),[3,4]);
+});
+
+test("doing binding the new alias way", function(assert) {
   var Something = Ember.Object.extend({
     pagedContent: pagedArray("content", {perPage: 2}),
-
     page: Ember.computed.alias("pagedContent.page")
   });
 
@@ -151,6 +167,7 @@ test("filtered", function(assert) {
     }),
 
     pagedContent: pagedArray("filteredContent", {"content.page": 2, perPage: 2})
+    // ^ @TODO why `content.page` over `page`
   });
 
   var object = Something.create({

@@ -4,8 +4,6 @@ export default Ember.Controller.extend({
   queryParams: ["page","perPage","sortByField"],
   page: 1,
 
-  pageBinding: Ember.computed.oneWay("content.page"),
-
   updatePaged: Ember.observer("sortByField", function() {
     var field = this.get('sortByField');
     var paged = this.get('content');
