@@ -10,9 +10,8 @@
   "repository": "https://github.com/mharris717/ember-cli-pagination",
   "scripts": {
     "clean": "rm -Rf ./node_modules ./bower_components",
-    "setup": "npm install && bower install && gem install mharris_ext",
+    "setup": "npm install && bower install",
     "build": "ember build",
-    "docs": "ruby ./doc/docs.rb",
     "test": "ember try:testall"
   },
   "engines": {

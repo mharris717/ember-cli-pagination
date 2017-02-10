@@ -38,8 +38,6 @@ For ember-cli < 1.13.0:
 npm install ember-cli-pagination@0.6.6 --save-dev
 ```
 
-<!--- FULL DOC START -->
-
 ## Usage
 
 #### Scenarios
@@ -78,7 +76,7 @@ This scenario applies if:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-Ember.ArrayController.extend({
+export default Ember.ArrayController.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -164,7 +162,7 @@ export default Ember.Route.extend(RouteMixin, {
 ```javascript
 import Ember from 'ember';
 
-Ember.ArrayController.extend({
+export default Ember.ArrayController.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -173,7 +171,7 @@ Ember.ArrayController.extend({
   page: Ember.computed.alias("content.page"),
   perPage: Ember.computed.alias("content.perPage"),
   totalPages: Ember.computed.alias("content.totalPages"),
-  
+
   // set default values, can cause problems if left out
   // if value matches default, it won't display in the URL
   page: 1,
@@ -182,7 +180,7 @@ Ember.ArrayController.extend({
 ```
 
 ```handlebars
-{{#each this}}
+{{#each model}}
   {{! your app's display logic}}
 {{/each}}
 
@@ -260,7 +258,7 @@ This scenario applies if:
 * Wish to display one page of records at a time.
 * Want to have a page query parameter (optional).
 
-This scenario is identical to the [Local Store](#local-store) scenario. 
+This scenario is identical to the [Local Store](#local-store) scenario.
 
 --------------
 
@@ -277,7 +275,7 @@ This scenario applies if:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-Ember.ArrayController.extend({
+export default Ember.ArrayController.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -344,7 +342,7 @@ import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default Ember.ArrayController.extend({
-  pagedContent: pagedArray('content', {infinite: "unpaged"}),
+  pagedContent: pagedArray('content', {infinite: "unpaged", perPage: 10}),
 
   actions: {
     loadNext: function() {
@@ -361,7 +359,7 @@ export default Ember.ArrayController.extend({
 
 ## Infinite Pagination with a Remote Paginated API
 
-The example below does not use a page query param, although that is certainly possible. 
+The example below does not use a page query param, although that is certainly possible.
 
 ```javascript
 // controller
@@ -402,7 +400,7 @@ export default Ember.Route.extend(RouteMixin, {
 
 Displays pagination controls.
 
-![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png) 
+![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png)
 
 Features:
 
@@ -413,7 +411,7 @@ Features:
 
 ### Including in your template
 
-There are two ways to use this component. 
+There are two ways to use this component.
 
 #### Backed by a PagedArray
 
@@ -451,7 +449,7 @@ Ember.Object.extend({
 
 ```handlebars
 {{page-numbers currentPage=page totalPages=totalPages}}
-``` 
+```
 
 Clicking a page number will:
 
@@ -478,7 +476,7 @@ To always show the first and last pages (in addition to the pages that would be 
 
 ## `pagedArray` Computed Helper
 
-Creates a computed property representing a PagedArray. 
+Creates a computed property representing a PagedArray.
 
 A PagedArray acts just like a normal array containing only the records on the current page.
 
@@ -496,7 +494,7 @@ A PagedArray has several properties you may find useful:
 ```javascript
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-Ember.Object.extend({
+export default Ember.Object.extend({
   // The property that contains all objects
   // In a real app, often set by the route
   content: [1,2,3,4,5,6,7,8,9,10],
@@ -512,7 +510,7 @@ In this example, these properties will be available:
 * `pagedContent.perPage`
 * `pagedContent.totalPages`
 
-The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details. 
+The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details.
 
 --------------
 
@@ -554,14 +552,22 @@ A Paged will be updated when the page property is changed.
 
 ### Binding
 
-You may bind PagedArray#page like any property. 
+You may bind PagedArray#page like any property.
 
 To update records when a page property changes:
 
 ```javascript
 Ember.ArrayController.extend({
   // the content property represents a paged array
+  page: Ember.computed.alais("content.page")
+});
+```
 
+In older versions of Ember you would have done:
+
+``` javascript
+Ember.ArrayController.extend({
+  // the content property represents a paged array
   pageBinding: "content.page"
 });
 ```
@@ -588,7 +594,7 @@ The object acts as a promise, with a working `then` method. If you are manually 
 ```javascript
 import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 
-Ember.Route.extend({
+export default Ember.Route.extend({
   model: function(params) {
     // possible params are params.page and params.per_page
     // Ember's query param logic converts perPage to per_page at some point, for now just dealing with it.
@@ -671,6 +677,30 @@ var paged = PagedRemoteArray.create({/* ..., */
 
 # Other
 
+## Testing
+
+We include some helpers to make testing pagination easier.
+
+The helper used here is responseHash, in the context of a Pretender definition.
+
+It takes the request, all fixtures, and the model name, and returns the appropriate response (with meta tag).
+
+```coffeescript
+`import Todo from '../../models/todo'`
+`import Helpers from 'ember-cli-pagination/test-helpers'`
+
+c = ->
+  server = new Pretender ->
+    @get "/todos", (request) ->
+      res = Helpers.responseHash(request,Todo.FIXTURES,'todo')
+
+      [200, {"Content-Type": "application/json"}, JSON.stringify(res)]
+
+`export default c`
+```
+
+--------------
+
 ## Setup Paginated Rails API
 
 ```ruby
@@ -693,30 +723,6 @@ end
 
 --------------
 
-## Testing
-
-We include some helpers to make testing pagination easier. 
-
-The helper used here is responseHash, in the context of a Pretender definition.
-
-It takes the request, all fixtures, and the model name, and returns the appropriate response (with meta tag).
-
-```coffeescript
-`import Todo from '../../models/todo'`
-`import Helpers from 'ember-cli-pagination/test-helpers'`
-
-c = ->
-  server = new Pretender ->
-    @get "/todos", (request) ->
-      res = Helpers.responseHash(request,Todo.FIXTURES,'todo')
-      
-      [200, {"Content-Type": "application/json"}, JSON.stringify(res)]
-
-`export default c`
-```
-
---------------
-
 ## Contributors
 
 You guys rock!
@@ -731,5 +737,18 @@ You guys rock!
 * @dlameri
 * @piotrpalek
 * @robertleib
-
-<!--- FULL DOC END -->
+* @halfdan
+* @bschnelle
+* @mcm-ham
+* @jcope2013
+* @thejchap
+* @sarupbanskota
+* @chrisccerami
+* @potato20
+* @aleontiev
+* @jeffreybiles
+* @fidlip
+* @lancedikson
+* @marceloandrader
+* @asermax
+* @balupton
