@@ -10,15 +10,8 @@ cache:
     - $HOME/.npm
     - $HOME/.cache # includes bowers cache
 
-before_install:
+install:
   - npm config set spin false
-  - npm install -g bower phantomjs-prebuilt
+  - npm run setup
   - bower --version
   - phantomjs --version
-
-install:
-  - npm install
-  - bower install
-
-script:
-  - npm test
