@@ -9,5 +9,6 @@ module.exports = {
   "launch_in_dev": [
     "PhantomJS",
     "Chrome"
-  ]
-};
+  ],
+  "phantomjs_launch_script": require('phantomjs-prebuilt').path
+}

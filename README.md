@@ -38,8 +38,6 @@ For ember-cli < 1.13.0:
 npm install ember-cli-pagination@0.6.6 --save-dev
 ```
 
-<!--- FULL DOC START -->
-
 ## Usage
 
 #### Scenarios
@@ -60,8 +58,8 @@ npm install ember-cli-pagination@0.6.6 --save-dev
 
 #### Other
 
-* [Testing](#testing)
 * [Setup Paginated Rails API](#setup-paginated-rails-api)
+* [Testing](#testing)
 * [Contributors](#contributors)
 
 # Scenarios
@@ -89,11 +87,14 @@ export default Ember.ArrayController.extend({
 
   // can be called anything, I've called it pagedContent
   // remember to iterate over pagedContent in your template
-  pagedContent: pagedArray('content', {pageBinding: "page", perPageBinding: "perPage"}),
+  pagedContent: pagedArray('content', {
+    page: Ember.computed.alias("parent.page"),
+    perPage: Ember.computed.alias("parent.perPage")
+  }),
 
   // binding the property on the paged array
   // to a property on the controller
-  totalPagesBinding: "pagedContent.totalPages"
+  totalPages: Ember.computed.oneWay("pagedContent.totalPages")
 });
 ```
 
@@ -107,10 +108,30 @@ export default Ember.ArrayController.extend({
 
 If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
 
+In older versions of Ember you would have done:
+
+``` javascript
+{
+  // ...
+
+  // can be called anything, I've called it pagedContent
+  // remember to iterate over pagedContent in your template
+  pagedContent: pagedArray('content', {
+    pageBinding: "page",
+    perPageBinding: "perPage"
+  }),
+
+  // binding the property on the paged array
+  // to a property on the controller
+  totalPagesBinding: "totalPages"
+}
+```
+
 #### Notes
 
 * There is no need to touch the route in this scenario.
 * There used to be route and controller mixins, and they may return in the future. For now, they were too much overhead, and they were too much magic. If you think getting rid of the mixins is a mistake, please open an issue and let me know.
+
 
 --------------
 
@@ -166,7 +187,21 @@ export default Ember.ArrayController.extend({
 {{page-numbers content=content}}
 ```
 
-If you don't want to have query params, you may leave them out, along with the 3 computed aliases. The rest will still work.
+If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
+
+In older versions of Ember you would have done:
+
+``` javascript
+{
+  // ...
+
+  // binding the property on the paged array
+  // to the query params on the controller
+  pageBinding: "content.page",
+  perPageBinding: "content.perPage",
+  totalPagesBinding: "content.totalPages",
+}
+```
 
 ### Passing other params to findPaged
 
@@ -210,6 +245,7 @@ export default Ember.Route.extend(RouteMixin, {
 
 * There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know.
 * Related: [Setup a Paginated Rails API](#setup-paginated-rails-api)
+
 
 --------------
 
@@ -257,9 +293,9 @@ export default Ember.ArrayController.extend({
 
   // binding the property on the paged array
   // to the query params on the controller
-  pageBinding: "pagedContent.page",
-  perPageBinding: "pagedContent.perPage",
-  totalPagesBinding: "pagedContent.totalPages"
+  page: Ember.computed.alias("pagedContent.page"),
+  perPage: Ember.computed.alias("pagedContent.perPage"),
+  totalPages: Ember.computed.oneWay("pagedContent.totalPages")
 });
 ```
 
@@ -273,9 +309,23 @@ export default Ember.ArrayController.extend({
 
 If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
 
+In older versions of Ember you would have done:
+
+``` javascript
+{
+  // ...
+
+  // binding the property on the paged array
+  // to the query params on the controller
+  pageBinding: "pagedContent.page",
+  perPageBinding: "pagedContent.perPage",
+  totalPagesBinding: "pagedContent.totalPages"
+}
+
 #### Notes
 
 * There is no need to touch the route in this scenario.
+
 
 --------------
 
@@ -303,6 +353,7 @@ export default Ember.ArrayController.extend({
 ```
 
 `"unpaged"` in this example indicates the source array (the `content` property) is a regular (unpaged) array, as opposed to a PagedArray.
+
 
 --------------
 
@@ -508,7 +559,15 @@ To update records when a page property changes:
 ```javascript
 Ember.ArrayController.extend({
   // the content property represents a paged array
+  page: Ember.computed.alais("content.page")
+});
+```
 
+In older versions of Ember you would have done:
+
+``` javascript
+Ember.ArrayController.extend({
+  // the content property represents a paged array
   pageBinding: "content.page"
 });
 ```
@@ -576,7 +635,15 @@ To update records when a page property changes:
 ```javascript
 Ember.ArrayController.extend({
   // the content property represents a paged array
+  page: Ember.computed.alias("content.page")
+});
+```
 
+In older versions of Ember you would have done:
+
+```javascript
+Ember.ArrayController.extend({
+  // the content property represents a paged array
   pageBinding: "content.page"
 });
 ```
@@ -589,7 +656,6 @@ PagedRemoteArray takes an optional otherParams arg. These params will be passed 
 var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2, otherParams: {name: "Adam"}});
 
 // server will receive params page=1, perPage=2, name=Adam
-```
 
 ### `paramMapping`
 
@@ -607,6 +673,7 @@ var paged = PagedRemoteArray.create({/* ..., */
                                                    perPage: "limit",
                                                    total_pages: "num_pages"}});
 ```
+
 
 # Other
 
@@ -684,5 +751,4 @@ You guys rock!
 * @lancedikson
 * @marceloandrader
 * @asermax
-
-<!--- FULL DOC END -->
+* @balupton
