@@ -76,7 +76,7 @@ This scenario applies if:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -99,7 +99,7 @@ export default Ember.ArrayController.extend({
 ```
 
 ```handlebars
-{{#each pagedContent}}
+{{#each pagedContent as |post|}}
   {{! your app's display logic}}
 {{/each}}
 
@@ -162,7 +162,7 @@ export default Ember.Route.extend(RouteMixin, {
 ```javascript
 import Ember from 'ember';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -171,11 +171,6 @@ export default Ember.ArrayController.extend({
   page: Ember.computed.alias("content.page"),
   perPage: Ember.computed.alias("content.perPage"),
   totalPages: Ember.computed.alias("content.totalPages"),
-
-  // set default values, can cause problems if left out
-  // if value matches default, it won't display in the URL
-  page: 1,
-  perPage: 10
 });
 ```
 
@@ -275,7 +270,7 @@ This scenario applies if:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   // setup our query params
   queryParams: ["page", "perPage"],
 
@@ -341,7 +336,7 @@ Controller:
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   pagedContent: pagedArray('content', {infinite: "unpaged", perPage: 10}),
 
   actions: {
@@ -367,7 +362,7 @@ The example below does not use a page query param, although that is certainly po
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.ArrayController.extend({
+export default Ember.Controller.extend({
   pagedContent: pagedArray("content", {infinite: true}),
 
   actions: {
@@ -418,7 +413,7 @@ There are two ways to use this component.
 This is the easier and most common way.
 
 ```javascript
-Ember.ArrayController.extend({
+Ember.Controller.extend({
   pagedContent: pagedArray('content')
 });
 ```
@@ -557,7 +552,7 @@ You may bind PagedArray#page like any property.
 To update records when a page property changes:
 
 ```javascript
-Ember.ArrayController.extend({
+Ember.Controller.extend({
   // the content property represents a paged array
   page: Ember.computed.alais("content.page")
 });
@@ -566,7 +561,7 @@ Ember.ArrayController.extend({
 In older versions of Ember you would have done:
 
 ``` javascript
-Ember.ArrayController.extend({
+Ember.Controller.extend({
   // the content property represents a paged array
   pageBinding: "content.page"
 });
@@ -633,7 +628,7 @@ You may bind PagedRemoteArray#page like any property.
 To update records when a page property changes:
 
 ```javascript
-Ember.ArrayController.extend({
+Ember.Controller.extend({
   // the content property represents a paged array
   page: Ember.computed.alias("content.page")
 });
@@ -642,7 +637,7 @@ Ember.ArrayController.extend({
 In older versions of Ember you would have done:
 
 ```javascript
-Ember.ArrayController.extend({
+Ember.Controller.extend({
   // the content property represents a paged array
   pageBinding: "content.page"
 });
