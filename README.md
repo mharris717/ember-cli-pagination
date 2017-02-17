@@ -747,3 +747,5 @@ You guys rock!
 * @marceloandrader
 * @asermax
 * @balupton
+* @noslouch
+* @irruputuncu
