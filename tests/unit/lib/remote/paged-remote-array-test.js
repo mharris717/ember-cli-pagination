@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
+import sinon from 'sinon';
 import BasePagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 import PagedLocalArray from 'ember-cli-pagination/local/paged-array';
 import Util from 'ember-cli-pagination/util';
@@ -160,6 +161,29 @@ asyncTest("notifies observer", function(assert) {
     paged.then(function() {
       equalArray(assert,paged,[3,4]);
       assert.equal(observer.get('arrayDidChangeCount'),2);
+    });
+  });
+});
+
+asyncTest("notifies an inside observer", function(assert) {
+  assert.expect(5);
+
+  var store = FakeStore.create({all: [1,2,3,4,5]});
+  var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2});
+  var spy = sinon.spy();
+  paged.on('contentWillChange', spy);
+  paged.on('contentUpdated', spy);
+
+  paged.then(function() {
+    equalArray(assert,paged,[1,2]);
+    // not sure if I want this to be 0
+    assert.equal(paged.get('contentUpdated'),1);
+
+    paged.set("page",2);
+    paged.then(function() {
+      equalArray(assert,paged,[3,4]);
+      assert.equal(paged.get('contentUpdated'),2);
+      assert.equal(spy.callCount, 4);
     });
   });
 });
