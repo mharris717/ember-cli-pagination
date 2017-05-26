@@ -236,6 +236,41 @@ export default Ember.Route.extend(RouteMixin, {
 });
 ```
 
+### Get updates outside
+
+Sometimes you may need to handle remote paginated API without `refreshModel`
+param, to provide more smooth update of data. In that case you could use
+default method to track it or add a custom observer.
+
+Here is an example how to use the default one:
+
+```javascript
+// routes/index.js
+export default Ember.Route.extend({
+  queryParams: {
+    page: {},
+    perPage: {}
+  },
+  model() {
+    return Ember.RSVP.hash({
+      approveVideos: this.findPaged('approve-video', queryParams),
+      approveVideoActions: this.findPaged('approve-video-action', queryParams)
+    });
+  }
+});
+
+//controllers/index.js
+export default Ember.Controller.extend({
+  filteredStuff: Ember.computed('model.approveVideos.contentUpdated', function () {
+    return this.get('model.approveVideos').map(...);
+  })
+});
+```
+
+As far as returned from '.findPaged()' method instance of PagedRemoteArray
+inherits Ember.Evented, you can subscribe on `contentWillChange` and 
+`contentUpdated` events.
+
 #### Notes
 
 * There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know.

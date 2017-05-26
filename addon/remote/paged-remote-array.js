@@ -20,12 +20,23 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
   paramMapping: Ember.computed(() => {
     return {};
   }),
+  contentUpdated: 0,
 
   init: function() {
     var initCallback = this.get('initCallback');
     if (initCallback) {
       initCallback(this);
     }
+
+    this.addArrayObserver({
+      arrayWillChange(me) {
+        me.trigger('contentWillChange');
+      },
+      arrayDidChange(me) {
+        me.incrementProperty('contentUpdated');
+        me.trigger('contentUpdated');
+      },
+    });
 
     try {
       this.get('promise');
