@@ -489,7 +489,7 @@ Clicking a page number will:
 
 You can use your own template for the pagination controls. Create it in your app at app/templates/components/page-numbers.hbs and it will be used automatically.
 
-See [the default template](https://github.com/mharris717/ember-cli-pagination/blob/master/app/templates/components/page-numbers.hbs) for an example.
+See [the default template](https://github.com/mharris717/ember-cli-pagination/blob/master/addon/templates/components/page-numbers.hbs) for an example.
 
 To always show the first and last pages (in addition to the pages that would be shown normally), set the showFL property
 
