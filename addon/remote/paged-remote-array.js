@@ -67,9 +67,11 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     return this.addParamMapping(key,mappedKey,mappingFunc);
   },
 
-  paramsForBackend: Ember.computed('page','perPage','paramMapping','paramsForBackendCounter', function() {
+  paramsForBackend: Ember.computed('page','perPage','paramMapping','paramsForBackendCounter','zeroBasedIndex', function() {
     var page = this.getPage();
-    page = page -1;
+    if (this.get('zeroBasedIndex')) {
+      page--;
+    }
 
     var paramsObj = QueryParamsForBackend.create({page: page,
                                                   perPage: this.getPerPage(),

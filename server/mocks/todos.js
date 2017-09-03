@@ -34,7 +34,7 @@ var makeDivide = function() {
 
     range: function(page) {
       var perPage = parseInt(this.get('perPage'));
-      var s = (parseInt(page)) * perPage;
+      var s = (parseInt(page) - 1) * perPage;
       var e = s + perPage - 1;
 
       return {start: s, end: e};
