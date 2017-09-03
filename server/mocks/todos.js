@@ -34,7 +34,7 @@ var makeDivide = function() {
 
     range: function(page) {
       var perPage = parseInt(this.get('perPage'));
-      var s = (parseInt(page) - 1) * perPage;
+      var s = (parseInt(page)) * perPage;
       var e = s + perPage - 1;
 
       return {start: s, end: e};
@@ -49,7 +49,7 @@ var makePagedResponse = function(page,sortByField) {
       return a[sortByField].localeCompare(b[sortByField]);
     });
   }
-  
+
   var divide = makeDivide();
   divide.set('page',1);
   divide.set('perPage',10);
@@ -59,7 +59,7 @@ var makePagedResponse = function(page,sortByField) {
   var totalPages = divide.totalPages();
 
   return {
-    "todos": objs, 
+    "todos": objs,
     "meta": {
       "total_pages": totalPages
     }
