@@ -803,5 +803,6 @@ You guys rock!
 * @balupton
 * @noslouch
 * @irruputuncu
+* @thomaswelton
 * @brentdanley
 * @pleszkowicz
