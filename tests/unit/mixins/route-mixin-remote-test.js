@@ -25,8 +25,8 @@ test("thing", function(assert) {
   assert.equal(findArgs[0].params.name,"Adam");
 });
 
-test("default model name", function(assert) {  
-  var Route = Ember.Object.extend(RouteMixin, {});  
+test("default model name", function(assert) {
+  var Route = Ember.Object.extend(RouteMixin, {});
   var route = Route.create();
 
   assert.equal('route', route._findModelName('route'));
@@ -56,7 +56,7 @@ test("can pass param mappings", function(assert) {
   var Something = Ember.Object.extend(RouteMixin, {});
   var something = Something.create({store: store});
 
-  something.findPaged("todo",{},function(remote) {
+  something.findPaged("todo",{},{},function(remote) {
     remote.addQueryParamMapping('page','current_page');
   });
 

@@ -16,11 +16,13 @@ export default Ember.Mixin.create({
       );
   },
 
-  findPaged: function(name, params, callback) {
+  findPaged: function(name, params, options, callback) {
+    var opt = options || {};
     var mainOps = {
       page: params.page || this.get('startingPage'),
       perPage: params.perPage || this.get('perPage'),
       modelName: name,
+      zeroBasedIndex: opt.zeroBasedIndex || false,
       store: this.get('store')
     };
 
@@ -28,7 +30,7 @@ export default Ember.Mixin.create({
       mainOps.paramMapping = params.paramMapping;
     }
 
-    var otherOps = Util.paramsOtherThan(params,["page","perPage","paramMapping"]);
+    var otherOps = Util.paramsOtherThan(params,["page","perPage","paramMapping","zeroBasedIndex"]);
     mainOps.otherParams = otherOps;
 
     mainOps.initCallback = callback;

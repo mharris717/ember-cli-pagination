@@ -49,7 +49,7 @@ var makePagedResponse = function(page,sortByField) {
       return a[sortByField].localeCompare(b[sortByField]);
     });
   }
-  
+
   var divide = makeDivide();
   divide.set('page',1);
   divide.set('perPage',10);
@@ -59,7 +59,7 @@ var makePagedResponse = function(page,sortByField) {
   var totalPages = divide.totalPages();
 
   return {
-    "todos": objs, 
+    "todos": objs,
     "meta": {
       "total_pages": totalPages
     }
