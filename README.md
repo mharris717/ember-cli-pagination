@@ -141,8 +141,10 @@ This scenario applies if:
 
 * Loading your records from a remote pagination-enabled API.
 * Wish to display one page of records at a time.
-* Want to have a page query parameter (optional).
+* Want to have a page query parameter. (optional)
+* Need to access a zero Based Index remote pagination-enabled API. (optional)
 
+1:1 based page index
 ```javascript
 import Ember from 'ember';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
@@ -155,6 +157,23 @@ export default Ember.Route.extend(RouteMixin, {
     // todo is your model name
     // returns a PagedRemoteArray
     return this.findPaged('todo',params);
+  }
+});
+```
+Zero based page index
+```javascript
+import Ember from 'ember';
+import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
+
+export default Ember.Route.extend(RouteMixin, {
+  // optional. default is 10
+  perPage: 25,
+
+  model: function(params) {
+    // todo is your model name
+    // returns a PagedRemoteArray
+    // Option: `zeroBasedIndex: true` enables a zero Based Index remote pagination-enabled API
+    return this.findPaged('todo',params,{zeroBasedIndex: true});
   }
 });
 ```
@@ -268,7 +287,7 @@ export default Ember.Controller.extend({
 ```
 
 As far as returned from '.findPaged()' method instance of PagedRemoteArray
-inherits Ember.Evented, you can subscribe on `contentWillChange` and 
+inherits Ember.Evented, you can subscribe on `contentWillChange` and
 `contentUpdated` events.
 
 #### Notes
@@ -784,3 +803,5 @@ You guys rock!
 * @balupton
 * @noslouch
 * @irruputuncu
+* @brentdanley
+* @pleszkowicz
