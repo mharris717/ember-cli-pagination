@@ -589,7 +589,7 @@ To update records when a page property changes:
 ```javascript
 Ember.Controller.extend({
   // the content property represents a paged array
-  page: Ember.computed.alais("content.page")
+  page: Ember.computed.alias("content.page")
 });
 ```
 
