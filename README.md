@@ -370,6 +370,7 @@ In older versions of Ember you would have done:
   perPageBinding: "pagedContent.perPage",
   totalPagesBinding: "pagedContent.totalPages"
 }
+```
 
 #### Notes
 
