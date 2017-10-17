@@ -52,7 +52,7 @@ var FakeStore = Ember.Object.extend({
     var paged = PagedArray.create({page: params.page, perPage: params.per_page, content: all});
     var res = toArray(paged);
 
-    return new Promise(function(success,failure) {
+    return new Promise(function(success) {
       success(Ember.A(res));
     });
   },

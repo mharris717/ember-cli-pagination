@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { moduleForModel, test } from 'ember-qunit';
+import { test } from 'qunit';
 import DivideIntoPages from 'ember-cli-pagination/divide-into-pages';
 
 var paramTest = function(name,ops,f) {

@@ -127,7 +127,7 @@ paramTest("truncation with showFL = true", {content: {page: 2, totalPages: 10}, 
 
 
 
-paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert,ops) {
+paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
   var actionCounter = 0;
   var clickedPage = null;
   var containingObject = {
@@ -149,7 +149,7 @@ paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5
   assert.equal(clickedPage,2);
 });
 
-paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert,ops) {
+paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
   var actionCounter = 0;
   var clickedPage = null;
   var containingObject = {
@@ -171,13 +171,11 @@ paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4
   assert.equal(clickedPage,2);
 });
 
-paramTest("invalid incrementPage does not send default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert,ops) {
+paramTest("invalid incrementPage does not send default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
   var actionCounter = 0;
-  var clickedPage = null;
   var containingObject = {
-    doThing: function(n) {
+    doThing() {
       actionCounter++;
-      clickedPage = n;
     }
   };
 
@@ -192,7 +190,7 @@ paramTest("invalid incrementPage does not send default event", {content: makePag
   assert.equal(actionCounter,0);
 });
 
-paramTest("invalid page send invalidPage component action", {content: makePagedArray([1,2,3,4,5])}, function(s,assert,ops) {
+paramTest("invalid page send invalidPage component action", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
   var actionCounter = 0;
   var pageEvent = null;
   var containingObject = {

@@ -1,5 +1,4 @@
 import Util from 'ember-cli-pagination/util';
-import toArray from '../../helpers/to-array';
 import equalArray from '../../helpers/equal-array';
 import { test } from 'ember-qunit';
 

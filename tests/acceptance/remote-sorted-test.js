@@ -1,26 +1,23 @@
-import startApp from '../helpers/start-app';
+/* global hasPages, hasTodo, clickPage */
+import { test } from 'qunit';
+import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
 import pretenderServer from '../helpers/pretender-server';
-import Todo from '../../models/todo';
 import Ember from 'ember';
-import { test, module } from 'qunit';
 
-var App = null;
-var server = null;
+let server = null;
 
-module('Acceptance | Pagination Remote Sorted', {
-  setup: function() {
-    App = startApp();
+moduleForAcceptance('Acceptance | Pagination Remote Sorted', {
+  beforeEach() {
     server = pretenderServer();
   },
-  teardown: function() {
-    Ember.run(App, 'destroy');
+  afterEach() {
     server.shutdown();
   }
 });
 
 // the sortByField and page params allow you to pass in starting values
 // that will be query params on the url when page is first visited
-var todosTest = function(name, f, sortByField, page) {
+let todosTest = function(name, f, sortByField, page) {
   test(name, function(assert) {
     var url = "/todos/remote-sorted";
     if (sortByField) {

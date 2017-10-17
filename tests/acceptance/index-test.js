@@ -1,18 +1,14 @@
-import startApp from '../helpers/start-app';
+import { test } from 'qunit';
+import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
 import pretenderServer from '../helpers/pretender-server';
-import Ember from 'ember';
-import { test, module } from 'qunit';
 
-var App = null;
-var server = null;
+let server = null;
 
-module('Integration - Todo Index', {
-  setup: function() {
-    App = startApp();
+moduleForAcceptance('Acceptance - Todo Index', {
+  beforeEach() {
     server = pretenderServer();
   },
-  teardown: function() {
-    Ember.run(App, 'destroy');
+  afterEach() {
     server.shutdown();
   }
 });

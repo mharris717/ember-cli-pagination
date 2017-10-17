@@ -1,13 +1,11 @@
-import startApp from '../helpers/start-app';
+/* global hasTodos */
+import { test } from 'qunit';
+import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
 import pretenderServer from '../helpers/pretender-server';
-import Todo from '../../models/todo';
-import Ember from 'ember';
-import { test, module } from 'qunit';
 
-var App = null;
-var server = null;
+let server = null;
 
-var todosTestLocal = function(name, f) {
+let todosTestLocal = function(name, f) {
   test(name, function(assert) {
     visit("/todos/infinite").then(function() {
       f(assert);
@@ -15,7 +13,7 @@ var todosTestLocal = function(name, f) {
   });
 };
 
-var todosTestRemote = function(name, f) {
+let todosTestRemote = function(name, f) {
   test(name, function(assert) {
     visit("/todos/infinite-remote").then(function() {
       f(assert);
@@ -23,7 +21,7 @@ var todosTestRemote = function(name, f) {
   });
 };
 
-var runTests = function(todosTest) {
+let runTests = function(todosTest) {
   todosTest("smoke", function(assert) {
     hasTodos(assert,10);
   });
@@ -39,26 +37,22 @@ var runTests = function(todosTest) {
   });
 };
 
-module('Integration - Infinite Pagination Local', {
-  setup: function() {
-    App = startApp();
+moduleForAcceptance('Acceptance - Infinite Pagination Local', {
+  beforeEach() {
     server = pretenderServer();
   },
-  teardown: function() {
-    Ember.run(App, 'destroy');
+  afterEach() {
     server.shutdown();
   }
 });
 
 runTests(todosTestLocal);
 
-module('Integration - Infinite Pagination Remote', {
-  setup: function() {
-    App = startApp();
+moduleForAcceptance('Acceptance - Infinite Pagination Remote', {
+  beforeEach() {
     server = pretenderServer();
   },
-  teardown: function() {
-    Ember.run(App, 'destroy');
+  afterEach() {
     server.shutdown();
   }
 });
