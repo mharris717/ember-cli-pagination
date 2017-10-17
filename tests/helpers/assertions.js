@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import $ from 'jquery';
 
 var f = function() {
   Ember.Test.registerAsyncHelper('hasActivePage', function(app, assert, num, context) {
@@ -11,7 +12,7 @@ var f = function() {
     });
   });
 
-  Ember.Test.registerAsyncHelper('hasButtons', function(app, assert, ops, context) {
+  Ember.Test.registerAsyncHelper('hasButtons', function(app, assert, ops) {
     for (var name in ops) {
       var present = ops[name];
 
@@ -23,19 +24,19 @@ var f = function() {
     }
   });
 
-  Ember.Test.registerAsyncHelper('hasTodos', function(app, assert, l, context) {
+  Ember.Test.registerAsyncHelper('hasTodos', function(app, assert, l) {
     assert.equal(find("table tr.todo").length, l);
   });
 
-  Ember.Test.registerAsyncHelper('hasTodo', function(app, assert, num, name, context) {
+  Ember.Test.registerAsyncHelper('hasTodo', function(app, assert, num, name) {
     assert.equal(find("table tr.todo:eq("+num+") td.name").text().trim(), name);
   });
 
-  Ember.Test.registerAsyncHelper('hasPages', function(app, assert, l, context) {
+  Ember.Test.registerAsyncHelper('hasPages', function(app, assert, l) {
     assert.equal(find(".pagination li.page-number").length, l);
   });
 
-  Ember.Test.registerAsyncHelper('clickPage', function(app, i, context) {
+  Ember.Test.registerAsyncHelper('clickPage', function(app, i) {
     if (i === "prev" || i === "next") {
       click(".pagination ." + i + " a");
     } else {

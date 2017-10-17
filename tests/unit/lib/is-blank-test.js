@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import { test } from 'ember-qunit';
 import Util from 'ember-cli-pagination/util';
 

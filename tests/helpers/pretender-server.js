@@ -1,6 +1,6 @@
+/* globals Pretender */
 import Todo from '../../models/todo';
 import Helpers from 'ember-cli-pagination/test-helpers';
-import Factory from 'ember-cli-pagination/factory';
 import config from '../../config/environment';
 
 var todos = function() {

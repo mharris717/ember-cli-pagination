@@ -6,7 +6,7 @@ export default Ember.Object.extend({
   }),
 
   find: function(modelName,params) {
-    return new Ember.RSVP.Promise((success,failure) => {
+    return new Ember.RSVP.Promise((success) => {
       this.get("findArgs").pushObject({modelName: modelName, params: params});
       success(Ember.A([]));
     });

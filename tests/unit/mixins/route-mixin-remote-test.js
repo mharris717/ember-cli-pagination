@@ -1,14 +1,9 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { module, test } from 'ember-qunit';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
-import Util from 'ember-cli-pagination/util';
-import toArray from '../../helpers/to-array';
-import equalArray from '../../helpers/equal-array';
 import MockStore from '../../helpers/mock-store';
 
-//module("Remote Route Mixin");
-
-var Promise = Ember.RSVP.Promise;
+module("Remote Route Mixin");
 
 test("thing", function(assert) {
   var store = MockStore.create();
@@ -19,7 +14,6 @@ test("thing", function(assert) {
   something.findPaged("todo",{name: "Adam"});
   var findArgs = store.get('findArgs');
 
-  console.debug(findArgs);
   assert.equal(findArgs.length,1);
   assert.equal(findArgs[0].modelName,"todo");
   assert.equal(findArgs[0].params.name,"Adam");

@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { module, test } from 'ember-qunit';
 import sinon from 'sinon';
 import BasePagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 import PagedLocalArray from 'ember-cli-pagination/local/paged-array';
@@ -20,21 +20,9 @@ var RunSet = Ember.Mixin.create({
 
 var PagedRemoteArray = BasePagedRemoteArray.extend(RunSet);
 
-// module("PagedRemoteArray");
+module("PagedRemoteArray");
 
 var Promise = Ember.RSVP.Promise;
-
-var paramTest = function(name,ops,f) {
-  test(name, function() {
-    var subject = null;
-
-    Ember.run(function() {
-      subject = PagedRemoteArray.create(ops);
-    });
-
-    f(subject);
-  });
-};
 
 var FakeStore = Ember.Object.extend({
   find: function(name,params) {
@@ -48,7 +36,7 @@ var FakeStore = Ember.Object.extend({
     res.meta = {};
     res.meta[key] = totalPages;
 
-    return new Promise(function(success,failure) {
+    return new Promise(function(success) {
       success(Ember.A(res));
     });
   },
@@ -134,11 +122,11 @@ var MyArrayObserver = Ember.Object.extend({
   arrayWillChangeCount: 0,
   arrayDidChangeCount: 0,
 
-  arrayWillChange: function(observedObj, start, removeCount, addCount) {
+  arrayWillChange() {
     this.incrementProperty("arrayWillChangeCount");
   },
 
-  arrayDidChange: function(observedObj, start, removeCount, addCount) {
+  arrayDidChange() {
     this.incrementProperty("arrayDidChangeCount");
   }
 });

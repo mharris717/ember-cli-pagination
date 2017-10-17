@@ -1,13 +1,11 @@
-import startApp from '../helpers/start-app';
+/* global hasPages, hasActivePage, clickPage, hasTodos, hasButtons, clickPage */
+import { test } from 'qunit';
+import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
 import pretenderServer from '../helpers/pretender-server';
-import Todo from '../../models/todo';
-import Ember from 'ember';
-import { test, module } from 'qunit';
 
-var App = null;
-var server = null;
+let server = null;
 
-var todosTestRemote = function(name, f, initialPage) {
+let todosTestRemote = function(name, f, initialPage) {
   test(name, function(assert) {
     var url = "/todos/remote";
     if (initialPage) {
@@ -19,7 +17,7 @@ var todosTestRemote = function(name, f, initialPage) {
   });
 };
 
-var todosTestLocal = function(name, f, initialPage) {
+let todosTestLocal = function(name, f, initialPage) {
   test(name, function(assert) {
     var url = "/todos/local";
     if (initialPage) {
@@ -31,12 +29,12 @@ var todosTestLocal = function(name, f, initialPage) {
   });
 };
 
-// commented out for now because it fails. 
+// commented out for now because it fails.
 // todosTest("numRemoteCalls", function() {
 //   equal(find(".numRemoteCalls").text().trim(), "1");
 // });
 
-var createTests = function(todosTest,todosUrl) {
+let createTests = function(todosTest) {
   todosTest("page links", function(assert) {
     assert.equal(find(".pagination").length, 1);
     hasPages(assert,4);
@@ -125,8 +123,6 @@ var createTests = function(todosTest,todosUrl) {
     });
   });
 
-  
-
   todosTest("click next on last page and not increment", function(assert) {
     assert.expect(5);
 
@@ -163,26 +159,22 @@ var createTests = function(todosTest,todosUrl) {
   });
 };
 
-module('Integration - Pagination Remote', {
-  setup: function() {
-    App = startApp();
+moduleForAcceptance('Acceptance - Pagination Remote', {
+  beforeEach() {
     server = pretenderServer();
   },
-  teardown: function() {
-    Ember.run(App, 'destroy');
+  afterEach() {
     server.shutdown();
   }
 });
 
 createTests(todosTestRemote,"/todos/remote");
 
-module('Integration - Pagination Local', {
-  setup: function() {
-    App = startApp();
+moduleForAcceptance('Acceptance - Pagination Local', {
+  beforeEach() {
     server = pretenderServer();
   },
-  teardown: function() {
-    Ember.run(App, 'destroy');
+  afterEach() {
     server.shutdown();
   }
 });

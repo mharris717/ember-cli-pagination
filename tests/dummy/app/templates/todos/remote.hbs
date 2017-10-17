@@ -4,7 +4,7 @@
     <th>Completed</th>
   </tr>
 
-  {{#each content as |content|}}
+  {{#each model as |content|}}
     <tr class="todo">
       <td>{{content.name}}</td>
       <td>
@@ -14,12 +14,12 @@
   {{/each}}
 </table>
 
-{{page-numbers content=content}}
+{{page-numbers content=model}}
 
 <button {{action "save"}}>Save</button>
 
 <div class="numRemoteCalls">
-  {{content.numRemoteCalls}}
+  {{model.numRemoteCalls}}
 </div>
 
 {{outlet}}
