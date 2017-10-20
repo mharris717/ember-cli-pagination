@@ -255,6 +255,28 @@ export default Ember.Route.extend(RouteMixin, {
 });
 ```
 
+You can also pass a mapping function for the paramMapping. A common usage for this would be a limit and offset API backend. This is done by passing an array as the mapping. The first item in the array being the param name, and the second item being the value mapping function. The function should accept one parameter, an object with keys `page` and `perPage` and their respective values.
+
+```javascript
+import Ember from 'ember';
+import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
+
+export default Ember.Route.extend(RouteMixin, {
+  model: function(params) {
+    params.paramMapping = {
+			page: [
+				"offset",
+				function(obj){
+					return (obj.page - 1) * obj.perPage;
+				}
+			],
+     perPage: "limit"
+	 };
+    return this.findPaged('todo',params);
+  }
+});
+```
+
 ### Get updates outside
 
 Sometimes you may need to handle remote paginated API without `refreshModel`
