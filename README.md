@@ -529,7 +529,7 @@ Clicking a page number will:
 
 ### Customization
 
-You can use your own template for the pagination controls. Create it in your app at app/templates/components/page-numbers.hbs and it will be used automatically.
+You can use your own template for the pagination controls. Create it in your app at app/templates/components/page-numbers.hbs and it will be used automatically. Note: do not use `ember generate component page-numbers`, as this will also create an empty JavaScript controller file. Create/copy the page-numbers.hbs file yourself.
 
 See [the default template](https://github.com/mharris717/ember-cli-pagination/blob/master/addon/templates/components/page-numbers.hbs) for an example.
 
