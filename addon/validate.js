@@ -7,9 +7,9 @@ Validate.reopenClass({
 
   internalError: function(str,obj) {
     this.internalErrors.push(str);
-    Ember.Logger.warn(str);
+    console.warn(str);
     if (obj) {
-      Ember.Logger.warn(obj);
+      console.warn(obj);
     }
   },
 
