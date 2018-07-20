@@ -33,14 +33,17 @@ export default Ember.Component.extend({
   },
 
   pageItemsObj: Ember.computed(function() {
-    return PageItems.create({
-      parent: this,
-      currentPage: Ember.computed.alias("parent.currentPage"),
-      totalPages: Ember.computed.alias("parent.totalPages"),
-      truncatePages: Ember.computed.alias("parent.truncatePages"),
-      numPagesToShow: Ember.computed.alias("parent.numPagesToShow"),
-      showFL: Ember.computed.alias("parent.showFL")
+    let result = PageItems.create({
+      parent: this
     });
+
+    Ember.defineProperty(result, 'currentPage', Ember.computed.alias("parent.currentPage"));
+    Ember.defineProperty(result, 'totalPages', Ember.computed.alias("parent.totalPages"));
+    Ember.defineProperty(result, 'truncatePages', Ember.computed.alias("parent.truncatePages"));
+    Ember.defineProperty(result, 'numPagesToShow', Ember.computed.alias("parent.numPagesToShow"));
+    Ember.defineProperty(result, 'showFL', Ember.computed.alias("parent.showFL"));
+
+    return result;
   }),
 
   pageItems: Ember.computed("pageItemsObj.pageItems","pageItemsObj", function() {
