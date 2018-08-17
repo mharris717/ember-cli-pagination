@@ -26,7 +26,7 @@ function makeLocal(contentProperty,ops) {
           // ^ deprecation warning based off of https://github.com/emberjs/ember.js/pull/13920/files
         }
         else {
-          Ember.defineProperty(pagedOps, key, value);
+          pagedOps[key] = value;
         }
       }
     }
