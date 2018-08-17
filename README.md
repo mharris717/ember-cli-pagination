@@ -317,7 +317,7 @@ inherits Ember.Evented, you can subscribe on `contentWillChange` and
 * There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know.
 * Related: [Setup a Paginated Rails API](#setup-paginated-rails-api)
 
-### Force reloading data 
+### Force reloading data
 
 This scenario assumes that we know we need to refresh the data from server. For example when we sent new data to the server and we want to display them in our application:
 
@@ -338,7 +338,7 @@ export default Route.extend(RouteMixin, {
 <ul>
   {{#each model as |post|}}
     <li>{{post.id}}</li>
-  {{/each}} 
+  {{/each}}
 </ul>
 ```
 
@@ -348,12 +348,12 @@ export default Controller.extend({
   actions: {
     createNewPost() {
       // Note that this by itself won't make the post appear in paginated list of posts
-      let newPost = this.store.createRecord('post'); 
+      let newPost = this.store.createRecord('post');
 
       // Not even saving the data server side will make it appear on user's screen
-      return newPost.save().then(() => { 
+      return newPost.save().then(() => {
         // This will force the ember-cli-pagination to re-fetch current page
-        this.get('model').setOtherParam('nameOrValueOfThisPropertyDoesNotReallyMatter', true); 
+        this.get('model').setOtherParam('nameOrValueOfThisPropertyDoesNotReallyMatter', true);
       });
     }
   }
@@ -873,3 +873,9 @@ You guys rock!
 * @brentdanley
 * @pleszkowicz
 * @mixonic
+* @chrisdevor
+* @MichalBryxi
+* @flyrev
+* @armiiller
+* @artemgurzhii
+* @iezer

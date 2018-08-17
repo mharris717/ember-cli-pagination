@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-pagination",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Addon for Ember CLI to do simple pagination. Compatible with the kaminari API in Rails",
   "private": false,
   "keywords": [
