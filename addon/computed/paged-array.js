@@ -4,10 +4,12 @@ import PagedInfiniteArray from 'ember-cli-pagination/infinite/paged-infinite-arr
 
 function makeLocal(contentProperty,ops) {
   return Ember.computed("",function() {
-    let pagedOps = {
+    let instanceOpts = {
       parent: this
     };
-    Ember.defineProperty(pagedOps, 'content', Ember.computed.alias('parent.' + contentProperty));
+    let classOpts = {
+      content: Ember.computed.alias('parent.' + contentProperty)
+    };
 
     // update the old binding method to the new alias method
     // converts {pageBinding: 'page'} to {page: Ember.computed.alias('parent.page')}
@@ -17,7 +19,7 @@ function makeLocal(contentProperty,ops) {
         const value = ops[key];
         if ( alias !== key ) {
 //          pagedOps[alias] = Ember.computed.alias('parent.' + value);
-          Ember.defineProperty(pagedOps, alias, Ember.computed.alias('parent.' + value));
+          classOpts[alias] = Ember.computed.alias('parent.' + value);
           Ember.deprecate('Using Binding is deprecated, use Ember.computed.alias or Ember.computed.oneWay instead', false, {
             id: 'addon.ember-cli-pagination.paged-array',
             until: '3.0.0',
@@ -26,12 +28,16 @@ function makeLocal(contentProperty,ops) {
           // ^ deprecation warning based off of https://github.com/emberjs/ember.js/pull/13920/files
         }
         else {
-          pagedOps[key] = value;
+          if (Ember.isArray(value) || typeof(value) == "object" && (!value || typeof(value.get) !== "function")) {
+            instanceOpts[key] = value;
+          } else {
+            classOpts[key] = value;
+          }
         }
       }
     }
 
-    const paged = PagedArray.create(pagedOps);
+    const paged = PagedArray.extend(classOpts).create(instanceOpts);
 
     // paged.lockToRange();
     return paged;
