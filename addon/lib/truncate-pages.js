@@ -70,7 +70,7 @@ export default Ember.Object.extend(SafeGet, {
         }
 
         // add last page if not already there
-        if (res[res.length-1] !== totalPages) {
+        if (res[res.length-1] !== totalPages && totalPages !== 0) {
           res.push(totalPages);
         }
       }
