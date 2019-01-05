@@ -10,7 +10,7 @@ var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
     var me = this;
 
     return promise.then(function() {
-      success(me);
+      return success(me);
     }, failure);
   }
 });
@@ -89,7 +89,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     var modelName = this.get('modelName');
 
     var ops = this.get('paramsForBackend');
-    var res = store.query(modelName, ops);
+    var res = store.query(modelName, Object.assign({},ops)); // always create a shallow copy of `ops` in case adapter would mutate the original object
 
     return res;
   },

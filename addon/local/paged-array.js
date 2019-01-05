@@ -45,7 +45,7 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
 
     if (content.then) {
       promise = content.then(function() {
-        success(me);
+        return success(me);
       },failure);
     }
     else {
@@ -53,7 +53,7 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
         resolve(success(me));
       });
     }
-    
+
     return promise;
   },
 
