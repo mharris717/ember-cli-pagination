@@ -148,6 +148,12 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     }
   }),
 
+  reload: function() {
+    var promise = this.fetchContent();
+    this.set('promise', promise);
+    return promise;
+  },
+
   setOtherParam: function(k,v) {
     if (!this.get('otherParams')) {
       this.set('otherParams',{});
