@@ -740,6 +740,20 @@ pagedArray.then(function() {
 });
 ```
 
+### Reloading
+
+A PagedRecordArray has a reload method which you can use to refresh the current data. All params passed when constructing the PagedRecordArray will remain unchanged. The method returns a promise which is resolved when new data are loaded.
+
+```javascript
+// pagedArray represents a PagedRemoteArray, already created
+// var pagedArray = ....
+
+// this will trigger the remote call to refresh the current page
+pagedArray.reload().then(() => {
+  // data loaded
+});
+```
+
 ### Binding
 
 You may bind PagedRemoteArray#page like any property.
