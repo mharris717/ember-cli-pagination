@@ -3,6 +3,7 @@ import Util from 'ember-cli-pagination/util';
 import PageItems from 'ember-cli-pagination/lib/page-items';
 import Validate from 'ember-cli-pagination/validate';
 import layout from '../templates/components/page-numbers';
+import { get } from '@ember/object';
 
 export default Ember.Component.extend({
   layout,
@@ -15,7 +16,7 @@ export default Ember.Component.extend({
     const c = this.get('content');
     if (c && c.on) {
       c.on('invalidPage', (e) => {
-        this.sendAction('invalidPageAction',e);
+        get(e, 'invalidPageAction');
       });
     }
   }),
@@ -66,7 +67,7 @@ export default Ember.Component.extend({
     pageClicked: function(number) {
       Util.log("PageNumbers#pageClicked number " + number);
       this.set("currentPage", number);
-      this.sendAction('action',number);
+      get(number 'action');
     },
     incrementPage: function(num) {
       const currentPage = Number(this.get("currentPage")),
@@ -77,7 +78,7 @@ export default Ember.Component.extend({
       this.incrementProperty('currentPage', num);
 
       const newPage = this.get('currentPage');
-      this.sendAction('action',newPage);
+      get(newPage, 'action');
     }
   }
 });
