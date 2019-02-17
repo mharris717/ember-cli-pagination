@@ -33,7 +33,8 @@ matrix:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
 before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - npm uninstall -g yarn 
+  - npm install -g yarn@1.12.3
   - export PATH=$HOME/.yarn/bin:$PATH
   - yarn global add bower
 
