@@ -138,7 +138,7 @@ paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5
   };
 
   s.set('targetObject',containingObject);
-  s.set('action','doThing');
+  s.set('action',containingObject.doThing);
 
   assert.equal(s.get('totalPages'),3);
   Ember.run(function() {
@@ -160,7 +160,7 @@ paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4
   };
 
   s.set('targetObject',containingObject);
-  s.set('action','doThing');
+  s.set('action',containingObject.doThing);
 
   assert.equal(s.get('totalPages'),3);
   Ember.run(function() {
@@ -180,7 +180,7 @@ paramTest("invalid incrementPage does not send default event", {content: makePag
   };
 
   s.set('targetObject',containingObject);
-  s.set('action','doThing');
+  s.set('action',containingObject.doThing);
 
   assert.equal(s.get('totalPages'),3);
   Ember.run(function() {
@@ -201,7 +201,7 @@ paramTest("invalid page send invalidPage component action", {content: makePagedA
   };
 
   s.set('targetObject',containingObject);
-  s.set('invalidPageAction','doThing');
+  s.set('invalidPageAction',containingObject.doThing);
 
   assert.equal(s.get('totalPages'),3);
   Ember.run(function() {

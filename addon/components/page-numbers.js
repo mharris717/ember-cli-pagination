@@ -15,7 +15,10 @@ export default Ember.Component.extend({
     const c = this.get('content');
     if (c && c.on) {
       c.on('invalidPage', (e) => {
-        this.sendAction('invalidPageAction',e);
+        const invalidPageAction = Ember.get(this, 'invalidPageAction');
+        if (Ember.isPresent(invalidPageAction)) {
+          invalidPageAction(e);
+        }
       });
     }
   }),
@@ -66,18 +69,25 @@ export default Ember.Component.extend({
     pageClicked: function(number) {
       Util.log("PageNumbers#pageClicked number " + number);
       this.set("currentPage", number);
-      this.sendAction('action',number);
+      const action = Ember.get(this, 'action');
+      if (Ember.isPresent(action)) {
+        action(number);
+      }
     },
     incrementPage: function(num) {
       const currentPage = Number(this.get("currentPage")),
-           totalPages = Number(this.get("totalPages"));
+            totalPages = Number(this.get("totalPages"));
 
       if(currentPage === totalPages && num === 1) { return false; }
       if(currentPage <= 1 && num === -1) { return false; }
       this.incrementProperty('currentPage', num);
 
       const newPage = this.get('currentPage');
-      this.sendAction('action',newPage);
+      const action = Ember.get(this, 'action');
+      if (Ember.isPresent(action)) {
+        action(newPage);
+      }
+
     }
   }
 });
