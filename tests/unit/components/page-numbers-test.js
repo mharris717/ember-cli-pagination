@@ -136,10 +136,11 @@ paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5
   };
   s.set('action', (arg) => containingObject.doThing(arg));
   Ember.run(function() {
-    s.send('pageClicked', 1);
+    s.send('pageClicked', 2);
   });
+  assert.equal(s.get('currentPage'), 2);
   assert.equal(actionCounter, 1, 'works with function/action');
-  assert.equal(clickedPage, 1, 'works with function/action');
+  assert.equal(clickedPage, 2, 'works with function/action');
 });
 
 paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
@@ -152,7 +153,9 @@ paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4
     }
   };
 
+  s.set('targetObject', containingObject);
   s.set('action', (arg) => containingObject.doThing(arg));
+  assert.equal(s.get('totalPages'), 3);
   Ember.run(function() {
     s.send('incrementPage', 1);
   });
