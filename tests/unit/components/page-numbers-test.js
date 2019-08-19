@@ -1,6 +1,9 @@
 import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
+import Component from '@ember/component';
+
+const supportsSendAction = typeof Component.prototype.sendAction === 'function';
 
 moduleForComponent("page-numbers", {unit: true});
 
@@ -125,7 +128,30 @@ paramTest("truncation with showFL = true", {content: {page: 2, totalPages: 10}, 
   assert.deepEqual(pages,[1,2,3,4,5,6,10]);
 });
 
+if (supportsSendAction) {
+  paramTest("deprecated sendAction - pageClicked sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
+    var actionCounter = 0;
+    var clickedPage = null;
+    var containingObject = {
+      doThing: function(n) {
+        actionCounter++;
+        clickedPage = n;
+      }
+    };
 
+    // deprecated sendAction behavior
+    s.set('targetObject',containingObject);
+    s.set('action','doThing');
+
+    assert.equal(s.get('totalPages'),3);
+    Ember.run(function() {
+      s.send('pageClicked',2);
+    });
+    assert.equal(s.get('currentPage'),2);
+    assert.equal(actionCounter,1);
+    assert.equal(clickedPage,2);
+  });
+}
 
 paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
   var actionCounter = 0;
@@ -136,27 +162,38 @@ paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5
       clickedPage = n;
     }
   };
-
-  // deprecated sendAction behavior
-  s.set('targetObject',containingObject);
-  s.set('action','doThing');
-
-  assert.equal(s.get('totalPages'),3);
-  Ember.run(function() {
-    s.send('pageClicked',2);
-  });
-  assert.equal(s.get('currentPage'),2);
-  assert.equal(actionCounter,1);
-  assert.equal(clickedPage,2);
-
-  // non deprecated behavior
   s.set('action', (arg) => containingObject.doThing(arg));
   Ember.run(function() {
     s.send('pageClicked', 1);
   });
-  assert.equal(actionCounter, 2, 'works with function/action');
+  assert.equal(actionCounter, 1, 'works with function/action');
   assert.equal(clickedPage, 1, 'works with function/action');
 });
+
+if (supportsSendAction) {
+  paramTest("deprecated sendAction - incrementPage sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
+    var actionCounter = 0;
+    var clickedPage = null;
+    var containingObject = {
+      doThing: function(n) {
+        actionCounter++;
+        clickedPage = n;
+      }
+    };
+
+    // deprecated sendAction behavior
+    s.set('targetObject',containingObject);
+    s.set('action','doThing');
+
+    assert.equal(s.get('totalPages'),3);
+    Ember.run(function() {
+      s.send('incrementPage',1);
+    });
+    assert.equal(s.get('currentPage'),2);
+    assert.equal(actionCounter,1);
+    assert.equal(clickedPage,2);
+  });
+}
 
 paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
   var actionCounter = 0;
@@ -168,26 +205,36 @@ paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4
     }
   };
 
-  // deprecated sendAction behavior
-  s.set('targetObject',containingObject);
-  s.set('action','doThing');
-
-  assert.equal(s.get('totalPages'),3);
-  Ember.run(function() {
-    s.send('incrementPage',1);
-  });
-  assert.equal(s.get('currentPage'),2);
-  assert.equal(actionCounter,1);
-  assert.equal(clickedPage,2);
-
   s.set('action', (arg) => containingObject.doThing(arg));
   Ember.run(function() {
     s.send('incrementPage', 1);
   });
-  assert.equal(s.get('currentPage'), 3, 'ohai');
-  assert.equal(actionCounter, 2);
-  assert.equal(clickedPage, 3);
+  assert.equal(s.get('currentPage'), 2, 'ohai');
+  assert.equal(actionCounter, 1);
+  assert.equal(clickedPage, 2);
 });
+
+if (supportsSendAction) {
+  paramTest("deprecated sendAction - invalid incrementPage does not send default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
+    var actionCounter = 0;
+    var containingObject = {
+      doThing() {
+        actionCounter++;
+      }
+    };
+
+    // deprecated sendAction behavior
+    s.set('targetObject',containingObject);
+    s.set('action','doThing');
+
+    assert.equal(s.get('totalPages'),3);
+    Ember.run(function() {
+      s.send('incrementPage',-1);
+    });
+    assert.equal(s.get('currentPage'),1);
+    assert.equal(actionCounter,0);
+  });
+}
 
 paramTest("invalid incrementPage does not send default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
   var actionCounter = 0;
@@ -197,18 +244,6 @@ paramTest("invalid incrementPage does not send default event", {content: makePag
     }
   };
 
-  // deprecated sendAction behavior
-  s.set('targetObject',containingObject);
-  s.set('action','doThing');
-
-  assert.equal(s.get('totalPages'),3);
-  Ember.run(function() {
-    s.send('incrementPage',-1);
-  });
-  assert.equal(s.get('currentPage'),1);
-  assert.equal(actionCounter,0);
-
-  // not deprecated behavior
   s.set('action', () => containingObject.doThing());
   Ember.run(function() {
     s.send('incrementPage',-1);
@@ -216,6 +251,30 @@ paramTest("invalid incrementPage does not send default event", {content: makePag
   assert.equal(s.get('currentPage'),1);
   assert.equal(actionCounter,0)
 });
+
+if (supportsSendAction) {
+  paramTest("deprecated sendAction - invalid page send invalidPage component action", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
+    var actionCounter = 0;
+    var pageEvent = null;
+    var containingObject = {
+      doThing: function(n) {
+        actionCounter++;
+        pageEvent = n;
+      }
+    };
+
+    // deprecated sendAction behavior
+    s.set('targetObject',containingObject);
+    s.set('invalidPageAction','doThing');
+
+    assert.equal(s.get('totalPages'),3);
+    Ember.run(function() {
+      s.get('content').set('page',99);
+    });
+    assert.equal(pageEvent.page,99);
+    assert.equal(actionCounter,1);
+  });
+}
 
 paramTest("invalid page send invalidPage component action", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
   var actionCounter = 0;
@@ -227,19 +286,7 @@ paramTest("invalid page send invalidPage component action", {content: makePagedA
     }
   };
 
-  // deprecated sendAction behavior
-  s.set('targetObject',containingObject);
-  s.set('invalidPageAction','doThing');
-
-  assert.equal(s.get('totalPages'),3);
-  Ember.run(function() {
-    s.get('content').set('page',99);
-  });
-  assert.equal(pageEvent.page,99);
-  assert.equal(actionCounter,1);
-
-  // not deprecated behavior
-  s.set('action', (arg) => containingObject.doThing(arg));
+  s.set('invalidPageAction', (arg) => containingObject.doThing(arg));
   Ember.run(function() {
     s.get('content').set('page', 99);
   });
