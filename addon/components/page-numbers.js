@@ -32,10 +32,13 @@ export default Ember.Component.extend({
     if (typeof action === 'function') {
       action(...args);
     } else if (typeof this.sendAction === 'function') {
-      deprecate('passing a string to `page-numbers` is deprecated due to Ember sendAction deprecation. Use a closure action instead: https://deprecations.emberjs.com/v3.x/#toc_ember-component-send-action');
+      deprecate('passing a string to `page-numbers` is deprecated due to Ember sendAction deprecation. Use a closure action instead: https://deprecations.emberjs.com/v3.x/#toc_ember-component-send-action', {
+        id: 'ember-component.send-action',
+        until: '4.0.0'
+      });
       this.sendAction(key, ...args);
     } else {
-      throw new Error('passing a string to `page-numbers` is deprecated due to Ember sendAction deprecation. Use a closure action instead: https://deprecations.emberjs.com/v3.x/#toc_ember-component-send-action');
+      throw new Error('passing a string to `page-numbers` is no longer supported due to Ember sendAction deprecation. Use a closure action instead: https://deprecations.emberjs.com/v3.x/#toc_ember-component-send-action');
     }
   },
 
