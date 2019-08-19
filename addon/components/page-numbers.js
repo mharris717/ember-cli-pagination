@@ -4,6 +4,7 @@ import PageItems from 'ember-cli-pagination/lib/page-items';
 import Validate from 'ember-cli-pagination/validate';
 import layout from '../templates/components/page-numbers';
 import { get } from '@ember/object';
+import { deprecate } from '@ember/debug';
 
 export default Ember.Component.extend({
   layout,
@@ -16,10 +17,28 @@ export default Ember.Component.extend({
     const c = this.get('content');
     if (c && c.on) {
       c.on('invalidPage', (e) => {
-        get(e, 'invalidPageAction');
+        const invalidPageAction = this.get('invalidPageAction');
+        // only run if a closure action has been passed
+        // or this version of ember supports this.sendAction
+        if (typeof invalidPageAction === 'function' || typeof this.sendAction == 'function') {
+          this._runAction('invalidPageAction', e);
+        }
       });
     }
   }),
+
+  _runAction(key, ...args) {
+    const action = get(this, key);
+    if (typeof action === 'function') {
+      action(...args);
+    } else if (typeof this.sendAction === 'function') {
+      deprecate('passing a string to `page-numbers` is deprecated due to Ember sendAction deprecation. Use a closure action instead: https://deprecations.emberjs.com/v3.x/#toc_ember-component-send-action');
+      this.sendAction(key, ...args);
+    } else {
+      throw new Error('passing a string to `page-numbers` is deprecated due to Ember sendAction deprecation. Use a closure action instead: https://deprecations.emberjs.com/v3.x/#toc_ember-component-send-action');
+    }
+  },
+
 
   truncatePages: true,
   numPagesToShow: 10,
@@ -67,7 +86,7 @@ export default Ember.Component.extend({
     pageClicked: function(number) {
       Util.log("PageNumbers#pageClicked number " + number);
       this.set("currentPage", number);
-      get(number, 'action');
+      this._runAction('action', number);
     },
     incrementPage: function(num) {
       const currentPage = Number(this.get("currentPage")),
@@ -78,7 +97,7 @@ export default Ember.Component.extend({
       this.incrementProperty('currentPage', num);
 
       const newPage = this.get('currentPage');
-      get(newPage, 'action');
+      this._runAction('action', newPage);
     }
   }
 });

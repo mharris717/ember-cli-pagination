@@ -137,6 +137,7 @@ paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5
     }
   };
 
+  // deprecated sendAction behavior
   s.set('targetObject',containingObject);
   s.set('action','doThing');
 
@@ -147,6 +148,14 @@ paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5
   assert.equal(s.get('currentPage'),2);
   assert.equal(actionCounter,1);
   assert.equal(clickedPage,2);
+
+  // non deprecated behavior
+  s.set('action', (arg) => containingObject.doThing(arg));
+  Ember.run(function() {
+    s.send('pageClicked', 1);
+  });
+  assert.equal(actionCounter, 2, 'works with function/action');
+  assert.equal(clickedPage, 1, 'works with function/action');
 });
 
 paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
@@ -159,6 +168,7 @@ paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4
     }
   };
 
+  // deprecated sendAction behavior
   s.set('targetObject',containingObject);
   s.set('action','doThing');
 
@@ -169,6 +179,14 @@ paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4
   assert.equal(s.get('currentPage'),2);
   assert.equal(actionCounter,1);
   assert.equal(clickedPage,2);
+
+  s.set('action', (arg) => containingObject.doThing(arg));
+  Ember.run(function() {
+    s.send('incrementPage', 1);
+  });
+  assert.equal(s.get('currentPage'), 3, 'ohai');
+  assert.equal(actionCounter, 2);
+  assert.equal(clickedPage, 3);
 });
 
 paramTest("invalid incrementPage does not send default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
@@ -179,6 +197,7 @@ paramTest("invalid incrementPage does not send default event", {content: makePag
     }
   };
 
+  // deprecated sendAction behavior
   s.set('targetObject',containingObject);
   s.set('action','doThing');
 
@@ -188,6 +207,14 @@ paramTest("invalid incrementPage does not send default event", {content: makePag
   });
   assert.equal(s.get('currentPage'),1);
   assert.equal(actionCounter,0);
+
+  // not deprecated behavior
+  s.set('action', () => containingObject.doThing());
+  Ember.run(function() {
+    s.send('incrementPage',-1);
+  });
+  assert.equal(s.get('currentPage'),1);
+  assert.equal(actionCounter,0)
 });
 
 paramTest("invalid page send invalidPage component action", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
@@ -200,6 +227,7 @@ paramTest("invalid page send invalidPage component action", {content: makePagedA
     }
   };
 
+  // deprecated sendAction behavior
   s.set('targetObject',containingObject);
   s.set('invalidPageAction','doThing');
 
@@ -209,6 +237,15 @@ paramTest("invalid page send invalidPage component action", {content: makePagedA
   });
   assert.equal(pageEvent.page,99);
   assert.equal(actionCounter,1);
+
+  // not deprecated behavior
+  s.set('action', (arg) => containingObject.doThing(arg));
+  Ember.run(function() {
+    s.get('content').set('page', 99);
+  });
+  assert.equal(pageEvent.page, 99);
+  assert.equal(actionCounter, 1);
+  assert.equal(s.get('totalPages'), 3);
 });
 /*
 */
