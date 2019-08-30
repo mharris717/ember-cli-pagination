@@ -895,3 +895,5 @@ You guys rock!
 * @iezer
 * @jlami
 * @synaptiko
+* @rinoldsimon
+* @fivetanley
