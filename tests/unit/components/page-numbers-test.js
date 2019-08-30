@@ -125,8 +125,6 @@ paramTest("truncation with showFL = true", {content: {page: 2, totalPages: 10}, 
   assert.deepEqual(pages,[1,2,3,4,5,6,10]);
 });
 
-
-
 paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
   var actionCounter = 0;
   var clickedPage = null;
@@ -136,17 +134,13 @@ paramTest("pageClicked sends default event", {content: makePagedArray([1,2,3,4,5
       clickedPage = n;
     }
   };
-
-  s.set('targetObject',containingObject);
-  s.set('action','doThing');
-
-  assert.equal(s.get('totalPages'),3);
+  s.set('action', (arg) => containingObject.doThing(arg));
   Ember.run(function() {
-    s.send('pageClicked',2);
+    s.send('pageClicked', 2);
   });
-  assert.equal(s.get('currentPage'),2);
-  assert.equal(actionCounter,1);
-  assert.equal(clickedPage,2);
+  assert.equal(s.get('currentPage'), 2);
+  assert.equal(actionCounter, 1, 'works with function/action');
+  assert.equal(clickedPage, 2, 'works with function/action');
 });
 
 paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
@@ -159,16 +153,15 @@ paramTest("incrementPage sends default event", {content: makePagedArray([1,2,3,4
     }
   };
 
-  s.set('targetObject',containingObject);
-  s.set('action','doThing');
-
-  assert.equal(s.get('totalPages'),3);
+  s.set('targetObject', containingObject);
+  s.set('action', (arg) => containingObject.doThing(arg));
+  assert.equal(s.get('totalPages'), 3);
   Ember.run(function() {
-    s.send('incrementPage',1);
+    s.send('incrementPage', 1);
   });
-  assert.equal(s.get('currentPage'),2);
-  assert.equal(actionCounter,1);
-  assert.equal(clickedPage,2);
+  assert.equal(s.get('currentPage'), 2);
+  assert.equal(actionCounter, 1);
+  assert.equal(clickedPage, 2);
 });
 
 paramTest("invalid incrementPage does not send default event", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
@@ -179,15 +172,12 @@ paramTest("invalid incrementPage does not send default event", {content: makePag
     }
   };
 
-  s.set('targetObject',containingObject);
-  s.set('action','doThing');
-
-  assert.equal(s.get('totalPages'),3);
+  s.set('action', () => containingObject.doThing());
   Ember.run(function() {
     s.send('incrementPage',-1);
   });
   assert.equal(s.get('currentPage'),1);
-  assert.equal(actionCounter,0);
+  assert.equal(actionCounter,0)
 });
 
 paramTest("invalid page send invalidPage component action", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
@@ -200,15 +190,13 @@ paramTest("invalid page send invalidPage component action", {content: makePagedA
     }
   };
 
-  s.set('targetObject',containingObject);
-  s.set('invalidPageAction','doThing');
-
-  assert.equal(s.get('totalPages'),3);
+  s.set('invalidPageAction', (arg) => containingObject.doThing(arg));
   Ember.run(function() {
-    s.get('content').set('page',99);
+    s.get('content').set('page', 99);
   });
-  assert.equal(pageEvent.page,99);
-  assert.equal(actionCounter,1);
+  assert.equal(pageEvent.page, 99);
+  assert.equal(actionCounter, 1);
+  assert.equal(s.get('totalPages'), 3);
 });
 /*
 */

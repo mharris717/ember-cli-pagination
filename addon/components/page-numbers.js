@@ -3,6 +3,7 @@ import Util from 'ember-cli-pagination/util';
 import PageItems from 'ember-cli-pagination/lib/page-items';
 import Validate from 'ember-cli-pagination/validate';
 import layout from '../templates/components/page-numbers';
+import { get } from '@ember/object';
 
 export default Ember.Component.extend({
   layout,
@@ -15,10 +16,18 @@ export default Ember.Component.extend({
     const c = this.get('content');
     if (c && c.on) {
       c.on('invalidPage', (e) => {
-        this.sendAction('invalidPageAction',e);
+        this._runAction('invalidPageAction', e);
       });
     }
   }),
+
+  // only run if a closure action has been passed
+  _runAction(key, ...args) {
+    const action = get(this, key);
+    if (typeof action === 'function') {
+      action(...args);
+    }
+  },
 
   truncatePages: true,
   numPagesToShow: 10,
@@ -66,7 +75,7 @@ export default Ember.Component.extend({
     pageClicked: function(number) {
       Util.log("PageNumbers#pageClicked number " + number);
       this.set("currentPage", number);
-      this.sendAction('action',number);
+      this._runAction('action', number);
     },
     incrementPage: function(num) {
       const currentPage = Number(this.get("currentPage")),
@@ -77,7 +86,7 @@ export default Ember.Component.extend({
       this.incrementProperty('currentPage', num);
 
       const newPage = this.get('currentPage');
-      this.sendAction('action',newPage);
+      this._runAction('action', newPage);
     }
   }
 });
