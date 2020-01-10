@@ -1,7 +1,8 @@
-/* global hasPages, hasActivePage, clickPage, hasTodos, hasButtons, clickPage */
+import { findAll, visit } from '@ember/test-helpers';
+import { hasPages, hasActivePage, clickPage, hasTodos, hasButtons } from '../helpers/assertions';
 import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
 import pretenderServer from '../helpers/pretender-server';
+import moduleForAcceptance from '../helpers/module-for-acceptance';
 
 let server = null;
 
@@ -36,7 +37,7 @@ let todosTestLocal = function(name, f, initialPage) {
 
 let createTests = function(todosTest) {
   todosTest("page links", function(assert) {
-    assert.equal(find(".pagination").length, 1);
+    assert.equal(findAll(".pagination").length, 1);
     hasPages(assert,4);
   });
 
@@ -44,29 +45,25 @@ let createTests = function(todosTest) {
     hasActivePage(assert,1);
   });
 
-  todosTest("clicking page 2", function(assert) {
+  todosTest("clicking page 2", async function(assert) {
     assert.expect(5);
 
-    clickPage(2);
-    andThen(function() {
-      hasTodos(assert,10);
-      hasActivePage(assert,2);
-    });
+    await clickPage(2);
+    hasTodos(assert,10);
+    hasActivePage(assert,2);
   });
 
   
-  todosTest("clicking page 4", function(assert) {
+  todosTest("clicking page 4", async function(assert) {
     assert.expect(7);
 
-    clickPage(4);
-    andThen(function() {
-      hasTodos(assert,3);
-      hasActivePage(assert,4);
+    await clickPage(4);
+    hasTodos(assert,3);
+    hasActivePage(assert,4);
 
-      hasButtons(assert,{
-        prev: true,
-        next: false
-      });
+    hasButtons(assert,{
+      prev: true,
+      next: false
     });
   });
 
@@ -92,90 +89,77 @@ let createTests = function(todosTest) {
     });
   });
 
-  todosTest("click next", function(assert) {
+  todosTest("click next", async function(assert) {
     assert.expect(7);
 
-    clickPage("next");
-    andThen(function() {
-      hasButtons(assert,{
-        prev: true,
-        next: true
-      });
-      hasTodos(assert,10);
-      hasActivePage(assert,2);
+    await clickPage("next");
+    hasButtons(assert,{
+      prev: true,
+      next: true
     });
+    hasTodos(assert,10);
+    hasActivePage(assert,2);
   });
 
-  todosTest("click prev", function(assert) {
+  todosTest("click prev", async function(assert) {
     assert.expect(7);
 
-    clickPage(2);
-    andThen(function() {
-      clickPage("prev");
+    await clickPage(2);
+    await clickPage("prev");
+    hasButtons(assert,{
+      prev: false,
+      next: true
     });
-    andThen(function() {
-      hasButtons(assert,{
-        prev: false,
-        next: true
-      });
-      hasTodos(assert,10);
-      hasActivePage(assert,1);
-    });
+    hasTodos(assert,10);
+    hasActivePage(assert,1);
   });
 
-  todosTest("click next on last page and not increment", function(assert) {
+  todosTest("click next on last page and not increment", async function(assert) {
     assert.expect(5);
 
-    clickPage(4);
-    andThen(function() {
-      clickPage("next");
-    });
-    andThen(function() {
-      clickPage("next");
-    });
-    andThen(function() {
-      hasTodos(assert,3);
-      // COMMENTEDOUTTEST
-      // assert.equal(currentURL(), todosUrl+"?page=4");
-      // assert.notEqual(currentURL(), todosUrl+"?page=5");
-      hasActivePage(assert,4);
-    });
+    await clickPage(4);
+    await clickPage("next");
+    await clickPage("next");
+    hasTodos(assert,3);
+    // COMMENTEDOUTTEST
+    // assert.equal(currentURL(), todosUrl+"?page=4");
+    // assert.notEqual(currentURL(), todosUrl+"?page=5");
+    hasActivePage(assert,4);
   });
 
-  todosTest("click prev on first page and not decrement", function(assert) {
+  todosTest("click prev on first page and not decrement", async function(assert) {
     assert.expect(5);
 
-    clickPage("prev");
-    andThen(function() {
-      clickPage("prev");
-    });
-    andThen(function() {
-      hasTodos(assert,10);
-      //assert.equal(currentURL(), todosUrl);
-      // COMMENTEDOUTTEST
-      //assert.notEqual(currentURL(), todosUrl+"?page=-1");
-      hasActivePage(assert,1);
-    });
+    await clickPage("prev");
+    await clickPage("prev");
+    hasTodos(assert,10);
+    //assert.equal(currentURL(), todosUrl);
+    // COMMENTEDOUTTEST
+    //assert.notEqual(currentURL(), todosUrl+"?page=-1");
+    hasActivePage(assert,1);
   });
 };
 
-moduleForAcceptance('Acceptance - Pagination Remote', {
-  beforeEach() {
+moduleForAcceptance('Acceptance - Pagination Remote', function(hooks) {
+  hooks.beforeEach(function() {
     server = pretenderServer();
-  },
-  afterEach() {
+  });
+
+  hooks.afterEach(function() {
     server.shutdown();
-  }
+  });
+
+  createTests(todosTestRemote,"/todos/remote");
 });
 
-createTests(todosTestRemote,"/todos/remote");
-
-moduleForAcceptance('Acceptance - Pagination Local', {
-  beforeEach() {
+moduleForAcceptance('Acceptance - Pagination Local', function(hooks) {
+  hooks.beforeEach(function() {
     server = pretenderServer();
-  },
-  afterEach() {
+  });
+
+  hooks.afterEach(function() {
     server.shutdown();
-  }
+  });
+
+  createTests(todosTestLocal,"/todos/local");
 });
-createTests(todosTestLocal,"/todos/local");

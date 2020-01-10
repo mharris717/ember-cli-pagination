@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { test } from 'qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 import equalArray from '../../../helpers/equal-array';

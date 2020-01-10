@@ -17,6 +17,13 @@ module.exports = function(environment) {
         Date: false
       }
     },
+    
+    'ember-cli-babel': {
+        includePolyfill: true
+    },
+    babel: {
+      includePolyfill: true
+    },
 
     APP: {
       // Here you can pass flags/options to your application instance
@@ -41,6 +48,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
   }
 
   if (environment === 'production') {

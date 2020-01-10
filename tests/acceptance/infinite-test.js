@@ -1,7 +1,8 @@
-/* global hasTodos */
+import { click, findAll, visit } from '@ember/test-helpers';
+import { hasTodos } from '../helpers/assertions';
 import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
 import pretenderServer from '../helpers/pretender-server';
+import moduleForAcceptance from '../helpers/module-for-acceptance';
 
 let server = null;
 
@@ -26,35 +27,36 @@ let runTests = function(todosTest) {
     hasTodos(assert,10);
   });
 
-  todosTest("next page", function(assert) {
+  todosTest("next page", async function(assert) {
     assert.expect(2);
     hasTodos(assert,10);
 
-    click(".infinite .next a");
-    andThen(function() {
-      assert.equal(find('.infinite .todo').length,20);
-    });
+    await click(".infinite .next a");
+    assert.equal(findAll('.infinite .todo').length,20);
   });
 };
 
-moduleForAcceptance('Acceptance - Infinite Pagination Local', {
-  beforeEach() {
+moduleForAcceptance('Acceptance - Infinite Pagination Local', function(hooks) {
+  hooks.beforeEach(function() {
     server = pretenderServer();
-  },
-  afterEach() {
+  });
+
+  hooks.afterEach(function() {
     server.shutdown();
-  }
+  });
+
+  runTests(todosTestLocal);
 });
 
-runTests(todosTestLocal);
-
-moduleForAcceptance('Acceptance - Infinite Pagination Remote', {
-  beforeEach() {
+moduleForAcceptance('Acceptance - Infinite Pagination Remote', function(hooks) {
+  hooks.beforeEach(function() {
     server = pretenderServer();
-  },
-  afterEach() {
+  });
+
+  hooks.afterEach(function() {
     server.shutdown();
-  }
+  });
+
+  runTests(todosTestRemote);
 });
-runTests(todosTestRemote);
 
