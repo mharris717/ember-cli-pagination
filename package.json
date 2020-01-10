@@ -49,6 +49,7 @@
     "ember-resolver": "^4.0.0",
     "ember-sinon": "0.7.0",
     "ember-source": "~2.16.0",
+    "ember-source-channel-url": "^1.1.0",
     "express": "^4.12.4",
     "glob": "^5.0.14",
     "loader.js": "^4.2.3",
