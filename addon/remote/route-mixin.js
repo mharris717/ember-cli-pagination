@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import PagedRemoteArray from './paged-remote-array';
 import Util from '../util';
+import { camelize } from '@ember/string';
+import { singularize } from 'ember-inflector';
 
 export default Ember.Mixin.create({
   perPage: 10,
@@ -11,8 +13,8 @@ export default Ember.Mixin.create({
   },
 
   _findModelName: function(routeName) {
-      return Ember.String.singularize(
-        Ember.String.camelize(routeName)
+      return singularize(
+        camelize(routeName)
       );
   },
 
