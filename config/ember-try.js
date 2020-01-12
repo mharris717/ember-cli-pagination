@@ -18,7 +18,8 @@ module.exports = function() {
           'ember-data': '2.4.3',
           'ember-inflector': '^1.9.4',
           'ember-source': null,
-          'ember-cli-shims': null
+          'ember-cli-shims': null,
+          'ember-factory-for-polyfill': '1.3.1'
         }
       },
       bower: {
@@ -44,7 +45,8 @@ module.exports = function() {
           'ember-data': '2.8.1',
           'ember-inflector': '^1.9.4',
           'ember-source': null,
-          'ember-cli-shims': null
+          'ember-cli-shims': null,
+          'ember-factory-for-polyfill': '1.3.1'
         }
       }
     },
