@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { test } from 'qunit';
 import TruncatePages from 'ember-cli-pagination/lib/truncate-pages';
 import Validate from 'ember-cli-pagination/validate';
 

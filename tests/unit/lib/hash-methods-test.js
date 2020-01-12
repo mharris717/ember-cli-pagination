@@ -1,6 +1,6 @@
 import Util from 'ember-cli-pagination/util';
 import equalArray from '../../helpers/equal-array';
-import { test } from 'ember-qunit';
+import { test } from 'qunit';
 
 // module("Hash Methods");
 

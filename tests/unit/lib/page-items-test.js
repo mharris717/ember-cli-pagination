@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { test } from 'ember-qunit';
+import { test } from 'qunit';
 import PageItems from 'ember-cli-pagination/lib/page-items';
 
 var paramTest = function(name,ops,f) {
