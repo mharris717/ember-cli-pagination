@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { click, find } from '@ember/test-helpers';
+import { click, findAll } from '@ember/test-helpers';
 
 export function hasActivePage(assert, num, context) {
   var i = 0;
@@ -16,29 +16,29 @@ export function hasButtons(assert, ops) {
     var present = ops[name];
 
     if(present) {
-      assert.equal(find(".pagination ." + name + ".enabled-arrow").length, 1);
+      assert.equal(findAll(".pagination ." + name + ".enabled-arrow").length, 1);
     } else {
-      assert.equal(find(".pagination ." + name + ".disabled").length, 1);
+      assert.equal(findAll(".pagination ." + name + ".disabled").length, 1);
     }
   }
 }
 
 export function hasTodos(assert, l) {
-  assert.equal(find("table tr.todo").length, l);
+  assert.equal(findAll("table tr.todo").length, l);
 }
 
 export function hasTodo(assert, num, name) {
-  assert.equal(find("table tr.todo:eq("+num+") td.name").text().trim(), name);
+  assert.equal(findAll("table tr.todo")[num].querySelector("td.name").textContent.trim(), name);
 }
 
 export function hasPages(assert, l) {
-  assert.equal(find(".pagination li.page-number").length, l);
+  assert.equal(findAll(".pagination li.page-number").length, l);
 }
 
 export async function clickPage(i) {
   if (i === "prev" || i === "next") {
     await click(".pagination ." + i + " a");
   } else {
-    await click(".pagination li.page-number:eq(" + (i - 1) + ") a");
+    await click(findAll(".pagination li.page-number")[(i - 1)].querySelector("a"));
   }
 }

@@ -1,14 +1,27 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
+import { setupRenderingTest } from 'ember-qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
+import { findAll, render } from '@ember/test-helpers';
+import hbs from 'htmlbars-inline-precompile';
 
 module("page-numbers", function(hooks) {
-  setupTest(hooks);
+  //setupTest(hooks);
+  setupRenderingTest(hooks);
 
+  var renderTest = function(name, ops, f) {
+    test(name, async function(assert) {
+      this.set('content', ops.content);
+      
+      await render(hbs`{{component 'page-numbers' content=content}}`);
+
+      await f.call(this, assert,ops);
+    });
+  };
+  
   var paramTest = function(name,ops,f) {
     test(name, function(assert) {
-      var subject = this.owner;
+      var subject = this.owner.factoryFor('component:page-numbers').create();
 
       Ember.run(function() {
         Object.keys(ops).forEach(function (key) {
@@ -94,21 +107,21 @@ module("page-numbers", function(hooks) {
     assert.equal(s.get('currentPage'),2);
   });
 
-  paramTest("template smoke", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
-    assert.equal(this.$().find(".page-number").length,3);
-    assert.equal(this.$().find(".prev.disabled").length,1);
-    assert.equal(this.$().find(".next.enabled-arrow").length,1);
+  renderTest("template smoke", {content: makePagedArray([1,2,3,4,5])}, function(assert) {
+    assert.equal(findAll(".page-number").length,3);
+    assert.equal(findAll(".prev.disabled").length,1);
+    assert.equal(findAll(".next.enabled-arrow").length,1);
   });
 
-  paramTest("arrows and pages in right order", {content: makePagedArray([1,2,3,4,5])}, function(s,assert) {
-    var pageItems = this.$().find("ul.pagination li");
+  renderTest("arrows and pages in right order", {content: makePagedArray([1,2,3,4,5])}, function(assert) {
+    var pageItems = findAll("ul.pagination li");
     assert.equal(pageItems.length,5);
 
-    assert.equal(pageItems.eq(0).hasClass("prev"),true);
-    assert.equal(pageItems.eq(1).text(),1);
-    assert.equal(pageItems.eq(2).text(),2);
-    assert.equal(pageItems.eq(3).text(),3);
-    assert.equal(pageItems.eq(4).hasClass("next"),true);
+    assert.equal(pageItems[0].classList.contains("prev"),true);
+    assert.equal(pageItems[1].textContent,1);
+    assert.equal(pageItems[2].textContent,2);
+    assert.equal(pageItems[3].textContent,3);
+    assert.equal(pageItems[4].classList.contains("next"),true);
   });
 
   paramTest("truncation", {content: {page: 2, totalPages: 10}, numPagesToShow: 5}, function(s,assert) {

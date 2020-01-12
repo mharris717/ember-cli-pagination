@@ -1,13 +1,14 @@
 import { fillIn, find, findAll, visit } from '@ember/test-helpers';
 import { hasPages, hasTodo, clickPage } from '../helpers/assertions';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
 import pretenderServer from '../helpers/pretender-server';
-import Ember from 'ember';
-import moduleForAcceptance from '../helpers/module-for-acceptance';
 
 let server = null;
 
-moduleForAcceptance('Acceptance | Pagination Remote Sorted', function(hooks) {
+module('Acceptance | Pagination Remote Sorted', function(hooks) {
+  setupApplicationTest(hooks);
+  
   hooks.beforeEach(function() {
     server = pretenderServer();
   });
@@ -19,7 +20,7 @@ moduleForAcceptance('Acceptance | Pagination Remote Sorted', function(hooks) {
   // the sortByField and page params allow you to pass in starting values
   // that will be query params on the url when page is first visited
   let todosTest = function(name, f, sortByField, page) {
-    test(name, function(assert) {
+    test(name, async function(assert) {
       var url = "/todos/remote-sorted";
       if (sortByField) {
         url += "?sortByField="+sortByField;
@@ -28,9 +29,9 @@ moduleForAcceptance('Acceptance | Pagination Remote Sorted', function(hooks) {
         var c = sortByField ? "&" : "?";
         url += c+"page="+page;
       }
-      visit(url).then(function() {
-        f(assert);
-      });
+      
+      await visit(url);
+      await f(assert);
     });
   };
 
@@ -62,15 +63,14 @@ moduleForAcceptance('Acceptance | Pagination Remote Sorted', function(hooks) {
     assert.equal(find("#sortByField input").value,"name");
   },"name");
 
-  todosTest("change to sorted", function(assert) {
+  todosTest("change to sorted", async function(assert) {
     assert.equal(findAll(".pagination").length, 1);
     hasPages(assert,4);
     hasTodo(assert,0,"Clean Gutters 0");
     hasTodo(assert,1,"Make Dinner 0");
 
-    Ember.run(async function() {
-      await fillIn("#sortByField input","name");
-    });
+    await fillIn("#sortByField input","name");
+    
     hasTodo(assert,1,"Clean Gutters 1");
   });
 });

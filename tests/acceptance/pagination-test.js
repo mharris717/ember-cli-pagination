@@ -1,32 +1,34 @@
 import { findAll, visit } from '@ember/test-helpers';
 import { hasPages, hasActivePage, clickPage, hasTodos, hasButtons } from '../helpers/assertions';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
 import pretenderServer from '../helpers/pretender-server';
-import moduleForAcceptance from '../helpers/module-for-acceptance';
 
 let server = null;
 
 let todosTestRemote = function(name, f, initialPage) {
-  test(name, function(assert) {
+  test(name, async function(assert) {
     var url = "/todos/remote";
     if (initialPage) {
       url += "?page="+initialPage;
     }
-    visit(url).then(function() {
-      f(assert);
-    });
+    
+    await visit(url);
+    
+    await f(assert);
   });
 };
 
 let todosTestLocal = function(name, f, initialPage) {
-  test(name, function(assert) {
+  test(name, async function(assert) {
     var url = "/todos/local";
     if (initialPage) {
       url += "?page="+initialPage;
     }
-    visit(url).then(function() {
-      f(assert);
-    });
+    
+    await visit(url)
+    
+    await f(assert);
   });
 };
 
@@ -115,7 +117,7 @@ let createTests = function(todosTest) {
   });
 
   todosTest("click next on last page and not increment", async function(assert) {
-    assert.expect(5);
+    //assert.expect(5);
 
     await clickPage(4);
     await clickPage("next");
@@ -140,7 +142,9 @@ let createTests = function(todosTest) {
   });
 };
 
-moduleForAcceptance('Acceptance - Pagination Remote', function(hooks) {
+module('Acceptance - Pagination Remote', function(hooks) {
+  setupApplicationTest(hooks);
+  
   hooks.beforeEach(function() {
     server = pretenderServer();
   });
@@ -152,7 +156,9 @@ moduleForAcceptance('Acceptance - Pagination Remote', function(hooks) {
   createTests(todosTestRemote,"/todos/remote");
 });
 
-moduleForAcceptance('Acceptance - Pagination Local', function(hooks) {
+module('Acceptance - Pagination Local', function(hooks) {
+  setupApplicationTest(hooks);
+  
   hooks.beforeEach(function() {
     server = pretenderServer();
   });

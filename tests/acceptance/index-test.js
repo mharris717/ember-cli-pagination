@@ -1,11 +1,13 @@
 import { findAll, visit } from '@ember/test-helpers';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
 import pretenderServer from '../helpers/pretender-server';
-import moduleForAcceptance from '../helpers/module-for-acceptance';
 
 let server = null;
 
-moduleForAcceptance('Acceptance - Todo Index', function(hooks) {
+module('Acceptance - Todo Index', function(hooks) {
+  setupApplicationTest(hooks);
+  
   hooks.beforeEach(function() {
     server = pretenderServer();
   });
