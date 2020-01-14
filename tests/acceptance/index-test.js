@@ -16,10 +16,9 @@ module('Acceptance - Todo Index', function(hooks) {
     server.shutdown();
   });
 
-  test('Should showo todos', function(assert) {
-    assert.expect(1);
-    visit("/todos/remote").then(function() {
-      assert.equal(findAll(".todo").length, 10);
-    });
+  test('Should showo todos', async function(assert) {
+    await visit("/todos/remote");
+    
+    assert.equal(findAll(".todo").length, 10)
   });
 });
