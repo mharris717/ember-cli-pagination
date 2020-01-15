@@ -40,7 +40,7 @@ var pushPromiseObjects = function(base,promise) {
 var InfiniteBase = Ember.ArrayProxy.extend({
   page: 1,
 
-  arrangedContent: Ember.computed('content.[]',function() {
+  arrangedContent: Ember.computed('content',function() {
     return this.get('content');
   }),
 
