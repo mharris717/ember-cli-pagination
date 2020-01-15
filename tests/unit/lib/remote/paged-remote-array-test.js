@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import sinon from 'sinon';
 import BasePagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 import PagedLocalArray from 'ember-cli-pagination/local/paged-array';
@@ -21,9 +20,7 @@ var RunSet = Ember.Mixin.create({
 
 var PagedRemoteArray = BasePagedRemoteArray.extend(RunSet);
 
-module.skip("PagedRemoteArray", function(hooks) {
-  setupTest(hooks);
-  
+module("PagedRemoteArray", function(hooks) { 
   var Promise = Ember.RSVP.Promise;
 
   var FakeStore = Ember.Object.extend({
