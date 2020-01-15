@@ -1,8 +1,8 @@
 import Util from 'ember-cli-pagination/util';
 import equalArray from '../../helpers/equal-array';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
 
-// module("Hash Methods");
+module("Hash Methods");
 
 test("hash property explore", function(assert) {
   var params = {page: 1, name: "Adam"};

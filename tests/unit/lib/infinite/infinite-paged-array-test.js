@@ -1,10 +1,12 @@
 import Ember from 'ember';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 import equalArray from '../../../helpers/equal-array';
 import toArray from '../../../helpers/to-array';
 import InfinitePagedArray from 'ember-cli-pagination/infinite/paged-infinite-array';
+
+module("infinite-paged-array");
 
 var makeAllPaged = function() {
   return PagedArray.create({

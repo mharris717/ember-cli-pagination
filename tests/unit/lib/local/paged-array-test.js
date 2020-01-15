@@ -1,9 +1,9 @@
 import Ember from 'ember';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 import equalArray from '../../../helpers/equal-array';
 
-//module("PagedArray abc");
+module("PagedArray abc");
 
 var paramTest = function(name,ops,f) {
   if (ops.content) {

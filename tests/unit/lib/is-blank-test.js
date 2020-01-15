@@ -1,7 +1,7 @@
-import { test } from 'qunit';
+import { module, test } from 'qunit';
 import Util from 'ember-cli-pagination/util';
 
-// module("TruncatePages");
+module("TruncatePages");
 
 test("normal values", function(assert) {
   function isPresent(val) {

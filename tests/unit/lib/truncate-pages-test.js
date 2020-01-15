@@ -1,9 +1,9 @@
 import Ember from 'ember';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
 import TruncatePages from 'ember-cli-pagination/lib/truncate-pages';
 import Validate from 'ember-cli-pagination/validate';
 
-// module("TruncatePages");
+module("TruncatePages");
 
 var paramTest = function(name,ops,f) {
   test(name, function(assert) {

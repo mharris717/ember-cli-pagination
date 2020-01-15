@@ -1,6 +1,8 @@
 import Ember from 'ember';
-import { test } from 'qunit';
+import { module, test } from 'qunit';
 import DivideIntoPages from 'ember-cli-pagination/divide-into-pages';
+
+module("divide-into-pages");
 
 var paramTest = function(name,ops,f) {
   test(name, function(assert) {
