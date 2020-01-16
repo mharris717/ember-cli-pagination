@@ -5,7 +5,7 @@ export default Ember.Controller.extend({
   queryParams: ["page"],
   page: 1,
 
-  pagedContent: pagedArray('content', {infinite: "unpaged"}),
+  pagedContent: pagedArray('model', {infinite: "unpaged"}),
 
   actions: {
     loadNext: function() {
