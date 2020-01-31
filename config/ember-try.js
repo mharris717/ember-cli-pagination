@@ -137,7 +137,7 @@ module.exports = function() {
       name: 'ember-canary',
       npm: {
         devDependencies: {
-          'ember-data': 'emberjs/data#master',
+          'ember-data': 'canary',
           'ember-source': urls[2]
         }
       }
