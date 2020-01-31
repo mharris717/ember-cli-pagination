@@ -1,4 +1,4 @@
-import { test } from 'ember-qunit';
+import { test } from 'qunit';
 import Util from 'ember-cli-pagination/util';
 
 // module("TruncatePages");

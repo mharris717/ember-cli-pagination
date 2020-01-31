@@ -6,7 +6,7 @@ export default Ember.Controller.extend({
 
   updatePaged: Ember.observer("sortByField", function() {
     var field = this.get('sortByField');
-    var paged = this.get('content');
+    var paged = this.get('model');
     if (paged && paged.setOtherParam) {
       paged.setOtherParam('sortByField',field);
     }

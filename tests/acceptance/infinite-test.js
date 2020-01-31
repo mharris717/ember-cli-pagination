@@ -1,23 +1,24 @@
-/* global hasTodos */
-import { test } from 'qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import { click, findAll, visit } from '@ember/test-helpers';
+import { hasTodos } from '../helpers/assertions';
+import { module, test } from 'qunit';
+import { setupApplicationTest } from 'ember-qunit';
 import pretenderServer from '../helpers/pretender-server';
 
 let server = null;
 
 let todosTestLocal = function(name, f) {
-  test(name, function(assert) {
-    visit("/todos/infinite").then(function() {
-      f(assert);
-    });
+  test(name, async function(assert) {
+    await visit("/todos/infinite");
+    
+    f(assert);
   });
 };
 
 let todosTestRemote = function(name, f) {
-  test(name, function(assert) {
-    visit("/todos/infinite-remote").then(function() {
-      f(assert);
-    });
+  test(name, async function(assert) {
+    await visit("/todos/infinite-remote");
+    
+    f(assert);
   });
 };
 
@@ -26,35 +27,40 @@ let runTests = function(todosTest) {
     hasTodos(assert,10);
   });
 
-  todosTest("next page", function(assert) {
+  todosTest("next page", async function(assert) {
     assert.expect(2);
     hasTodos(assert,10);
 
-    click(".infinite .next a");
-    andThen(function() {
-      assert.equal(find('.infinite .todo').length,20);
-    });
+    await click(".infinite .next a");
+    assert.equal(findAll('.infinite .todo').length,20);
   });
 };
 
-moduleForAcceptance('Acceptance - Infinite Pagination Local', {
-  beforeEach() {
+module('Acceptance - Infinite Pagination Local', function(hooks) {
+  setupApplicationTest(hooks);
+  
+  hooks.beforeEach(function() {
     server = pretenderServer();
-  },
-  afterEach() {
+  });
+
+  hooks.afterEach(function() {
     server.shutdown();
-  }
+  });
+
+  runTests(todosTestLocal);
 });
 
-runTests(todosTestLocal);
-
-moduleForAcceptance('Acceptance - Infinite Pagination Remote', {
-  beforeEach() {
+module('Acceptance - Infinite Pagination Remote', function(hooks) {
+  setupApplicationTest(hooks);
+  
+  hooks.beforeEach(function() {
     server = pretenderServer();
-  },
-  afterEach() {
+  });
+
+  hooks.afterEach(function() {
     server.shutdown();
-  }
+  });
+
+  runTests(todosTestRemote);
 });
-runTests(todosTestRemote);
 

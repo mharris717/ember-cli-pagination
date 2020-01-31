@@ -5,7 +5,7 @@ export default Ember.Controller.extend({
   queryParams: ["page","perPage"],
   page: 1,
 
-  pagedContent: pagedArray("content", {
+  pagedContent: pagedArray("model", {
     page: Ember.computed.alias('parent.page')
   })
 });
