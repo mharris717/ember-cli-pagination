@@ -94,7 +94,7 @@ module("page-numbers", function(hooks) {
   paramTest("create with content - changing array.content changes component", {content: makePagedArray([1,2,3,4,5])}, function(s,assert,ops) {
     assert.equal(s.get('totalPages'),3);
     Ember.run(function() {
-      ops.content.pushObjects([6,7]);
+      ops.content.content.pushObjects([6,7]);
     });
     assert.equal(s.get('totalPages'),4);
   });
