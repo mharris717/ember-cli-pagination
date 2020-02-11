@@ -4,6 +4,8 @@
 
 Simple pagination addon for your Ember CLI app.
 
+⚠️ This addon works with Ember version 3.12.x and below and with Ember version 3.16.2 and up. Some examples are still in non Octane style.
+
 ![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png)
 
 Features:
@@ -73,6 +75,46 @@ This scenario applies if:
 * Want to have a page query parameter (optional).
 
 ```javascript
+import Controller from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
+import { alias, oneWay } from '@ember/object/computed';
+import pagedArray from 'ember-cli-pagination/computed/paged-array';
+
+export default class PostsController extends Controller {
+  // setup our query params
+  queryParams: ["page", "perPage"];
+
+  // set default values, can cause problems if left out
+  // if value matches default, it won't display in the URL
+  @tracked page = 1;
+  @tracked perPage = 10;
+
+  // can be called anything, I've called it pagedContent
+  // remember to iterate over pagedContent in your template
+  @pagedArray (
+    'model',
+    { page: alias('parent.page'), perPage: alias('parent.perPage')}
+  ) pagedContent;
+
+  // binding the property on the paged array
+  // to a property on the controller
+  @oneWay('pagedContent.totalPages') totalPages;
+}
+```
+
+```handlebars
+{{#each pagedContent as |post|}}
+  {{! your app's display logic}}
+{{/each}}
+
+<PageNumbers @content={{pagedContent}} />
+```
+
+If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
+
+In older versions of Ember you would have done:
+
+```javascript
 import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
@@ -106,9 +148,7 @@ export default Ember.Controller.extend({
 {{page-numbers content=pagedContent}}
 ```
 
-If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
-
-In older versions of Ember you would have done:
+Or in even older Ember versions:
 
 ``` javascript
 {
@@ -146,51 +186,55 @@ This scenario applies if:
 
 1:1 based page index
 ```javascript
-import Ember from 'ember';
+import Route from '@ember/routing/route';
+import { tracked } from '@glimmer/tracking';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
-export default Ember.Route.extend(RouteMixin, {
+export default class PostsRoute extends Route.extend(RouteMixin) {
   // optional. default is 10
-  perPage: 25,
+  perPage: 25;
 
-  model: function(params) {
+  model (params) {
     // todo is your model name
     // returns a PagedRemoteArray
-    return this.findPaged('todo',params);
+    return this.findPaged('post',params);
   }
-});
+}
 ```
 Zero based page index
 ```javascript
-import Ember from 'ember';
+import Route from '@ember/routing/route';
+import { tracked } from '@glimmer/tracking';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
-export default Ember.Route.extend(RouteMixin, {
+export default class PostsRoute extends Route.extend(RouteMixin) {
   // optional. default is 10
-  perPage: 25,
+  perPage: 25;
 
-  model: function(params) {
+  model (params) {
     // todo is your model name
     // returns a PagedRemoteArray
-    // Option: `zeroBasedIndex: true` enables a zero Based Index remote pagination-enabled API
-    return this.findPaged('todo',params,{zeroBasedIndex: true});
+    return this.findPaged('post',params,{zeroBasedIndex: true});
   }
-});
+}
 ```
 
 ```javascript
-import Ember from 'ember';
+import Controller from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
+import { alias } from '@ember/object/computed';
 
-export default Ember.Controller.extend({
+export default class PostsController extends Controller {
+
   // setup our query params
-  queryParams: ["page", "perPage"],
+  queryParams: ['page', 'perPage'];
 
   // binding the property on the paged array
   // to the query params on the controller
-  page: Ember.computed.alias("content.page"),
-  perPage: Ember.computed.alias("content.perPage"),
-  totalPages: Ember.computed.alias("content.totalPages"),
-});
+  @tracked page = alias('model.page');
+  @tracked perPage = alias('model.perPage');
+  @tracked totalPages = alias('model.totalPages');
+}
 ```
 
 ```handlebars
@@ -198,7 +242,7 @@ export default Ember.Controller.extend({
   {{! your app's display logic}}
 {{/each}}
 
-{{page-numbers content=content}}
+<PageNumbers @content={{pagedContent}} />
 ```
 
 If you don't want to have query params, you may leave them out, along with the 3 bindings. The rest will still work.
@@ -222,15 +266,15 @@ In older versions of Ember you would have done:
 If your params object has other params, they will be passed to your backend.
 
 ```javascript
-Ember.Route.extend({
-  model: function(params) {
+export default class PostsRoute extends Route.extend(RouteMixin) {
+  model (params) {
     // params is {page: 1, name: "Adam"}
 
     return this.findPaged("post",params);
 
     // server will receive params page=1, name=Adam
   }
-});
+}
 ```
 
 ### Using other names for page/perPage/total_pages
@@ -242,27 +286,27 @@ Note that the default param name for perPage is per_page.
 `page` and `perPage` control what is sent to the backend. `total_pages` controls where we expect to find the total pages value in the response from the backend.
 
 ```javascript
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
-export default Ember.Route.extend(RouteMixin, {
-  model: function(params) {
+export default class PostsRoute extends Route.extend(RouteMixin) {
+  model (params) {
     params.paramMapping = {page: "pageNum",
                            perPage: "limit",
                            total_pages: "num_pages"};
-    return this.findPaged('todo',params);
+    return this.findPaged('post',params);
   }
-});
+}
 ```
 
 You can also pass a mapping function for the paramMapping. A common usage for this would be a limit and offset API backend. This is done by passing an array as the mapping. The first item in the array being the param name, and the second item being the value mapping function. The function should accept one parameter, an object with keys `page` and `perPage` and their respective values.
 
 ```javascript
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
-export default Ember.Route.extend(RouteMixin, {
-  model: function(params) {
+export default class PostsRoute extends Route.extend(RouteMixin) {
+  model (params) {
     params.paramMapping = {
 			page: [
 				"offset",
@@ -270,11 +314,11 @@ export default Ember.Route.extend(RouteMixin, {
 					return (obj.page - 1) * obj.perPage;
 				}
 			],
-     perPage: "limit"
-	 };
+      perPage: "limit"
+	  };
     return this.findPaged('todo',params);
   }
-});
+}
 ```
 
 ### Get updates outside
