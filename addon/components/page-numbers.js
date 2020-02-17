@@ -9,6 +9,13 @@ export default Ember.Component.extend({
   layout,
   currentPage: Ember.computed.alias("content.page"),
   totalPages: Ember.computed.alias("content.totalPages"),
+  isStyleFoundation: Ember.computed("style", function(){
+    if(this.get("style") === "foundation"){
+      return true;
+    } else {
+      return false;
+    }
+  }),
 
   hasPages: Ember.computed.gt('totalPages', 1),
 
