@@ -10,7 +10,7 @@ let todosTestLocal = function(name, f) {
   test(name, async function(assert) {
     await visit("/todos/infinite");
     
-    f(assert);
+    await f(assert);
   });
 };
 
@@ -18,7 +18,7 @@ let todosTestRemote = function(name, f) {
   test(name, async function(assert) {
     await visit("/todos/infinite-remote");
     
-    f(assert);
+    await f(assert);
   });
 };
 
@@ -28,7 +28,6 @@ let runTests = function(todosTest) {
   });
 
   todosTest("next page", async function(assert) {
-    assert.expect(2);
     hasTodos(assert,10);
 
     await click(".infinite .next a");

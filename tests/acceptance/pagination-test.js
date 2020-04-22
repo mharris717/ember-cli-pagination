@@ -48,8 +48,6 @@ let createTests = function(todosTest) {
   });
 
   todosTest("clicking page 2", async function(assert) {
-    assert.expect(5);
-
     await clickPage(2);
     hasTodos(assert,10);
     hasActivePage(assert,2);
@@ -57,8 +55,6 @@ let createTests = function(todosTest) {
 
   
   todosTest("clicking page 4", async function(assert) {
-    assert.expect(7);
-
     await clickPage(4);
     hasTodos(assert,3);
     hasActivePage(assert,4);
@@ -82,8 +78,6 @@ let createTests = function(todosTest) {
   // },2);
 
   todosTest("next button - proper buttons visible", function(assert) {
-    assert.expect(6);
-
     hasActivePage(assert,1);
     hasButtons(assert,{
       prev: false,
@@ -92,8 +86,6 @@ let createTests = function(todosTest) {
   });
 
   todosTest("click next", async function(assert) {
-    assert.expect(7);
-
     await clickPage("next");
     hasButtons(assert,{
       prev: true,
@@ -104,8 +96,6 @@ let createTests = function(todosTest) {
   });
 
   todosTest("click prev", async function(assert) {
-    assert.expect(7);
-
     await clickPage(2);
     await clickPage("prev");
     hasButtons(assert,{
@@ -117,8 +107,6 @@ let createTests = function(todosTest) {
   });
 
   todosTest("click next on last page and not increment", async function(assert) {
-    //assert.expect(5);
-
     await clickPage(4);
     await clickPage("next");
     await clickPage("next");
@@ -130,8 +118,6 @@ let createTests = function(todosTest) {
   });
 
   todosTest("click prev on first page and not decrement", async function(assert) {
-    assert.expect(5);
-
     await clickPage("prev");
     await clickPage("prev");
     hasTodos(assert,10);

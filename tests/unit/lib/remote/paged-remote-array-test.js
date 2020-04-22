@@ -20,7 +20,7 @@ var RunSet = Ember.Mixin.create({
 
 var PagedRemoteArray = BasePagedRemoteArray.extend(RunSet);
 
-module("PagedRemoteArray", function() {
+module("PagedRemoteArray", function() { 
   var Promise = Ember.RSVP.Promise;
 
   var FakeStore = Ember.Object.extend({
