@@ -820,6 +820,19 @@ Ember.Controller.extend({
 });
 ```
 
+### Lock to range
+
+An example scenario where this will be useful:
+
+Say you're dealing with realtime content. `content.length` is 20, `perPage` is 10 and you're on the second page. At some point `content.length` drops to 9. Calling `lockToRange`, ideally in the consuming component's `init` hook, will take you to automatically to the first page and update `page-numbers` accordingly.
+
+```javascript
+init() {
+  this._super(...arguments);
+  get(this, 'pagedArray').lockToRange();
+}
+```
+
 ### `otherParams`
 
 PagedRemoteArray takes an optional otherParams arg. These params will be passed to the server when the request is made.
