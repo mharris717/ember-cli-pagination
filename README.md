@@ -692,7 +692,7 @@ The object acts as a promise, with a working `then` method.
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 
 var all = Ember.A([1,2,3,4,5]);
-var paged = PagedArray.create(content: all, perPage: 2);
+var paged = PagedArray.create({content: all, perPage: 2});
 
 equal(paged.get('length'),2);
 deepEqual(paged.toArray(),[1,2]);
