@@ -1,62 +1,74 @@
 {
   "name": "ember-cli-pagination",
   "version": "3.1.5",
-  "description": "Addon for Ember CLI to do simple pagination. Compatible with the kaminari API in Rails",
   "private": false,
+  "description": "Addon for Ember CLI to do simple pagination. Compatible with the kaminari API in Rails",
   "keywords": [
     "ember-addon"
   ],
+  "repository": "https://github.com/mharris717/ember-cli-pagination",
   "license": "MIT",
   "author": "",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "https://github.com/mharris717/ember-cli-pagination",
   "scripts": {
+    "build": "ember build",
     "clean": "rm -Rf ./node_modules ./bower_components",
     "setup": "npm install && bower install",
-    "build": "ember build",
     "start": "ember server",
     "test": "ember try:each"
   },
   "dependencies": {
-    "ember-cli-babel": "^7.13.0",
-    "ember-cli-htmlbars": "^3.0.0",
+    "ember-auto-import": "^2.4.2",
+    "ember-cli-babel": "^7.26.10",
+    "ember-cli-htmlbars": "^5.7.2",
     "ember-cli-version-checker": "^2.1.0",
-    "ember-inflector": "^3.0.1"
+    "ember-inflector": "^4.0.2",
+    "faker": "^6.6.6",
+    "pretender": "^3.4.7",
+    "underscore": "^1.13.3"
   },
   "devDependencies": {
-    "active-model-adapter": "2.2.0",
-    "bower": "^1.8.2",
-    "broccoli-asset-rev": "^2.4.5",
-    "ember-ajax": "^3.0.0",
-    "ember-cli": "2.18.2",
-    "ember-cli-app-version": "^3.2.0",
+    "@ember/optional-features": "^1.3.0",
+    "@ember/test-helpers": "^2.8.1",
+    "@glimmer/component": "^1.0.0",
+    "@glimmer/tracking": "^1.0.0",
+    "active-model-adapter": "4.0.0",
+    "babel-eslint": "^8.2.6",
+    "broccoli-asset-rev": "^3.0.0",
+    "ember-ajax": "^5.1.1",
+    "ember-classic-decorator": "^3.0.0",
+    "ember-cli": "~4.3.0",
+    "ember-cli-app-version": "^5.0.0",
     "ember-cli-dependency-checker": "^3.1.0",
-    "ember-cli-eslint": "^4.0.0",
-    "ember-cli-htmlbars-inline-precompile": "^2.1.0",
+    "ember-cli-eslint": "^5.1.0",
     "ember-cli-inject-live-reload": "^2.0.1",
     "ember-cli-release": "^0.2.9",
-    "ember-cli-shims": "^1.2.0",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-uglify": "^3.0.0",
-    "ember-data": "~2.18.0",
+    "ember-data": "~4.3.0",
+    "ember-decorators": "^6.1.1",
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-export-application-global": "^2.0.0",
     "ember-load-initializers": "^2.0.0",
-    "ember-qunit": "^4.6.0",
-    "ember-resolver": "^5.1.3",
-    "ember-sinon": "0.7.0",
-    "ember-source": "~2.18.0",
-    "ember-source-channel-url": "^1.1.0",
+    "ember-qunit": "^5.1.5",
+    "ember-resolver": "^8.0.3",
+    "ember-sinon": "5.0.0",
+    "ember-source": "~4.3.0",
+    "ember-source-channel-url": "^3.0.0",
     "express": "^4.12.4",
-    "glob": "^5.0.14",
+    "glob": "^8.0.3",
     "loader.js": "^4.7.0",
-    "morgan": "^1.5.3"
+    "morgan": "^1.5.3",
+    "route-recognizer": "^0.3.4"
   },
   "engines": {
-    "node": "^4.5 || 6.* || >= 7.*"
+    "node": "12.* || 14.* || >= 16"
+  },
+  "ember": {
+    "edition": "octane"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"

@@ -15,9 +15,9 @@ module.exports = function(defaults) {
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
 
-  app.import({development:'bower_components/route-recognizer/dist/route-recognizer.js'});
-  app.import({development:'bower_components/FakeXMLHttpRequest/fake_xml_http_request.js'});
-  app.import({development:'bower_components/pretender/pretender.js'});
+  // app.import({development:'node_modules/route-recognizer/dist/route-recognizer.js'});
+  // app.import({development:'node_modules/fake-xml-http-request/fake_xml_http_request.js'});
+  // app.import({development:'node_modules/pretender/pretender.js'});
 
   return app.toTree();
 };

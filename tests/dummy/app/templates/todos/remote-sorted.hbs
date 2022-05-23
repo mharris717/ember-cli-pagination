@@ -1,5 +1,5 @@
 <div id="sortByField">
-  {{input type="text" value=sortByField}}
+  <Input @type="text" @value={{sortByField}} />
 </div>
 
 <table class="table">
@@ -12,13 +12,13 @@
     <tr class="todo">
       <td class="name">{{content.name}}</td>
       <td>
-        {{input type="checkbox" checked=content.completed}}
+        <Input @type="checkbox" @checked={{content.completed}} />
       </td>
     </tr>
   {{/each}}
 </table>
 
-{{page-numbers content=model}}
+<PageNumbers @content={{model}} />
 
 <button {{action "save"}}>Save</button>
 

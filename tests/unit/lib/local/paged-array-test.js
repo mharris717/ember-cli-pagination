@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+import { A } from '@ember/array';
 import { test } from 'qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 import equalArray from '../../../helpers/equal-array';
@@ -7,12 +8,12 @@ import equalArray from '../../../helpers/equal-array';
 
 var paramTest = function(name,ops,f) {
   if (ops.content) {
-    ops.content = Ember.A(ops.content);
+    ops.content = A(ops.content);
   }
   test(name, function(assert) {
     var subject = null;
 
-    Ember.run(function() {
+    run(function() {
       subject = PagedArray.create(ops);
     });
 
@@ -48,14 +49,14 @@ paramTest("page oob event test", {page: 1, perPage: 2, content: [1,2,3,4,5]}, fu
     events.push(page);
   });
 
-  Ember.run(function() {
+  run(function() {
     s.set('page',20);
   });
 
   assert.equal(events.length,1);
   assert.equal(events[0].page,20);
 
-  Ember.run(function() {
+  run(function() {
     s.set('page',2);
   });
   assert.equal(events.length,1);
@@ -64,13 +65,13 @@ paramTest("page oob event test", {page: 1, perPage: 2, content: [1,2,3,4,5]}, fu
 import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
 paramTest("LockToRange", {page: 1, perPage: 2, content: [1,2,3,4,5]}, function(s,assert) {
   LockToRange.watch(s);
-  Ember.run(function() {
+  run(function() {
     s.set('page',20);
   });
 
   equalArray(assert,s,[5]);
 
-  Ember.run(function() {
+  run(function() {
     s.set('page',-10);
   });
 

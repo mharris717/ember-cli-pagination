@@ -1,5 +1,11 @@
 import { findAll, visit } from '@ember/test-helpers';
-import { hasPages, hasActivePage, clickPage, hasTodos, hasButtons } from '../helpers/assertions';
+import {
+  hasPages,
+  hasActivePage,
+  clickPage,
+  hasTodos,
+  hasButtons
+} from '../helpers/assertions';
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import pretenderServer from '../helpers/pretender-server';
@@ -39,7 +45,7 @@ let todosTestLocal = function(name, f, initialPage) {
 
 let createTests = function(todosTest) {
   todosTest("page links", function(assert) {
-    assert.equal(findAll(".pagination").length, 1);
+    assert.dom(".pagination").exists({ count: 1 });
     hasPages(assert,4);
   });
 

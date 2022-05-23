@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
 // import config from '../config/environment';
 // import Factory from 'ember-cli-pagination/factory';
 // import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   // pagedContent: pagedArray("content"),
 
   // actions: {

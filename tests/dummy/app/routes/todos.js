@@ -1,4 +1,3 @@
-import Ember from 'ember';
 // import config from '../config/environment';
 // import Factory from 'ember-cli-pagination/factory';
 
@@ -10,4 +9,10 @@ import Ember from 'ember';
 //   }
 // });
 
-export default Ember.Route.extend();
+import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
+
+export default class SecretRoute extends Route {
+  @service store;
+  
+}

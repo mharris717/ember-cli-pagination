@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
 import { test } from 'qunit';
 import DivideIntoPages from 'ember-cli-pagination/divide-into-pages';
 
@@ -6,7 +6,7 @@ var paramTest = function(name,ops,f) {
   test(name, function(assert) {
     var subject = null;
 
-    Ember.run(function() {
+    run(function() {
       subject = DivideIntoPages.create(ops);
     });
 

@@ -1,4 +1,6 @@
-import Ember from 'ember';
+import { Promise } from 'rsvp';
+import EmberObject from '@ember/object';
+import { A } from '@ember/array';
 import { test } from 'qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
@@ -9,7 +11,7 @@ import InfinitePagedArray from 'ember-cli-pagination/infinite/paged-infinite-arr
 var makeAllPaged = function() {
   return PagedArray.create({
     perPage: 2,
-    content: Ember.A([1,2,3,4,5])
+    content: A([1,2,3,4,5])
   });
 };
 
@@ -45,15 +47,15 @@ test("add next page - unpagedSource", function(assert) {
 
 import Util from 'ember-cli-pagination/util';
 
-var FakeStore = Ember.Object.extend({
+var FakeStore = EmberObject.extend({
   find: function(name,params) {
     Util.log("FakeStore#find params",params);
-    var all = Ember.A(this.get('all'));
+    var all = A(this.all);
     var paged = PagedArray.create({page: params.page, perPage: params.per_page, content: all});
     var res = toArray(paged);
 
     return new Promise(function(success) {
-      success(Ember.A(res));
+      success(A(res));
     });
   },
 
@@ -61,8 +63,6 @@ var FakeStore = Ember.Object.extend({
     return this.find(name,params);
   }
 });
-
-var Promise = Ember.RSVP.Promise;
 
 test("remote smoke", function(assert) {
   assert.expect(2);

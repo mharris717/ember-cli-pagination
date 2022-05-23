@@ -9,7 +9,7 @@
       <tr class="todo">
         <td>{{content.name}}</td>
         <td>
-          {{input type="checkbox" checked=content.completed}}
+          <Input @type="checkbox" @checked={{content.completed}} />
         </td>
       </tr>
     {{/each}}

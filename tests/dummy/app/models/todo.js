@@ -1,25 +1,6 @@
-import DS from 'ember-data';
+import Model, { attr } from '@ember-data/model';
 
-var Todo = DS.Model.extend({
-  name: DS.attr('string'),
-  completed: DS.attr('boolean')
-});
-
-var makeFixtures = function() {
-  var res = [];
-
-  var nextId = 0;
-  for (var i=0;i<11;i++) {
-    res.push({id: nextId++, name: "Clean Gutters "+i, completed: false});
-    res.push({id: nextId++, name: "Make Dinner "+i, completed: true});
-    res.push({id: nextId++, name: "More Stuff "+i, completed: false});
-  }
-
-  return res;
-};
-
-Todo.reopenClass({
-  FIXTURES: makeFixtures()
-});
-
-export default Todo;
+export default class RentalModel extends Model {
+  @attr('string', {defaultValue: ""}) name;
+  @attr('boolean', {defaultValue: false}) completed;
+}

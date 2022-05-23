@@ -1,4 +1,8 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import EmberObject from '@ember/object';
+import { Promise } from 'rsvp';
+import { run } from '@ember/runloop';
+import Mixin from '@ember/object/mixin';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import BasePagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
@@ -9,10 +13,10 @@ import equalArray from '../../../helpers/equal-array';
 import MockStore from '../../../helpers/mock-store';
 import DivideIntoPages from 'ember-cli-pagination/divide-into-pages';
 
-var RunSet = Ember.Mixin.create({
+var RunSet = Mixin.create({
   runSet: function(k,v) {
     var me = this;
-    Ember.run(function() {
+    run(function() {
       me.set(k,v);
     });
   }
@@ -21,22 +25,20 @@ var RunSet = Ember.Mixin.create({
 var PagedRemoteArray = BasePagedRemoteArray.extend(RunSet);
 
 module("PagedRemoteArray", function() {
-  var Promise = Ember.RSVP.Promise;
-
-  var FakeStore = Ember.Object.extend({
+  var FakeStore = EmberObject.extend({
     find: function(name,params) {
       Util.log("FakeStore#find params",params);
-      var all = Ember.A(this.get('all'));
+      var all = A(this.all);
       var paged = PagedLocalArray.create({page: params.page, perPage: params.per_page, content: all});
       var res = toArray(paged);
 
       var totalPages = DivideIntoPages.create({all: all, perPage: params.per_page}).totalPages();
-      var key = this.get('totalPagesField') || 'total_pages';
+      var key = this.totalPagesField || 'total_pages';
       res.meta = {};
       res.meta[key] = totalPages;
 
       return new Promise(function(success) {
-        success(Ember.A(res));
+        success(A(res));
       });
     },
 
@@ -88,7 +90,7 @@ module("PagedRemoteArray", function() {
     });
   });
 
-  var ErrorStore = Ember.Object.extend({
+  var ErrorStore = EmberObject.extend({
     find: function() {
       return new Promise(function(success,failure) {
         failure("Network Error");
@@ -117,7 +119,7 @@ module("PagedRemoteArray", function() {
 
 
 
-  var MyArrayObserver = Ember.Object.extend({
+  var MyArrayObserver = EmberObject.extend({
     arrayWillChangeCount: 0,
     arrayDidChangeCount: 0,
 

@@ -1,11 +1,12 @@
-import Ember from 'ember';
+import { alias } from '@ember/object/computed';
+import Controller from '@ember/controller';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   queryParams: ["page","perPage"],
   page: 1,
 
   pagedContent: pagedArray("model", {
-    page: Ember.computed.alias('parent.page')
+    page: alias('parent.page')
   })
 });

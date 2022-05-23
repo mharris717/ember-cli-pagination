@@ -32,7 +32,7 @@ let runTests = function(todosTest) {
     hasTodos(assert,10);
 
     await click(".infinite .next a");
-    assert.equal(findAll('.infinite .todo').length,20);
+    assert.dom('.infinite .todo').exists({ count: 20 });
   });
 };
 

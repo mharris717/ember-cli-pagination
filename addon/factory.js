@@ -1,16 +1,16 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 import PageControllerMixin from 'ember-cli-pagination/remote/controller-mixin';
 import PageControllerLocalMixin from 'ember-cli-pagination/local/controller-local-mixin';
 import PageRouteMixin from 'ember-cli-pagination/remote/route-mixin';
 import PageRouteLocalMixin from 'ember-cli-pagination/local/route-local-mixin';
 
-var Factory = Ember.Object.extend({
+var Factory = EmberObject.extend({
   paginationTypeInner: function() {
-    var res = this.get('config').paginationType;
+    var res = this.config.paginationType;
     if (res) {
       return res;
     }
-    var ops = this.get('config').pagination;
+    var ops = this.config.pagination;
     if (ops) {
       return ops.type;
     }

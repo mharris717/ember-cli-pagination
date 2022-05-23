@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import EmberObject from '@ember/object';
 
-var Util = Ember.Object.extend();
+var Util = EmberObject.extend();
 
 Util.reopenClass({
   log: function() {},
@@ -13,7 +14,7 @@ Util.reopenClass({
   },
 
   keysOtherThan: function(params,excludeKeys) {
-    excludeKeys = Ember.A(excludeKeys);
+    excludeKeys = A(excludeKeys);
     var res = [];
     for (var key in params) {
       if (!excludeKeys.includes(key)) {

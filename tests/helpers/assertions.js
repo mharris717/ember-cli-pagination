@@ -16,9 +16,9 @@ export function hasButtons(assert, ops) {
     var present = ops[name];
 
     if(present) {
-      assert.equal(findAll(".pagination ." + name + ".enabled-arrow").length, 1);
+      assert.dom(".pagination ." + name + ".enabled-arrow").exists({ count: 1 });
     } else {
-      assert.equal(findAll(".pagination ." + name + ".disabled").length, 1);
+      assert.dom(".pagination ." + name + ".disabled").exists({ count: 1 });
     }
   }
 }
@@ -28,7 +28,7 @@ export function hasTodos(assert, l) {
 }
 
 export function hasTodo(assert, num, name) {
-  assert.equal(findAll("table tr.todo")[num].querySelector("td.name").textContent.trim(), name);
+  assert.dom(findAll("table tr.todo")[num].querySelector("td.name")).hasText(name);
 }
 
 export function hasPages(assert, l) {

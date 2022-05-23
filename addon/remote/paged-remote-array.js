@@ -1,12 +1,18 @@
-import Ember from 'ember';
+import { once } from '@ember/runloop';
+import { alias } from '@ember/object/computed';
+import { computed, observer } from '@ember/object';
+import Evented from '@ember/object/evented';
+import ArrayProxy from '@ember/array/proxy';
+import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
+import Mixin from '@ember/object/mixin';
 import Util from 'ember-cli-pagination/util';
 import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
 import { QueryParamsForBackend, ChangeMeta } from './mapping';
 import PageMixin from '../page-mixin';
 
-var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
+var ArrayProxyPromiseMixin = Mixin.create(PromiseProxyMixin, {
   then: function(success,failure) {
-    var promise = this.get('promise');
+    var promise = this.promise;
     var me = this;
 
     return promise.then(function() {
@@ -15,9 +21,9 @@ var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
   }
 });
 
-export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromiseMixin, {
+export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
   page: 1,
-  paramMapping: Ember.computed(() => {
+  paramMapping: computed(() => {
     return {};
   }),
   contentUpdated: 0,
@@ -25,7 +31,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
   init: function() {
     this._super(...arguments);
 
-    var initCallback = this.get('initCallback');
+    var initCallback = this.initCallback;
     if (initCallback) {
       initCallback(this);
     }
@@ -41,7 +47,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     });
 
     try {
-      this.get('promise');
+      this.promise;
     }
     catch (e) {
       this.set('promise', this.fetchContent());
@@ -49,7 +55,7 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
   },
 
   addParamMapping: function(key,mappedKey,mappingFunc) {
-    var paramMapping = this.get('paramMapping') || {};
+    var paramMapping = this.paramMapping || {};
     if (mappingFunc) {
       paramMapping[key] = [mappedKey,mappingFunc];
     }
@@ -69,28 +75,28 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     return this.addParamMapping(key,mappedKey,mappingFunc);
   },
 
-  paramsForBackend: Ember.computed('page','perPage','paramMapping','paramsForBackendCounter','zeroBasedIndex', function() {
+  paramsForBackend: computed('page','perPage','paramMapping','paramsForBackendCounter','zeroBasedIndex', function() {
     var page = this.getPage();
-    if (this.get('zeroBasedIndex')) {
+    if (this.zeroBasedIndex) {
       page--;
     }
 
     var paramsObj = QueryParamsForBackend.create({page: page,
                                                   perPage: this.getPerPage(),
-                                                  paramMapping: this.get('paramMapping')});
+                                                  paramMapping: this.paramMapping});
     var ops = paramsObj.make();
 
     // take the otherParams hash and add the values at the same level as page/perPage
-    ops = Util.mergeHashes(ops,this.get('otherParams')||{});
+    ops = Util.mergeHashes(ops,this.otherParams||{});
 
     return ops;
   }),
 
   rawFindFromStore: function() {
-    var store = this.get('store');
-    var modelName = this.get('modelName');
+    var store = this.store;
+    var modelName = this.modelName;
 
-    var ops = this.get('paramsForBackend');
+    var ops = this.paramsForBackend;
     var res = store.query(modelName, Object.assign({},ops)); // always create a shallow copy of `ops` in case adapter would mutate the original object
 
     return res;
@@ -119,13 +125,13 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     return res;
   },
 
-  totalPages: Ember.computed.alias("meta.total_pages"),
+  totalPages: alias("meta.total_pages"),
 
   lastPage: null,
 
-  pageChanged: Ember.observer("page", "perPage", function() {
-    var page = this.get('page');
-    var lastPage = this.get('lastPage');
+  pageChanged: observer("page", "perPage", function() {
+    var page = this.page;
+    var lastPage = this.lastPage;
     if (lastPage != page) {
       this.set('lastPage', page);
       this.set("promise", this.fetchContent());
@@ -136,9 +142,9 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
     LockToRange.watch(this);
   },
 
-  watchPage: Ember.observer('page','totalPages', function() {
-    var page = this.get('page');
-    var totalPages = this.get('totalPages');
+  watchPage: observer('page','totalPages', function() {
+    var page = this.page;
+    var totalPages = this.totalPages;
     if (parseInt(totalPages) <= 0) {
       return;
     }
@@ -157,12 +163,12 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
   },
 
   setOtherParam: function(k,v) {
-    if (!this.get('otherParams')) {
+    if (!this.otherParams) {
       this.set('otherParams',{});
     }
 
-    this.get('otherParams')[k] = v;
+    this.otherParams[k] = v;
     this.incrementProperty('paramsForBackendCounter');
-    Ember.run.once(this,"pageChanged");
+    once(this,"pageChanged");
   }
 });

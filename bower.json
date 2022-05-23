@@ -1,8 +1,0 @@
-{
-  "name": "ember-cli-pagination",
-  "dependencies": {
-    "underscore": "~1.6.0",
-    "pretender": "~0.10.1",
-    "Faker": "~3.0.0"
-  }
-}

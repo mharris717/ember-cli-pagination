@@ -1,5 +1,5 @@
+import { get } from '@ember/object';
 import DS from 'ember-data';
-import Ember from 'ember';
 
 export function initialize(/* application */) {
   //ember-data 3-3.12 has a bug that results in an explosive dependency update issue on application destroy
@@ -8,7 +8,7 @@ export function initialize(/* application */) {
     DS.RecordArray.reopen({
       _removeInternalModels(internalModels) {
         if (!this.isDestroying)
-          Ember.get(this, 'content').removeObjects(internalModels);
+          this.content.removeObjects(internalModels);
       }
     })
   }

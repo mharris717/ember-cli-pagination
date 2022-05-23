@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   queryParams: ["page"],
   page: 1,
 
@@ -9,7 +9,7 @@ export default Ember.Controller.extend({
 
   actions: {
     loadNext: function() {
-      this.get('pagedContent').loadNextPage();
+      this.pagedContent.loadNextPage();
     }
   }
 });

@@ -1,14 +1,17 @@
+import { isArray, A } from '@ember/array';
+import { alias } from '@ember/object/computed';
+import { computed } from '@ember/object';
 import Ember from 'ember';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 import PagedInfiniteArray from 'ember-cli-pagination/infinite/paged-infinite-array';
 
 function makeLocal(contentProperty,ops) {
-  return Ember.computed("",function() {
+  return computed("",function() {
     let instanceOpts = {
       parent: this
     };
     let classOpts = {
-      content: Ember.computed.alias('parent.' + contentProperty)
+      content: alias('parent.' + contentProperty)
     };
 
     // update the old binding method to the new alias method
@@ -19,7 +22,7 @@ function makeLocal(contentProperty,ops) {
         const value = ops[key];
         if ( alias !== key ) {
 //          pagedOps[alias] = Ember.computed.alias('parent.' + value);
-          classOpts[alias] = Ember.computed.alias('parent.' + value);
+          classOpts[alias] = alias('parent.' + value);
           Ember.deprecate('Using Binding is deprecated, use Ember.computed.alias or Ember.computed.oneWay instead', false, {
             id: 'addon.ember-cli-pagination.paged-array',
             until: '3.0.0',
@@ -28,7 +31,7 @@ function makeLocal(contentProperty,ops) {
           // ^ deprecation warning based off of https://github.com/emberjs/ember.js/pull/13920/files
         }
         else {
-          if (Ember.isArray(value) || typeof(value) == "object" && (!value || typeof(value.get) !== "function")) {
+          if (isArray(value) || typeof(value) == "object" && (!value || typeof(value.get) !== "function")) {
             instanceOpts[key] = value;
           } else {
             classOpts[key] = value;
@@ -45,16 +48,16 @@ function makeLocal(contentProperty,ops) {
 }
 
 function makeInfiniteWithPagedSource(contentProperty /*, ops */) {
-  return Ember.computed(contentProperty, function() {
+  return computed(contentProperty, function() {
     return PagedInfiniteArray.create({all: this.get(contentProperty)});
   });
 }
 
 function makeInfiniteWithUnpagedSource(contentProperty,ops) {
-  return Ember.computed(contentProperty, function() {
+  return computed(contentProperty, function() {
     let all = this.get(contentProperty);
     if (all) {
-      all = Ember.A(all);
+      all = A(all);
     }
     ops.all = all;
     return PagedInfiniteArray.createFromUnpaged(ops);

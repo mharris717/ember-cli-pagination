@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 import Validate from '../validate';
 import Util from '../util';
 
-export default Ember.Mixin.create({
+export default Mixin.create({
   getInt: function(prop) {
     var raw = this.get(prop);
     if (raw === 0 || raw === "0") {

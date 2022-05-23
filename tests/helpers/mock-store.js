@@ -1,14 +1,16 @@
-import Ember from 'ember';
+import { Promise } from 'rsvp';
+import { A } from '@ember/array';
+import EmberObject, { computed } from '@ember/object';
 
-export default Ember.Object.extend({
-  findArgs: Ember.computed(() => { 
-    return Ember.A([]);
+export default EmberObject.extend({
+  findArgs: computed(() => { 
+    return A([]);
   }),
 
   find: function(modelName,params) {
-    return new Ember.RSVP.Promise((success) => {
-      this.get("findArgs").pushObject({modelName: modelName, params: params});
-      success(Ember.A([]));
+    return new Promise((success) => {
+      this.findArgs.pushObject({modelName: modelName, params: params});
+      success(A([]));
     });
   },
 

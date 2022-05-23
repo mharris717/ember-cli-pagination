@@ -19,7 +19,7 @@ module('Acceptance - Todo Index', function(hooks) {
   test('Should showo todos', function(assert) {
     assert.expect(1);
     visit("/todos/remote").then(function() {
-      assert.equal(findAll(".todo").length, 10);
+      assert.dom(".todo").exists({ count: 10 });
     });
   });
 });

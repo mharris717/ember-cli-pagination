@@ -36,7 +36,7 @@ module('Acceptance | Pagination Remote Sorted', function(hooks) {
   };
 
   todosTest("smoke", function(assert) {
-    assert.equal(findAll(".pagination").length, 1);
+    assert.dom(".pagination").exists({ count: 1 });
     hasPages(assert,4);
     hasTodo(assert,0,"Clean Gutters 0");
     hasTodo(assert,1,"Make Dinner 0");
@@ -54,17 +54,17 @@ module('Acceptance | Pagination Remote Sorted', function(hooks) {
   },"name");
 
   todosTest("smoke sorted", function(assert) {
-    assert.equal(findAll(".pagination").length, 1);
+    assert.dom(".pagination").exists({ count: 1 });
     hasPages(assert,4);
 
     hasTodo(assert,0,"Clean Gutters 0");
     hasTodo(assert,1,"Clean Gutters 1");
 
-    assert.equal(find("#sortByField input").value,"name");
+    assert.dom("#sortByField input").hasValue("name");
   },"name");
 
   todosTest("change to sorted", async function(assert) {
-    assert.equal(findAll(".pagination").length, 1);
+    assert.dom(".pagination").exists({ count: 1 });
     hasPages(assert,4);
     hasTodo(assert,0,"Clean Gutters 0");
     hasTodo(assert,1,"Make Dinner 0");

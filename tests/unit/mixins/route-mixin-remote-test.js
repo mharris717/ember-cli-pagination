@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 import { module, test } from 'qunit';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 import MockStore from '../../helpers/mock-store';
@@ -7,7 +7,7 @@ module("Remote Route Mixin", function() {
   test("thing", function(assert) {
     var store = MockStore.create();
 
-    var Something = Ember.Object.extend(RouteMixin, {});
+    var Something = EmberObject.extend(RouteMixin, {});
     var something = Something.create({store: store});
 
     something.findPaged("todo",{name: "Adam"});
@@ -19,7 +19,7 @@ module("Remote Route Mixin", function() {
   });
 
   test("default model name", function(assert) {
-    var Route = Ember.Object.extend(RouteMixin, {});
+    var Route = EmberObject.extend(RouteMixin, {});
     var route = Route.create();
 
     assert.equal('route', route._findModelName('route'));
@@ -31,7 +31,7 @@ module("Remote Route Mixin", function() {
   test("arguments passed to findPaged", function(assert) {
     var store = MockStore.create();
 
-    var Something = Ember.Object.extend(RouteMixin, {});
+    var Something = EmberObject.extend(RouteMixin, {});
     var something = Something.create({store: store});
     something.set('routeName', 'todo');
 
@@ -46,7 +46,7 @@ module("Remote Route Mixin", function() {
   test("can pass param mappings", function(assert) {
     var store = MockStore.create();
 
-    var Something = Ember.Object.extend(RouteMixin, {});
+    var Something = EmberObject.extend(RouteMixin, {});
     var something = Something.create({store: store});
 
     something.findPaged("todo",{},{},function(remote) {

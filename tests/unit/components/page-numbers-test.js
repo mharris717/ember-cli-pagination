@@ -1,4 +1,5 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import { run } from '@ember/runloop';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
@@ -23,7 +24,7 @@ module("page-numbers", function(hooks) {
     test(name, function(assert) {
       var subject = this.owner.factoryFor('component:page-numbers').create();
 
-      Ember.run(function() {
+      run(function() {
         Object.keys(ops).forEach(function (key) {
             var value = ops[key];
             subject.set(key,value);
@@ -38,12 +39,12 @@ module("page-numbers", function(hooks) {
     assert.expect(2);
     var s = this.owner.factoryFor('component:page-numbers').create();
 
-    Ember.run(function() {
+    run(function() {
       s.set('content', {totalPages: 1});
     });
     assert.equal(s.get('hasPages'),false);
 
-    Ember.run(function() {
+    run(function() {
       s.set('content', {totalPages: 2});
     });
     assert.equal(s.get('hasPages'),true);
@@ -51,7 +52,7 @@ module("page-numbers", function(hooks) {
 
   test("canStepBackward", function(assert) {
     var s = this.owner.factoryFor('component:page-numbers').create();
-    Ember.run(function() {
+    run(function() {
       s.set('content', {page: 1});
     });
     assert.equal(s.get('canStepBackward'),false);
@@ -79,7 +80,7 @@ module("page-numbers", function(hooks) {
 
 
   var makePagedArray = function(list) {
-    list = Ember.A(list);
+    list = A(list);
 
     return PagedArray.create({content: list, perPage: 2, page: 1});
   };
@@ -93,7 +94,7 @@ module("page-numbers", function(hooks) {
 
   paramTest("create with content - changing array.content changes component", {content: makePagedArray([1,2,3,4,5])}, function(s,assert,ops) {
     assert.equal(s.get('totalPages'),3);
-    Ember.run(function() {
+    run(function() {
       ops.content.content.pushObjects([6,7]);
     });
     assert.equal(s.get('totalPages'),4);
@@ -101,27 +102,27 @@ module("page-numbers", function(hooks) {
 
   paramTest("create with content - changing page changes content value", {content: makePagedArray([1,2,3,4,5])}, function(s,assert,ops) {
     assert.equal(s.get('totalPages'),3);
-    Ember.run(function() {
+    run(function() {
       ops.content.set("page",2);
     });
     assert.equal(s.get('currentPage'),2);
   });
 
   renderTest("template smoke", {content: makePagedArray([1,2,3,4,5])}, function(assert) {
-    assert.equal(findAll(".page-number").length,3);
-    assert.equal(findAll(".prev.disabled").length,1);
-    assert.equal(findAll(".next.enabled-arrow").length,1);
+    assert.dom(".page-number").exists({ count: 3 });
+    assert.dom(".prev.disabled").exists({ count: 1 });
+    assert.dom(".next.enabled-arrow").exists({ count: 1 });
   });
 
   renderTest("arrows and pages in right order", {content: makePagedArray([1,2,3,4,5])}, function(assert) {
     var pageItems = findAll("ul.pagination li");
     assert.equal(pageItems.length,5);
 
-    assert.equal(pageItems[0].classList.contains("prev"),true);
-    assert.equal(pageItems[1].textContent,1);
-    assert.equal(pageItems[2].textContent,2);
-    assert.equal(pageItems[3].textContent,3);
-    assert.equal(pageItems[4].classList.contains("next"),true);
+    assert.dom(pageItems[0]).hasClass("prev");
+    assert.dom(pageItems[1]).hasText(1);
+    assert.dom(pageItems[2]).hasText(2);
+    assert.dom(pageItems[3]).hasText(3);
+    assert.dom(pageItems[4]).hasClass("next");
   });
 
   paramTest("truncation", {content: {page: 2, totalPages: 10}, numPagesToShow: 5}, function(s,assert) {
@@ -150,7 +151,7 @@ module("page-numbers", function(hooks) {
       }
     };
     s.set('action', (arg) => containingObject.doThing(arg));
-    Ember.run(function() {
+    run(function() {
       s.send('pageClicked', 2);
     });
     assert.equal(s.get('currentPage'), 2);
@@ -171,7 +172,7 @@ module("page-numbers", function(hooks) {
     s.set('targetObject', containingObject);
     s.set('action', (arg) => containingObject.doThing(arg));
     assert.equal(s.get('totalPages'), 3);
-    Ember.run(function() {
+    run(function() {
       s.send('incrementPage', 1);
     });
     assert.equal(s.get('currentPage'), 2);
@@ -188,7 +189,7 @@ module("page-numbers", function(hooks) {
     };
 
     s.set('action', () => containingObject.doThing());
-    Ember.run(function() {
+    run(function() {
       s.send('incrementPage',-1);
     });
     assert.equal(s.get('currentPage'),1);
@@ -206,7 +207,7 @@ module("page-numbers", function(hooks) {
     };
 
     s.set('invalidPageAction', (arg) => containingObject.doThing(arg));
-    Ember.run(function() {
+    run(function() {
       s.get('content').set('page', 99);
     });
     assert.equal(pageEvent && pageEvent.page, 99);

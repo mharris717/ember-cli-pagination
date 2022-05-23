@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 import Validate from '../validate';
 import Util from '../util';
 
-export var QueryParamsForBackend = Ember.Object.extend({
+export var QueryParamsForBackend = EmberObject.extend({
   defaultKeyFor: function(key) {
     if (key === 'perPage') {
       return 'per_page';
@@ -15,7 +15,7 @@ export var QueryParamsForBackend = Ember.Object.extend({
   },
 
   getSuppliedParamMapping: function(key) {
-    var h = this.get('paramMapping') || {};
+    var h = this.paramMapping || {};
     return h[key];
   },
 
@@ -35,7 +35,7 @@ export var QueryParamsForBackend = Ember.Object.extend({
     var mappedKey = mapArr[0];
     var mapFunc = mapArr[1];
 
-    var val = mapFunc({page: this.get('page'), perPage: this.get('perPage')});
+    var val = mapFunc({page: this.page, perPage: this.perPage});
     accum[mappedKey] = val;
   },
 
@@ -49,9 +49,9 @@ export var QueryParamsForBackend = Ember.Object.extend({
   }
 });
 
-export var ChangeMeta = Ember.Object.extend({
+export var ChangeMeta = EmberObject.extend({
   getSuppliedParamMapping: function(targetVal) {
-    var h = this.get('paramMapping') || {};
+    var h = this.paramMapping || {};
 
     // have to do this gross thing because mapping looks like this:
     // {total_pages: ['num_pages',function() ...]}
@@ -81,14 +81,14 @@ export var ChangeMeta = Ember.Object.extend({
     var mappedKey = mapArr[0];
     var mapFunc = mapArr[1];
 
-    var ops = {rawVal: rawVal, page: this.get('page'), perPage: this.get('perPage')};
+    var ops = {rawVal: rawVal, page: this.page, perPage: this.perPage};
     var mappedVal = mapFunc(ops);
     accum[mappedKey] = mappedVal;
   },
 
   make: function() {
     var res = {};
-    var meta = this.get('meta');
+    var meta = this.meta;
 
     for (var key in meta) {
       var mappedKey = this.finalKeyFor(key);

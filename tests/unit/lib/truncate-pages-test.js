@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
 import { test } from 'qunit';
 import TruncatePages from 'ember-cli-pagination/lib/truncate-pages';
 import Validate from 'ember-cli-pagination/validate';
@@ -9,7 +9,7 @@ var paramTest = function(name,ops,f) {
   test(name, function(assert) {
     var subject = null;
 
-    Ember.run(function() {
+    run(function() {
       subject = TruncatePages.create(ops);
     });
 
