@@ -1,14 +1,10 @@
-import { hash } from 'rsvp';
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
-export default Route.extend({
-  model: function() {
-    return hash({
-      model: this.store.findAll('todo')
-    });
-  },
-
-  setupController: function(controller, models) {
-    controller.setProperties(models);
+export default class SecretRoute extends Route {
+  @service store;
+  
+  model() {
+    return this.store.findAll('todo');
   }
-});
+}

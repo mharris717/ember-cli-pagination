@@ -5,7 +5,7 @@ import { alias } from '@ember/object/computed';
 import Util from 'ember-cli-pagination/util';
 import PageItems from 'ember-cli-pagination/lib/page-items';
 import Validate from 'ember-cli-pagination/validate';
-import layout from '../templates/components/page-numbers';
+import layout from './page-numbers';
 
 export default class PageNumbersComponent extends Component {
   layout = '';

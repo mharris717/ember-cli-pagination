@@ -4,7 +4,7 @@
     <th>Completed</th>
   </tr>
 
-  {{#each pagedContent as |content|}}
+  {{#each this.pagedContent as |content|}}
     <tr class="todo">
       <td>{{content.name}}</td>
       <td>
@@ -14,12 +14,10 @@
   {{/each}}
 </table>
 
-<PageNumbers @content={{pagedContent}} />
+<PageNumbers @content={{this.pagedContent}} />
 
-<button {{action "save"}}>Save</button>
+<button {{on "click" this.save}}>Save</button>
 
 <div class="numRemoteCalls">
-  {{pagedContent.numRemoteCalls}}
+  {{this.pagedContent.numRemoteCalls}}
 </div>
-
-{{outlet}}

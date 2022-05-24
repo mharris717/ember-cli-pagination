@@ -1,4 +1,4 @@
-import ActiveModelAdapter from 'active-model-adapter';
+import { ActiveModelAdapter } from 'active-model-adapter';
 
 export default class ApplicationAdapter extends ActiveModelAdapter {
   namespace = 'api';
