@@ -41,7 +41,7 @@ var pushPromiseObjects = function (base, promise) {
 var InfiniteBase = ArrayProxy.extend({
   page: 1,
 
-  arrangedContent: computed.reads('content'),
+  arrangedContent: computed('content'),
 
   init: function () {
     this.set('content', A([]));
