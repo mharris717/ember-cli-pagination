@@ -6,8 +6,8 @@ export default class Router extends EmberRouter {
   rootURL = config.rootURL;
 }
 
-Router.map(function() {
-  this.route('todos', function() {
+Router.map(function () {
+  this.route('todos', function () {
     this.route('infinite');
     this.route('infinite-remote');
     this.route('remote');

@@ -1,11 +1,10 @@
-export default function(a) {
+export default function (a) {
   var res = [];
   if (a.forEach) {
-    a.forEach(function(obj) {
+    a.forEach(function (obj) {
       res.push(obj);
     });
-  }
-  else {
+  } else {
     res = a;
   }
   return res;

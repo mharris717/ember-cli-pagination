@@ -15,7 +15,7 @@ module.exports = function (defaults) {
   */
 
   app.import('node_modules/bootstrap/dist/css/bootstrap.min.css');
-  
+
   const { maybeEmbroider } = require('@embroider/test-setup');
   return maybeEmbroider(app, {
     skipBabel: [

@@ -11,14 +11,14 @@ import { QueryParamsForBackend, ChangeMeta } from './mapping';
 import PageMixin from '../page-mixin';
 
 var ArrayProxyPromiseMixin = Mixin.create(PromiseProxyMixin, {
-  then: function(success,failure) {
+  then: function (success, failure) {
     var promise = this.promise;
     var me = this;
 
-    return promise.then(function() {
+    return promise.then(function () {
       return success(me);
     }, failure);
-  }
+  },
 });
 
 export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
@@ -28,7 +28,7 @@ export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
   }),
   contentUpdated: 0,
 
-  init: function() {
+  init: function () {
     this._super(...arguments);
 
     var initCallback = this.initCallback;
@@ -48,127 +48,143 @@ export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
 
     try {
       this.promise;
-    }
-    catch (e) {
+    } catch (e) {
       this.set('promise', this.fetchContent());
     }
   },
 
-  addParamMapping: function(key,mappedKey,mappingFunc) {
+  addParamMapping: function (key, mappedKey, mappingFunc) {
     var paramMapping = this.paramMapping || {};
     if (mappingFunc) {
-      paramMapping[key] = [mappedKey,mappingFunc];
-    }
-    else {
+      paramMapping[key] = [mappedKey, mappingFunc];
+    } else {
       paramMapping[key] = mappedKey;
     }
-    this.set('paramMapping',paramMapping);
+    this.set('paramMapping', paramMapping);
     this.incrementProperty('paramsForBackendCounter');
     //this.pageChanged();
   },
 
-  addQueryParamMapping: function(key,mappedKey,mappingFunc) {
-    return this.addParamMapping(key,mappedKey,mappingFunc);
+  addQueryParamMapping: function (key, mappedKey, mappingFunc) {
+    return this.addParamMapping(key, mappedKey, mappingFunc);
   },
 
-  addMetaResponseMapping: function(key,mappedKey,mappingFunc) {
-    return this.addParamMapping(key,mappedKey,mappingFunc);
+  addMetaResponseMapping: function (key, mappedKey, mappingFunc) {
+    return this.addParamMapping(key, mappedKey, mappingFunc);
   },
 
-  paramsForBackend: computed('page','perPage','paramMapping','paramsForBackendCounter','zeroBasedIndex', function() {
-    var page = this.getPage();
-    if (this.zeroBasedIndex) {
-      page--;
+  paramsForBackend: computed(
+    'otherParams',
+    'page',
+    'paramMapping',
+    'paramsForBackendCounter',
+    'perPage',
+    'zeroBasedIndex',
+    function () {
+      var page = this.getPage();
+      if (this.zeroBasedIndex) {
+        page--;
+      }
+
+      var paramsObj = QueryParamsForBackend.create({
+        page: page,
+        perPage: this.getPerPage(),
+        paramMapping: this.paramMapping,
+      });
+      var ops = paramsObj.make();
+
+      // take the otherParams hash and add the values at the same level as page/perPage
+      ops = Util.mergeHashes(ops, this.otherParams || {});
+
+      return ops;
     }
+  ),
 
-    var paramsObj = QueryParamsForBackend.create({page: page,
-                                                  perPage: this.getPerPage(),
-                                                  paramMapping: this.paramMapping});
-    var ops = paramsObj.make();
-
-    // take the otherParams hash and add the values at the same level as page/perPage
-    ops = Util.mergeHashes(ops,this.otherParams||{});
-
-    return ops;
-  }),
-
-  rawFindFromStore: function() {
+  rawFindFromStore: function () {
     var store = this.store;
     var modelName = this.modelName;
 
     var ops = this.paramsForBackend;
-    var res = store.query(modelName, Object.assign({},ops)); // always create a shallow copy of `ops` in case adapter would mutate the original object
+    var res = store.query(modelName, Object.assign({}, ops)); // always create a shallow copy of `ops` in case adapter would mutate the original object
 
     return res;
   },
 
-  fetchContent: function() {
-    this.set("loading",true);
+  fetchContent: function () {
+    this.set('loading', true);
     var res = this.rawFindFromStore();
-    this.incrementProperty("numRemoteCalls");
+    this.incrementProperty('numRemoteCalls');
     var me = this;
 
-    res.then(function(rows) {
-      var metaObj = ChangeMeta.create({paramMapping: me.get('paramMapping'),
-                                       meta: rows.meta,
-                                       page: me.getPage(),
-                                       perPage: me.getPerPage()});
+    res.then(
+      function (rows) {
+        var metaObj = ChangeMeta.create({
+          paramMapping: me.get('paramMapping'),
+          meta: rows.meta,
+          page: me.getPage(),
+          perPage: me.getPerPage(),
+        });
 
-      me.set("loading",false);
-      return me.set("meta", metaObj.make());
-
-    }, function(error) {
-      Util.log("PagedRemoteArray#fetchContent error " + error);
-      me.set("loading",false);
-    });
+        me.set('loading', false);
+        return me.set('meta', metaObj.make());
+      },
+      function (error) {
+        Util.log('PagedRemoteArray#fetchContent error ' + error);
+        me.set('loading', false);
+      }
+    );
 
     return res;
   },
 
-  totalPages: alias("meta.total_pages"),
+  totalPages: alias('meta.total_pages'),
 
   lastPage: null,
 
-  pageChanged: observer("page", "perPage", function() {
+  pageChanged: observer('page', 'perPage', function () {
     var page = this.page;
     var lastPage = this.lastPage;
     if (lastPage != page) {
       this.set('lastPage', page);
-      this.set("promise", this.fetchContent());
+      this.set('promise', this.fetchContent());
     }
   }),
 
-  lockToRange: function() {
+  lockToRange: function () {
     LockToRange.watch(this);
   },
 
-  watchPage: observer('page','totalPages', function() {
+  watchPage: observer('page', 'totalPages', function () {
     var page = this.page;
     var totalPages = this.totalPages;
     if (parseInt(totalPages) <= 0) {
       return;
     }
 
-    this.trigger('pageChanged',page);
+    this.trigger('pageChanged', page);
 
     if (page < 1 || page > totalPages) {
-      this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
+      this.trigger('invalidPage', {
+        page: page,
+        totalPages: totalPages,
+        array: this,
+      });
     }
   }),
 
-  reload: function() {
+  reload: function () {
     var promise = this.fetchContent();
     this.set('promise', promise);
     return promise;
   },
 
-  setOtherParam: function(k,v) {
+  setOtherParam: function (k, v) {
     if (!this.otherParams) {
-      this.set('otherParams',{});
+      this.set('otherParams', {});
     }
 
     this.otherParams[k] = v;
     this.incrementProperty('paramsForBackendCounter');
-    once(this,"pageChanged");
-  }
+    once(this, 'pageChanged');
+  },
 });

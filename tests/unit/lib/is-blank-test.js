@@ -3,21 +3,21 @@ import Util from 'ember-cli-pagination/util';
 
 // module("TruncatePages");
 
-test("normal values", function(assert) {
+test('normal values', function (assert) {
   function isPresent(val) {
-    assert.equal(Util.isBlank(val),false);
+    assert.false(Util.isBlank(val));
   }
 
   function isBlank(val) {
-    assert.equal(Util.isBlank(val),true);
+    assert.true(Util.isBlank(val));
   }
 
   isPresent(1);
   isPresent(5);
-  isPresent("abc");
+  isPresent('abc');
   isPresent(0);
 
-  isBlank("");
+  isBlank('');
   isBlank(null);
   isBlank(undefined);
 });

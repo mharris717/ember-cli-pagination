@@ -15,12 +15,12 @@ import { hash } from 'rsvp';
 
 export default class SecretRoute extends Route {
   @service store;
-  
+
   model() {
     return hash({ model: this.store.findAll('todo') });
   }
-  
+
   setupController(controller, models) {
     controller.setProperties(models);
-  }  
+  }
 }

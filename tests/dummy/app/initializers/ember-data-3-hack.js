@@ -7,13 +7,12 @@ export function initialize(/* application */) {
   if (DS.VERSION.match(/^3\.(\d|1[012])(\..*)?$/)) {
     DS.RecordArray.reopen({
       _removeInternalModels(internalModels) {
-        if (!this.isDestroying)
-          this.content.removeObjects(internalModels);
-      }
-    })
+        if (!this.isDestroying) this.content.removeObjects(internalModels);
+      },
+    });
   }
 }
 
 export default {
-  initialize
+  initialize,
 };

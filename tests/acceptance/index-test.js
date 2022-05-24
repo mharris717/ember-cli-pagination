@@ -5,21 +5,21 @@ import pretenderServer from '../helpers/pretender-server';
 
 let server = null;
 
-module('Acceptance - Todo Index', function(hooks) {
+module('Acceptance - Todo Index', function (hooks) {
   setupApplicationTest(hooks);
-  
-  hooks.beforeEach(function() {
+
+  hooks.beforeEach(function () {
     server = pretenderServer();
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     server.shutdown();
   });
 
-  test('Should showo todos', function(assert) {
+  test('Should showo todos', function (assert) {
     assert.expect(1);
-    visit("/todos/remote").then(function() {
-      assert.dom(".todo").exists({ count: 10 });
+    visit('/todos/remote').then(function () {
+      assert.dom('.todo').exists({ count: 10 });
     });
   });
 });

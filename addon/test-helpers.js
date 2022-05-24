@@ -2,49 +2,49 @@ import EmberObject from '@ember/object';
 import DivideIntoPages from './divide-into-pages';
 
 var TestHelpers = EmberObject.extend({
-  responseHash: function() {
+  responseHash: function () {
     var page = this.pageFromRequest(this.request);
-    var k = "" + this.name + "s";
+    var k = '' + this.name + 's';
 
     var res = {};
     res[k] = this.objsForPage(page);
-    res.meta = {total_pages: this.totalPages()};
+    res.meta = { total_pages: this.totalPages() };
 
     return res;
   },
 
-  divideObj: function() {
+  divideObj: function () {
     var perPage = this.perPageFromRequest(this.request);
-    return DivideIntoPages.create({perPage: perPage, all: this.all});
+    return DivideIntoPages.create({ perPage: perPage, all: this.all });
   },
 
-  objsForPage: function(page) {
+  objsForPage: function (page) {
     return this.divideObj().objsForPage(page);
   },
 
-  pageFromRequest: function(request) {
+  pageFromRequest: function (request) {
     var res = request.queryParams.page;
     return parseInt(res);
   },
 
-  perPageFromRequest: function(request) {
+  perPageFromRequest: function (request) {
     var res = request.queryParams.per_page;
     return parseInt(res);
   },
 
-  totalPages: function() {
+  totalPages: function () {
     return this.divideObj().totalPages();
-  }
+  },
 });
 
 TestHelpers.reopenClass({
-  responseHash: function(request, all, name) {
+  responseHash: function (request, all, name) {
     return this.create({
       request: request,
       all: all,
-      name: name
+      name: name,
     }).responseHash();
-  }
+  },
 });
 
 export default TestHelpers;

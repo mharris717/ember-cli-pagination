@@ -6,61 +6,60 @@ import pretenderServer from '../helpers/pretender-server';
 
 let server = null;
 
-let todosTestLocal = function(name, f) {
-  test(name, async function(assert) {
-    await visit("/todos/infinite");
-    
+let todosTestLocal = function (name, f) {
+  test(name, async function (assert) {
+    await visit('/todos/infinite');
+
     f(assert);
   });
 };
 
-let todosTestRemote = function(name, f) {
-  test(name, async function(assert) {
-    await visit("/todos/infinite-remote");
-    
+let todosTestRemote = function (name, f) {
+  test(name, async function (assert) {
+    await visit('/todos/infinite-remote');
+
     f(assert);
   });
 };
 
-let runTests = function(todosTest) {
-  todosTest("smoke", function(assert) {
-    hasTodos(assert,10);
+let runTests = function (todosTest) {
+  todosTest('smoke', function (assert) {
+    hasTodos(assert, 10);
   });
 
-  todosTest("next page", async function(assert) {
+  todosTest('next page', async function (assert) {
     assert.expect(2);
-    hasTodos(assert,10);
+    hasTodos(assert, 10);
 
-    await click(".infinite .next a");
+    await click('.infinite .next a');
     assert.dom('.infinite .todo').exists({ count: 20 });
   });
 };
 
-module('Acceptance - Infinite Pagination Local', function(hooks) {
+module('Acceptance - Infinite Pagination Local', function (hooks) {
   setupApplicationTest(hooks);
-  
-  hooks.beforeEach(function() {
+
+  hooks.beforeEach(function () {
     server = pretenderServer();
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     server.shutdown();
   });
 
   runTests(todosTestLocal);
 });
 
-module('Acceptance - Infinite Pagination Remote', function(hooks) {
+module('Acceptance - Infinite Pagination Remote', function (hooks) {
   setupApplicationTest(hooks);
-  
-  hooks.beforeEach(function() {
+
+  hooks.beforeEach(function () {
     server = pretenderServer();
   });
 
-  hooks.afterEach(function() {
+  hooks.afterEach(function () {
     server.shutdown();
   });
 
   runTests(todosTestRemote);
 });
-

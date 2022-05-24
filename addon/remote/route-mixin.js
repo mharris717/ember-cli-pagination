@@ -8,35 +8,38 @@ export default Mixin.create({
   perPage: 10,
   startingPage: 1,
 
-  model: function(params) {
+  model: function (params) {
     return this.findPaged(this._findModelName(this.routeName), params);
   },
 
-  _findModelName: function(routeName) {
-      return singularize(
-        camelize(routeName)
-      );
+  _findModelName: function (routeName) {
+    return singularize(camelize(routeName));
   },
 
-  findPaged: function(name, params, options, callback) {
+  findPaged: function (name, params, options, callback) {
     var opt = options || {};
     var mainOps = {
       page: params.page || this.startingPage,
       perPage: params.perPage || this.perPage,
       modelName: name,
       zeroBasedIndex: opt.zeroBasedIndex || false,
-      store: this.store
+      store: this.store,
     };
 
     if (params.paramMapping) {
       mainOps.paramMapping = params.paramMapping;
     }
 
-    var otherOps = Util.paramsOtherThan(params,["page","perPage","paramMapping","zeroBasedIndex"]);
+    var otherOps = Util.paramsOtherThan(params, [
+      'page',
+      'perPage',
+      'paramMapping',
+      'zeroBasedIndex',
+    ]);
     mainOps.otherParams = otherOps;
 
     mainOps.initCallback = callback;
 
     return PagedRemoteArray.create(mainOps);
-  }
+  },
 });

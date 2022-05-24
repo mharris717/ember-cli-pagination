@@ -11,49 +11,52 @@ export default ArrayProxy.extend(Evented, {
   page: 1,
   perPage: 10,
 
-  divideObj: function() {
+  divideObj: function () {
     return DivideIntoPages.create({
       perPage: this.perPage,
-      all: this.content
+      all: this.content,
     });
   },
 
-  arrangedContent: computed("content.[]", "page", "perPage", function() {
+  arrangedContent: computed('content.[]', 'page', 'perPage', function () {
     return this.divideObj().objsForPage(this.page);
   }),
 
-  totalPages: computed("content.[]", "perPage", function() {
+  totalPages: computed('content.[]', 'perPage', function () {
     return this.divideObj().totalPages();
   }),
 
-  setPage: function(page) {
-    Util.log("setPage " + page);
+  setPage: function (page) {
+    Util.log('setPage ' + page);
     return this.set('page', page);
   },
 
-  watchPage: observer('page','totalPages', function() {
+  watchPage: observer('page', 'totalPages', function () {
     var page = this.page;
     var totalPages = this.totalPages;
 
-    this.trigger('pageChanged',page);
+    this.trigger('pageChanged', page);
 
     if (page < 1 || page > totalPages) {
-      this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
+      this.trigger('invalidPage', {
+        page: page,
+        totalPages: totalPages,
+        array: this,
+      });
     }
   }),
 
-  then: function(success,failure) {
+  then: function (success, failure) {
     var content = A(this.content);
     var me = this;
     var promise;
 
     if (content.then) {
-      promise = content.then(function() {
+      promise = content.then(function () {
         return success(me);
-      },failure);
-    }
-    else {
-      promise = new Promise(function(resolve) {
+      }, failure);
+    } else {
+      promise = new Promise(function (resolve) {
         resolve(success(me));
       });
     }
@@ -61,7 +64,7 @@ export default ArrayProxy.extend(Evented, {
     return promise;
   },
 
-  lockToRange: function() {
+  lockToRange: function () {
     LockToRange.watch(this);
-  }
+  },
 });

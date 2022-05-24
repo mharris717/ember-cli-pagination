@@ -3,18 +3,18 @@ import { A } from '@ember/array';
 import EmberObject, { computed } from '@ember/object';
 
 export default EmberObject.extend({
-  findArgs: computed(() => { 
+  findArgs: computed(() => {
     return A([]);
   }),
 
-  find: function(modelName,params) {
+  find: function (modelName, params) {
     return new Promise((success) => {
-      this.findArgs.pushObject({modelName: modelName, params: params});
+      this.findArgs.pushObject({ modelName: modelName, params: params });
       success(A([]));
     });
   },
 
-  query: function(modelName,params) {
-    return this.find(modelName,params);
-  }
+  query: function (modelName, params) {
+    return this.find(modelName, params);
+  },
 });

@@ -9,18 +9,18 @@ import layout from './page-numbers';
 
 export default class PageNumbersComponent extends Component {
   layout = '';
-  
-  @alias("args.content.page") currentPage;
-  @alias("args.content.totalPages")totalPages;
-  
-  get hasPages(){
-    if(this.totalpages > 1){
+
+  @alias('args.content.page') currentPage;
+  @alias('args.content.totalPages') totalPages;
+
+  get hasPages() {
+    if (this.totalpages > 1) {
       return true;
     }
     return false;
   }
 
-  watchInvalidPage(){
+  watchInvalidPage() {
     const c = this.args.content;
     if (c && c.on) {
       c.on('invalidPage', (e) => {
@@ -42,7 +42,7 @@ export default class PageNumbersComponent extends Component {
 
   validate() {
     if (Util.isBlank(this.currentPage)) {
-      Validate.internalError("no currentPage for page-numbers");
+      Validate.internalError('no currentPage for page-numbers');
     }
     if (Util.isBlank(this.totalPages)) {
       Validate.internalError('no totalPages for page-numbers');
@@ -51,14 +51,14 @@ export default class PageNumbersComponent extends Component {
 
   get pageItemsObj() {
     let result = PageItems.create({
-      parent: this
+      parent: this,
     });
 
-    defineProperty(result, 'currentPage', alias("parent.currentPage"));
-    defineProperty(result, 'totalPages', alias("parent.totalPages"));
-    defineProperty(result, 'truncatePages', alias("parent.truncatePages"));
-    defineProperty(result, 'numPagesToShow', alias("parent.numPagesToShow"));
-    defineProperty(result, 'showFL', alias("parent.showFL"));
+    defineProperty(result, 'currentPage', alias('parent.currentPage'));
+    defineProperty(result, 'totalPages', alias('parent.totalPages'));
+    defineProperty(result, 'truncatePages', alias('parent.truncatePages'));
+    defineProperty(result, 'numPagesToShow', alias('parent.numPagesToShow'));
+    defineProperty(result, 'showFL', alias('parent.showFL'));
 
     return result;
   }
@@ -74,11 +74,10 @@ export default class PageNumbersComponent extends Component {
     return page < totalPages;
   }
 
-  get canStepBackward(){
+  get canStepBackward() {
     const page = Number(this.currentPage);
     return page > 1;
-  } 
-
+  }
 
   @action pageClicked(number) {
     Util.log('PageNumbers#pageClicked number ' + number);

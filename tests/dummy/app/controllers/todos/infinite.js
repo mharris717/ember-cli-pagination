@@ -2,14 +2,14 @@ import Controller from '@ember/controller';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default Controller.extend({
-  queryParams: ["page"],
+  queryParams: ['page'],
   page: 1,
 
-  pagedContent: pagedArray('model', {infinite: "unpaged"}),
+  pagedContent: pagedArray('model', { infinite: 'unpaged' }),
 
   actions: {
-    loadNext: function() {
+    loadNext: function () {
       this.pagedContent.loadNextPage();
-    }
-  }
+    },
+  },
 });

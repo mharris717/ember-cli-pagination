@@ -1,14 +1,14 @@
-<table class="table">
+<table class='table'>
   <tr>
     <th>Name</th>
     <th>Completed</th>
   </tr>
 
   {{#each this.pagedContent as |content|}}
-    <tr class="todo">
+    <tr class='todo'>
       <td>{{content.name}}</td>
       <td>
-        <Input @type="checkbox" @checked={{content.completed}} />
+        <Input @type='checkbox' @checked={{content.completed}} />
       </td>
     </tr>
   {{/each}}
@@ -16,8 +16,8 @@
 
 <PageNumbers @content={{this.pagedContent}} />
 
-<button {{on "click" this.save}}>Save</button>
+<button type='button' {{on 'click' this.save}}>Save</button>
 
-<div class="numRemoteCalls">
+<div class='numRemoteCalls'>
   {{this.pagedContent.numRemoteCalls}}
 </div>
