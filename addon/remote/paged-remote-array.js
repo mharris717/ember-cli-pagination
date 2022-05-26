@@ -9,6 +9,7 @@ import Util from 'ember-cli-pagination/util';
 import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
 import { QueryParamsForBackend, ChangeMeta } from './mapping';
 import PageMixin from '../page-mixin';
+import { tracked } from '@glimmer/tracking';
 
 var ArrayProxyPromiseMixin = Mixin.create(PromiseProxyMixin, {
   then: function (success, failure) {
@@ -21,22 +22,26 @@ var ArrayProxyPromiseMixin = Mixin.create(PromiseProxyMixin, {
   },
 });
 
-export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
-  page: 1,
-  paramMapping: computed(() => {
+
+var ExtendedArrayProxy = ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin)
+
+export default class PagedRemoteArray extends ExtendedArrayProxy {
+  @tracked page = 1;
+  get paramMapping(){
     return {};
-  }),
-  contentUpdated: 0,
+  }
+  
+  contentUpdated = 0;
 
-  init: function () {
-    this._super(...arguments);
-
+  constructor () {
+    // this._super(...arguments);
+    super();
     var initCallback = this.initCallback;
     if (initCallback) {
       initCallback(this);
     }
 
-    this.addArrayObserver({
+    /*this.addArrayObserver({
       arrayWillChange(me) {
         me.trigger('contentWillChange');
       },
@@ -44,16 +49,16 @@ export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
         me.incrementProperty('contentUpdated');
         me.trigger('contentUpdated');
       },
-    });
+    });*/
 
     try {
       this.promise;
     } catch (e) {
       this.set('promise', this.fetchContent());
     }
-  },
+  }
 
-  addParamMapping: function (key, mappedKey, mappingFunc) {
+  addParamMapping (key, mappedKey, mappingFunc) {
     var paramMapping = this.paramMapping || {};
     if (mappingFunc) {
       paramMapping[key] = [mappedKey, mappingFunc];
@@ -63,44 +68,36 @@ export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
     this.set('paramMapping', paramMapping);
     this.incrementProperty('paramsForBackendCounter');
     //this.pageChanged();
-  },
+  }
 
-  addQueryParamMapping: function (key, mappedKey, mappingFunc) {
+  addQueryParamMapping (key, mappedKey, mappingFunc) {
     return this.addParamMapping(key, mappedKey, mappingFunc);
-  },
+  }
 
-  addMetaResponseMapping: function (key, mappedKey, mappingFunc) {
+  addMetaResponseMapping (key, mappedKey, mappingFunc) {
     return this.addParamMapping(key, mappedKey, mappingFunc);
-  },
+  }
 
-  paramsForBackend: computed(
-    'otherParams',
-    'page',
-    'paramMapping',
-    'paramsForBackendCounter',
-    'perPage',
-    'zeroBasedIndex',
-    function () {
-      var page = this.getPage();
-      if (this.zeroBasedIndex) {
-        page--;
-      }
-
-      var paramsObj = QueryParamsForBackend.create({
-        page: page,
-        perPage: this.getPerPage(),
-        paramMapping: this.paramMapping,
-      });
-      var ops = paramsObj.make();
-
-      // take the otherParams hash and add the values at the same level as page/perPage
-      ops = Util.mergeHashes(ops, this.otherParams || {});
-
-      return ops;
+  paramsForBackend() {
+    var page = this.getPage();
+    if (this.zeroBasedIndex) {
+      page--;
     }
-  ),
 
-  rawFindFromStore: function () {
+    var paramsObj = QueryParamsForBackend.create({
+      page: page,
+      perPage: this.getPerPage(),
+      paramMapping: this.paramMapping,
+    });
+    var ops = paramsObj.make();
+
+    // take the otherParams hash and add the values at the same level as page/perPage
+    ops = Util.mergeHashes(ops, this.otherParams || {});
+
+    return ops;
+  }
+
+  rawFindFromStore() {
     var store = this.store;
     var modelName = this.modelName;
 
@@ -108,9 +105,9 @@ export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
     var res = store.query(modelName, Object.assign({}, ops)); // always create a shallow copy of `ops` in case adapter would mutate the original object
 
     return res;
-  },
+  }
 
-  fetchContent: function () {
+  fetchContent() {
     this.set('loading', true);
     var res = this.rawFindFromStore();
     this.incrementProperty('numRemoteCalls');
@@ -135,26 +132,26 @@ export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
     );
 
     return res;
-  },
+  }
 
-  totalPages: alias('meta.total_pages'),
+  @alias ('meta.total_pages') totalPages;
 
-  lastPage: null,
+  @tracked lastPage = null;
 
-  pageChanged: observer('page', 'perPage', function () {
+  get pageChanged() {
     var page = this.page;
     var lastPage = this.lastPage;
     if (lastPage != page) {
       this.set('lastPage', page);
       this.set('promise', this.fetchContent());
     }
-  }),
+  }
 
-  lockToRange: function () {
+  lockToRange () {
     LockToRange.watch(this);
-  },
+  }
 
-  watchPage: observer('page', 'totalPages', function () {
+  get watchPage () {
     var page = this.page;
     var totalPages = this.totalPages;
     if (parseInt(totalPages) <= 0) {
@@ -170,15 +167,15 @@ export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
         array: this,
       });
     }
-  }),
+  }
 
-  reload: function () {
+  reload () {
     var promise = this.fetchContent();
     this.set('promise', promise);
     return promise;
-  },
+  }
 
-  setOtherParam: function (k, v) {
+  setOtherParam (k, v) {
     if (!this.otherParams) {
       this.set('otherParams', {});
     }
@@ -186,5 +183,5 @@ export default ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin, {
     this.otherParams[k] = v;
     this.incrementProperty('paramsForBackendCounter');
     once(this, 'pageChanged');
-  },
-});
+  }
+}

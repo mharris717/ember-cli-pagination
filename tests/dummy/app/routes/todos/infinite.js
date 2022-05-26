@@ -1,14 +1,10 @@
-import { hash } from 'rsvp';
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
-export default Route.extend({
-  model: function () {
-    return hash({
-      model: this.store.findAll('todo', { page: 'all' }),
-    });
-  },
+export default class InfiniteRoute extends Route {
+  @service store;
 
-  setupController: function (controller, models) {
-    controller.setProperties(models);
-  },
-});
+  model() {
+    return this.store.findAll('todo', { page: 'all' });
+  }
+}

@@ -1,6 +1,17 @@
-import Controller from '@ember/controller';
+import Controller, { inject } from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
 
-export default Controller.extend({
-  queryParams: ['page', 'perPage'],
-  page: 1,
-});
+class QueryParamsObj {
+  @tracked page = 1;
+  @tracked perPage = 10;
+}
+
+export default class RemoteController extends Controller {
+
+  queryParams = [
+    { 'queryParamsObj.page': 'page' },
+    { 'queryParamsObj.perPage': 'perPage' },
+  ];
+
+  queryParamsObj = new QueryParamsObj();
+}

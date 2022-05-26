@@ -6,7 +6,7 @@ export default class ApplicationRoute extends Route {
 
   beforeModel() {
     var nextId = 0;
-    for (var i = 0; i < 11; i++) {
+    for (var i = 0; i < 30; i++) {
       this.store
         .createRecord('todo', {
           id: nextId++,

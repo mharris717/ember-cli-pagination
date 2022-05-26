@@ -1,5 +1,5 @@
 import { A } from '@ember/array';
-import { computed } from '@ember/object';
+import { reads } from '@ember/object/computed';
 import ArrayProxy from '@ember/array/proxy';
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 // import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
@@ -41,7 +41,7 @@ var pushPromiseObjects = function (base, promise) {
 var InfiniteBase = ArrayProxy.extend({
   page: 1,
 
-  arrangedContent: computed('content'),
+  arrangedContent: reads('content'),
 
   init: function () {
     this.set('content', A([]));

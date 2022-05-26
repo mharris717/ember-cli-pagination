@@ -1,15 +1,13 @@
-import { hash } from 'rsvp';
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
-export default Route.extend(RouteMixin, {
-  model: function (params) {
-    return hash({
-      model: this.findPaged('todo', params, { zeroBasedIndex: false }),
-    });
-  },
+const RouteMixed = Route.extend(RouteMixin);
 
-  setupController: function (controller, models) {
-    controller.setProperties(models);
-  },
-});
+export default class SecretRoute extends RouteMixed {
+  @service store;
+
+  model(params) {
+    return this.findPaged('todo', params, { zeroBasedIndex: false });
+  }
+}

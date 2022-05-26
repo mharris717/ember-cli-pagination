@@ -18,9 +18,9 @@ export default class LocalController extends Controller {
     { 'queryParamsObj.perPage': 'perPage' },
   ];
 
-  @tracked queryParamsObj = new QueryParamsObj();
+  queryParamsObj = new QueryParamsObj();
 
-  @tracked sortingProperties = Object.freeze(['name:asc']);
+  sortingProperties = Object.freeze(['name:asc']);
   @sort('model', 'sortingProperties') arrangedContent;
   sortingOrder = 'asc';
 

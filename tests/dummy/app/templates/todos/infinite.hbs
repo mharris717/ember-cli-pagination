@@ -1,21 +1,24 @@
 <div class='infinite'>
-  <table class='table'>
-    <tr>
-      <th>Name</th>
-      <th>Completed</th>
-    </tr>
-
-    {{#each pagedContent as |content|}}
-      <tr class='todo'>
-        <td>{{content.name}}</td>
-        <td>
-          <Input @type='checkbox' @checked={{content.completed}} />
-        </td>
+  <table class='table table-striped'>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Completed</th>
       </tr>
-    {{/each}}
+    </thead>
+    <tbody>
+      {{#each this.pagedContent as |content|}}
+        <tr class='todo'>
+          <td>{{content.name}}</td>
+          <td>
+            <Input @type='checkbox' @checked={{content.completed}} />
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
   </table>
-
+  
   <div class='next'>
-    <a href='#' {{action 'loadNext'}}>Next</a>
+    <a href='#' {{on "click" this.loadNext}}>Next</a>
   </div>
 </div>
