@@ -18,7 +18,6 @@ Features:
 - Current page bound to the `page` query param
 - Compatible with the Kaminari API Rails gem
 
-
 **Questions?**
 
 This is a new project, but many people are already using it successfully. If you have any trouble, open an issue, and you should get help quickly.
@@ -44,25 +43,25 @@ npm install ember-cli-pagination@0.6.6 --save-dev
 
 #### Scenarios
 
-* [Local Store](#local-store)
-* [Remote Paginated API](#remote-paginated-api)
-* [Remote Unpaginated API](#remote-unpaginated-api)
-* [Paginating a Filtered List](#paginating-a-filtered-list)
-* [Infinite Pagination with All Records Present Locally](#infinite-pagination-with-all-records-present-locally)
-* [Infinite Pagination with a Remote Paginated API](#infinite-pagination-with-a-remote-paginated-api)
+- [Local Store](#local-store)
+- [Remote Paginated API](#remote-paginated-api)
+- [Remote Unpaginated API](#remote-unpaginated-api)
+- [Paginating a Filtered List](#paginating-a-filtered-list)
+- [Infinite Pagination with All Records Present Locally](#infinite-pagination-with-all-records-present-locally)
+- [Infinite Pagination with a Remote Paginated API](#infinite-pagination-with-a-remote-paginated-api)
 
 #### Primitives
 
-* [`page-numbers` Component](#page-numbers-component)
-* [`pagedArray` Computed Helper](#pagedarray-computed-helper)
-* [PagedLocalArray](#pagedlocalarray)
-* [PagedRemoteArray](#pagedremotearray)
+- [`page-numbers` Component](#page-numbers-component)
+- [`pagedArray` Computed Helper](#pagedarray-computed-helper)
+- [PagedLocalArray](#pagedlocalarray)
+- [PagedRemoteArray](#pagedremotearray)
 
 #### Other
 
-* [Setup Paginated Rails API](#setup-paginated-rails-api)
-* [Testing](#testing)
-* [Contributors](#contributors)
+- [Setup Paginated Rails API](#setup-paginated-rails-api)
+- [Testing](#testing)
+- [Contributors](#contributors)
 
 # Scenarios
 
@@ -70,9 +69,9 @@ npm install ember-cli-pagination@0.6.6 --save-dev
 
 This scenario applies if:
 
-* Have all of your records already loaded client-side.
-* Wish to display one page of records at a time.
-* Want to have a page query parameter (optional).
+- Have all of your records already loaded client-side.
+- Wish to display one page of records at a time.
+- Want to have a page query parameter (optional).
 
 ```javascript
 import Controller from '@ember/controller';
@@ -82,7 +81,7 @@ import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default class PostsController extends Controller {
   // setup our query params
-  queryParams: ["page", "perPage"];
+  queryParams: ['page', 'perPage'];
 
   // set default values, can cause problems if left out
   // if value matches default, it won't display in the URL
@@ -91,10 +90,11 @@ export default class PostsController extends Controller {
 
   // can be called anything, I've called it pagedContent
   // remember to iterate over pagedContent in your template
-  @pagedArray (
-    'model',
-    { page: alias('parent.page'), perPage: alias('parent.perPage')}
-  ) pagedContent;
+  @pagedArray('model', {
+    page: alias('parent.page'),
+    perPage: alias('parent.perPage'),
+  })
+  pagedContent;
 
   // binding the property on the paged array
   // to a property on the controller
@@ -120,7 +120,7 @@ import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default Ember.Controller.extend({
   // setup our query params
-  queryParams: ["page", "perPage"],
+  queryParams: ['page', 'perPage'],
 
   // set default values, can cause problems if left out
   // if value matches default, it won't display in the URL
@@ -130,13 +130,13 @@ export default Ember.Controller.extend({
   // can be called anything, I've called it pagedContent
   // remember to iterate over pagedContent in your template
   pagedContent: pagedArray('content', {
-    page: Ember.computed.alias("parent.page"),
-    perPage: Ember.computed.alias("parent.perPage")
+    page: Ember.computed.alias('parent.page'),
+    perPage: Ember.computed.alias('parent.perPage'),
   }),
 
   // binding the property on the paged array
   // to a property on the controller
-  totalPages: Ember.computed.oneWay("pagedContent.totalPages")
+  totalPages: Ember.computed.oneWay('pagedContent.totalPages'),
 });
 ```
 
@@ -150,7 +150,7 @@ export default Ember.Controller.extend({
 
 Or in even older Ember versions:
 
-``` javascript
+```javascript
 {
   // ...
 
@@ -169,22 +169,22 @@ Or in even older Ember versions:
 
 #### Notes
 
-* There is no need to touch the route in this scenario.
-* There used to be route and controller mixins, and they may return in the future. For now, they were too much overhead, and they were too much magic. If you think getting rid of the mixins is a mistake, please open an issue and let me know.
+- There is no need to touch the route in this scenario.
+- There used to be route and controller mixins, and they may return in the future. For now, they were too much overhead, and they were too much magic. If you think getting rid of the mixins is a mistake, please open an issue and let me know.
 
-
---------------
+---
 
 ## Remote Paginated API
 
 This scenario applies if:
 
-* Loading your records from a remote pagination-enabled API.
-* Wish to display one page of records at a time.
-* Want to have a page query parameter. (optional)
-* Need to access a zero Based Index remote pagination-enabled API. (optional)
+- Loading your records from a remote pagination-enabled API.
+- Wish to display one page of records at a time.
+- Want to have a page query parameter. (optional)
+- Need to access a zero Based Index remote pagination-enabled API. (optional)
 
 1:1 based page index
+
 ```javascript
 import Route from '@ember/routing/route';
 import { tracked } from '@glimmer/tracking';
@@ -194,14 +194,16 @@ export default class PostsRoute extends Route.extend(RouteMixin) {
   // optional. default is 10
   perPage: 25;
 
-  model (params) {
+  model(params) {
     // todo is your model name
     // returns a PagedRemoteArray
-    return this.findPaged('post',params);
+    return this.findPaged('post', params);
   }
 }
 ```
+
 Zero based page index
+
 ```javascript
 import Route from '@ember/routing/route';
 import { tracked } from '@glimmer/tracking';
@@ -211,10 +213,10 @@ export default class PostsRoute extends Route.extend(RouteMixin) {
   // optional. default is 10
   perPage: 25;
 
-  model (params) {
+  model(params) {
     // todo is your model name
     // returns a PagedRemoteArray
-    return this.findPaged('post',params,{zeroBasedIndex: true});
+    return this.findPaged('post', params, { zeroBasedIndex: true });
   }
 }
 ```
@@ -225,7 +227,6 @@ import { tracked } from '@glimmer/tracking';
 import { alias } from '@ember/object/computed';
 
 export default class PostsController extends Controller {
-
   // setup our query params
   queryParams: ['page', 'perPage'];
 
@@ -249,7 +250,7 @@ If you don't want to have query params, you may leave them out, along with the 3
 
 In older versions of Ember you would have done:
 
-``` javascript
+```javascript
 {
   // ...
 
@@ -267,10 +268,10 @@ If your params object has other params, they will be passed to your backend.
 
 ```javascript
 export default class PostsRoute extends Route.extend(RouteMixin) {
-  model (params) {
+  model(params) {
     // params is {page: 1, name: "Adam"}
 
-    return this.findPaged("post",params);
+    return this.findPaged('post', params);
 
     // server will receive params page=1, name=Adam
   }
@@ -290,11 +291,13 @@ import Route from '@ember/routing/route';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
 export default class PostsRoute extends Route.extend(RouteMixin) {
-  model (params) {
-    params.paramMapping = {page: "pageNum",
-                           perPage: "limit",
-                           total_pages: "num_pages"};
-    return this.findPaged('post',params);
+  model(params) {
+    params.paramMapping = {
+      page: 'pageNum',
+      perPage: 'limit',
+      total_pages: 'num_pages',
+    };
+    return this.findPaged('post', params);
   }
 }
 ```
@@ -306,17 +309,17 @@ import Route from '@ember/routing/route';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
 export default class PostsRoute extends Route.extend(RouteMixin) {
-  model (params) {
+  model(params) {
     params.paramMapping = {
-			page: [
-				"offset",
-				function(obj){
-					return (obj.page - 1) * obj.perPage;
-				}
-			],
-      perPage: "limit"
-	  };
-    return this.findPaged('todo',params);
+      page: [
+        'offset',
+        function (obj) {
+          return (obj.page - 1) * obj.perPage;
+        },
+      ],
+      perPage: 'limit',
+    };
+    return this.findPaged('todo', params);
   }
 }
 ```
@@ -358,8 +361,8 @@ inherits Ember.Evented, you can subscribe on `contentWillChange` and
 
 #### Notes
 
-* There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know.
-* Related: [Setup a Paginated Rails API](#setup-paginated-rails-api)
+- There used to be a controller mixin, and they may return in the future. For now, it was too much overhead, and it was too much magic. If you think getting rid of the mixin is a mistake, please open an issue and let me know.
+- Related: [Setup a Paginated Rails API](#setup-paginated-rails-api)
 
 ### Force reloading data
 
@@ -375,9 +378,9 @@ export default Route.extend(RouteMixin, {
 ```
 
 ```handlebars
-{{!-- template.hbs --}}
+{{! template.hbs }}
 
-<button {{action "createNewPost"}}>Click me to create new post</button>
+<button {{action 'createNewPost'}}>Click me to create new post</button>
 
 <ul>
   {{#each model as |post|}}
@@ -397,36 +400,39 @@ export default Controller.extend({
       // Not even saving the data server side will make it appear on user's screen
       return newPost.save().then(() => {
         // This will force the ember-cli-pagination to re-fetch current page
-        this.get('model').setOtherParam('nameOrValueOfThisPropertyDoesNotReallyMatter', true);
+        this.get('model').setOtherParam(
+          'nameOrValueOfThisPropertyDoesNotReallyMatter',
+          true
+        );
       });
-    }
-  }
+    },
+  },
 });
 ```
 
---------------
+---
 
 ## Remote Unpaginated API
 
 This scenario applies if:
 
-* Loading your records from a remote API that is not pagination-enabled.
-* You are ok with loading all records from the API in order to display one page at a time.
-* Wish to display one page of records at a time.
-* Want to have a page query parameter (optional).
+- Loading your records from a remote API that is not pagination-enabled.
+- You are ok with loading all records from the API in order to display one page at a time.
+- Wish to display one page of records at a time.
+- Want to have a page query parameter (optional).
 
 This scenario is identical to the [Local Store](#local-store) scenario.
 
---------------
+---
 
 ## Paginating a Filtered List
 
 This scenario applies if:
 
-* Have all of your records already loaded client-side.
-* You are filtering those records down to create a subset for display
-* Wish to display one page of records at a time.
-* Want to have a page query parameter (optional).
+- Have all of your records already loaded client-side.
+- You are filtering those records down to create a subset for display
+- Wish to display one page of records at a time.
+- Want to have a page query parameter (optional).
 
 ```javascript
 import Ember from 'ember';
@@ -434,7 +440,7 @@ import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default Ember.Controller.extend({
   // setup our query params
-  queryParams: ["page", "perPage"],
+  queryParams: ['page', 'perPage'],
 
   // set default values, can cause problems if left out
   // if value matches default, it won't display in the URL
@@ -450,9 +456,9 @@ export default Ember.Controller.extend({
 
   // binding the property on the paged array
   // to the query params on the controller
-  page: Ember.computed.alias("pagedContent.page"),
-  perPage: Ember.computed.alias("pagedContent.perPage"),
-  totalPages: Ember.computed.oneWay("pagedContent.totalPages")
+  page: Ember.computed.alias('pagedContent.page'),
+  perPage: Ember.computed.alias('pagedContent.perPage'),
+  totalPages: Ember.computed.oneWay('pagedContent.totalPages'),
 });
 ```
 
@@ -468,7 +474,7 @@ If you don't want to have query params, you may leave them out, along with the 3
 
 In older versions of Ember you would have done:
 
-``` javascript
+```javascript
 {
   // ...
 
@@ -482,10 +488,9 @@ In older versions of Ember you would have done:
 
 #### Notes
 
-* There is no need to touch the route in this scenario.
+- There is no need to touch the route in this scenario.
 
-
---------------
+---
 
 ## Infinite Pagination with All Records Present Locally
 
@@ -500,20 +505,19 @@ import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default Ember.Controller.extend({
-  pagedContent: pagedArray('content', {infinite: "unpaged", perPage: 10}),
+  pagedContent: pagedArray('content', { infinite: 'unpaged', perPage: 10 }),
 
   actions: {
-    loadNext: function() {
+    loadNext: function () {
       this.get('pagedContent').loadNextPage();
-    }
-  }
+    },
+  },
 });
 ```
 
 `"unpaged"` in this example indicates the source array (the `content` property) is a regular (unpaged) array, as opposed to a PagedArray.
 
-
---------------
+---
 
 ## Infinite Pagination with a Remote Paginated API
 
@@ -526,17 +530,17 @@ import Ember from 'ember';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
 export default Ember.Controller.extend({
-  pagedContent: pagedArray("content", {infinite: true}),
+  pagedContent: pagedArray('content', { infinite: true }),
 
   actions: {
-    loadNext: function() {
+    loadNext: function () {
       this.get('pagedContent').loadNextPage();
-    }
-  }
+    },
+  },
 });
 ```
 
- `{infinite: true}` in this example indicates the source array (the `content` property) is a paged array, in this case a PagedRemoteArray.
+`{infinite: true}` in this example indicates the source array (the `content` property) is a paged array, in this case a PagedRemoteArray.
 
 ```javascript
 // route
@@ -545,12 +549,11 @@ import Ember from 'ember';
 import RouteMixin from 'ember-cli-pagination/remote/route-mixin';
 
 export default Ember.Route.extend(RouteMixin, {
-  model: function(params) {
-    return this.findPaged('todo',params);
-  }
+  model: function (params) {
+    return this.findPaged('todo', params);
+  },
 });
 ```
-
 
 # Primitives
 
@@ -562,10 +565,10 @@ Displays pagination controls.
 
 Features:
 
-* A clickable link for each page.
-* Previous and next buttons, disabled when appropriate.
-* The link to the current page receives the .active class.
-* Styling with bootstrap, if included.
+- A clickable link for each page.
+- Previous and next buttons, disabled when appropriate.
+- The link to the current page receives the .active class.
+- Styling with bootstrap, if included.
 
 ### Including in your template
 
@@ -577,7 +580,7 @@ This is the easier and most common way.
 
 ```javascript
 Ember.Controller.extend({
-  pagedContent: pagedArray('content')
+  pagedContent: pagedArray('content'),
 });
 ```
 
@@ -591,8 +594,8 @@ Ember.Controller.extend({
 
 Clicking a page number will:
 
-* Display the rows on the clicked page.
-* Update `pagedContent.page` to the clicked page.
+- Display the rows on the clicked page.
+- Update `pagedContent.page` to the clicked page.
 
 See the pagedArray doc for more information on the pagedArray helper.
 
@@ -601,7 +604,7 @@ See the pagedArray doc for more information on the pagedArray helper.
 ```javascript
 Ember.Object.extend({
   page: 1,
-  totalPages: 10
+  totalPages: 10,
 });
 ```
 
@@ -611,7 +614,7 @@ Ember.Object.extend({
 
 Clicking a page number will:
 
-* Update the `page` property to the clicked page.
+- Update the `page` property to the clicked page.
 
 ### Customization
 
@@ -627,10 +630,10 @@ To always show the first and last pages (in addition to the pages that would be 
 
 ### Future Additions
 
-* <</>> links to move more than one page at a time.
-* Configuration settings to change behavior, remove arrows, etc.
+- <</>> links to move more than one page at a time.
+- Configuration settings to change behavior, remove arrows, etc.
 
---------------
+---
 
 ## `pagedArray` Computed Helper
 
@@ -640,14 +643,14 @@ A PagedArray acts just like a normal array containing only the records on the cu
 
 Takes two arguments:
 
-* A `contentProperty` argument, representing the name of the "all objects" property on the source object.
-* An optional `options` hash. Currently the only allowed options are page and perPage, both integers
+- A `contentProperty` argument, representing the name of the "all objects" property on the source object.
+- An optional `options` hash. Currently the only allowed options are page and perPage, both integers
 
 A PagedArray has several properties you may find useful:
 
-* `page`: the current page (Default: 1)
-* `perPage`: how many records to have on each page (Default: 10)
-* `totalPages`: the total number of pages
+- `page`: the current page (Default: 1)
+- `perPage`: how many records to have on each page (Default: 10)
+- `totalPages`: the total number of pages
 
 ```javascript
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
@@ -655,34 +658,34 @@ import pagedArray from 'ember-cli-pagination/computed/paged-array';
 export default Ember.Object.extend({
   // The property that contains all objects
   // In a real app, often set by the route
-  content: [1,2,3,4,5,6,7,8,9,10],
+  content: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 
   // the PagedArray
-  pagedContent: pagedArray('content', {perPage: 5})
+  pagedContent: pagedArray('content', { perPage: 5 }),
 });
 ```
 
 In this example, these properties will be available:
 
-* `pagedContent.page`
-* `pagedContent.perPage`
-* `pagedContent.totalPages`
+- `pagedContent.page`
+- `pagedContent.perPage`
+- `pagedContent.totalPages`
 
 The pagedContent property can serve as a backing array for pagination controls. See the page-numbers component for details.
 
---------------
+---
 
 ## PagedLocalArray
 
-PagedLocalArray represents a page of records from the list of all records.  
+PagedLocalArray represents a page of records from the list of all records.
 
 All records must be loaded client-side in order to use PagedArray.
 
 It takes three arguments at creation, in a standard options hash passed to PagedArray#create:
 
-* content - list of all records
-* page - Optional (Default 1)
-* perPage - Optional (Default 10)
+- content - list of all records
+- page - Optional (Default 1)
+- perPage - Optional (Default 10)
 
 Once the data is loaded, you may iterate over a PagedArray as you would a normal array.
 
@@ -691,17 +694,17 @@ The object acts as a promise, with a working `then` method.
 ```javascript
 import PagedArray from 'ember-cli-pagination/local/paged-array';
 
-var all = Ember.A([1,2,3,4,5]);
-var paged = PagedArray.create({content: all, perPage: 2});
+var all = Ember.A([1, 2, 3, 4, 5]);
+var paged = PagedArray.create({ content: all, perPage: 2 });
 
-equal(paged.get('length'),2);
-deepEqual(paged.toArray(),[1,2]);
+equal(paged.get('length'), 2);
+deepEqual(paged.toArray(), [1, 2]);
 
-paged.set("page",3);
-deepEqual(paged.toArray(),[5]);
+paged.set('page', 3);
+deepEqual(paged.toArray(), [5]);
 
 all.pushObject(6);
-deepEqual(paged.toArray(),[5,6]);
+deepEqual(paged.toArray(), [5, 6]);
 ```
 
 ### Updating
@@ -717,20 +720,20 @@ To update records when a page property changes:
 ```javascript
 Ember.Controller.extend({
   // the content property represents a paged array
-  page: Ember.computed.alias("content.page")
+  page: Ember.computed.alias('content.page'),
 });
 ```
 
 In older versions of Ember you would have done:
 
-``` javascript
+```javascript
 Ember.Controller.extend({
   // the content property represents a paged array
-  pageBinding: "content.page"
+  pageBinding: 'content.page',
 });
 ```
 
---------------
+---
 
 ## PagedRemoteArray
 
@@ -738,12 +741,12 @@ PagedRemoteArray represents a page of records fetched from a remote pagination-e
 
 It takes six arguments at creation, in a standard options hash passed to PagedRemoteArray#create:
 
-* modelName - singular
-* store
-* page
-* perPage
-* otherParams - optional. If provided, will be passed on to server at same level as page and perPage
-* paramMapping - optional. Allows configuration of param names for page/perPage/total_pages
+- modelName - singular
+- store
+- page
+- perPage
+- otherParams - optional. If provided, will be passed on to server at same level as page and perPage
+- paramMapping - optional. Allows configuration of param names for page/perPage/total_pages
 
 Once the data is loaded, you may iterate over a PagedRemoteArray as you would a normal array.
 
@@ -753,15 +756,17 @@ The object acts as a promise, with a working `then` method. If you are manually 
 import PagedRemoteArray from 'ember-cli-pagination/remote/paged-remote-array';
 
 export default Ember.Route.extend({
-  model: function(params) {
+  model: function (params) {
     // possible params are params.page and params.per_page
     // Ember's query param logic converts perPage to per_page at some point, for now just dealing with it.
 
-    return PagedRemoteArray.create({modelName: 'post',
-                                    store: this.store,
-                                    page: params.page || 1,
-                                    perPage: params.per_page || 10});
-  }
+    return PagedRemoteArray.create({
+      modelName: 'post',
+      store: this.store,
+      page: params.page || 1,
+      perPage: params.per_page || 10,
+    });
+  },
 });
 ```
 
@@ -774,11 +779,11 @@ A PagedRecordArray will make a new remote call to update records when the page p
 // var pagedArray = ....
 
 // this will trigger the remote call for new data
-pagedArray.set("page",2);
+pagedArray.set('page', 2);
 
-pagedArray.then(function() {
+pagedArray.then(function () {
   // the data is loaded.
-  pagedArray.forEach(function(obj) {
+  pagedArray.forEach(function (obj) {
     // your logic
   });
 });
@@ -807,7 +812,7 @@ To update records when a page property changes:
 ```javascript
 Ember.Controller.extend({
   // the content property represents a paged array
-  page: Ember.computed.alias("content.page")
+  page: Ember.computed.alias('content.page'),
 });
 ```
 
@@ -816,7 +821,7 @@ In older versions of Ember you would have done:
 ```javascript
 Ember.Controller.extend({
   // the content property represents a paged array
-  pageBinding: "content.page"
+  pageBinding: 'content.page',
 });
 ```
 
@@ -838,7 +843,13 @@ init() {
 PagedRemoteArray takes an optional otherParams arg. These params will be passed to the server when the request is made.
 
 ```javascript
-var paged = PagedRemoteArray.create({store: store, modelName: 'number', page: 1, perPage: 2, otherParams: {name: 'Adam'}});
+var paged = PagedRemoteArray.create({
+  store: store,
+  modelName: 'number',
+  page: 1,
+  perPage: 2,
+  otherParams: { name: 'Adam' },
+});
 
 // server will receive params page=1, perPage=2, name=Adam
 ```
@@ -854,12 +865,11 @@ Note that the default param name for perPage is per_page.
 ```javascript
 // This will send a request with pageNum and limit params,
 // and expect a response with a num_pages param in the meta.
-var paged = PagedRemoteArray.create({/* ..., */
-                                    paramMapping: {page: "pageNum",
-                                                   perPage: "limit",
-                                                   total_pages: "num_pages"}});
+var paged = PagedRemoteArray.create({
+  /* ..., */
+  paramMapping: { page: 'pageNum', perPage: 'limit', total_pages: 'num_pages' },
+});
 ```
-
 
 # Other
 
@@ -885,7 +895,7 @@ c = ->
 export default c
 ```
 
---------------
+---
 
 ## Setup Paginated Rails API
 
@@ -907,50 +917,50 @@ class TodosController < ApplicationController
 end
 ```
 
---------------
+---
 
 ## Contributors
 
 You guys rock!
 
-* @broerse
-* @robdel12
-* @samselikoff
-* @pedrokiefer
-* @gcollazo
-* @johanneswuerback
-* @tonycoco
-* @dlameri
-* @piotrpalek
-* @robertleib
-* @halfdan
-* @bschnelle
-* @mcm-ham
-* @jcope2013
-* @thejchap
-* @sarupbanskota
-* @chrisccerami
-* @potato20
-* @aleontiev
-* @jeffreybiles
-* @fidlip
-* @lancedikson
-* @marceloandrader
-* @asermax
-* @balupton
-* @noslouch
-* @irruputuncu
-* @thomaswelton
-* @brentdanley
-* @pleszkowicz
-* @mixonic
-* @chrisdevor
-* @MichalBryxi
-* @flyrev
-* @armiiller
-* @artemgurzhii
-* @iezer
-* @jlami
-* @synaptiko
-* @rinoldsimon
-* @fivetanley
+- @broerse
+- @robdel12
+- @samselikoff
+- @pedrokiefer
+- @gcollazo
+- @johanneswuerback
+- @tonycoco
+- @dlameri
+- @piotrpalek
+- @robertleib
+- @halfdan
+- @bschnelle
+- @mcm-ham
+- @jcope2013
+- @thejchap
+- @sarupbanskota
+- @chrisccerami
+- @potato20
+- @aleontiev
+- @jeffreybiles
+- @fidlip
+- @lancedikson
+- @marceloandrader
+- @asermax
+- @balupton
+- @noslouch
+- @irruputuncu
+- @thomaswelton
+- @brentdanley
+- @pleszkowicz
+- @mixonic
+- @chrisdevor
+- @MichalBryxi
+- @flyrev
+- @armiiller
+- @artemgurzhii
+- @iezer
+- @jlami
+- @synaptiko
+- @rinoldsimon
+- @fivetanley

@@ -9,7 +9,6 @@ import Util from 'ember-cli-pagination/util';
 import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
 import { QueryParamsForBackend, ChangeMeta } from './mapping';
 import PageMixin from '../page-mixin';
-import { tracked } from '@glimmer/tracking';
 
 var ArrayProxyPromiseMixin = Mixin.create(PromiseProxyMixin, {
   then: function (success, failure) {
@@ -26,7 +25,7 @@ var ArrayProxyPromiseMixin = Mixin.create(PromiseProxyMixin, {
 var ExtendedArrayProxy = ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin)
 
 export default class PagedRemoteArray extends ExtendedArrayProxy {
-  @tracked page = 1;
+  page = 1;
   get paramMapping(){
     return {};
   }
@@ -40,7 +39,7 @@ export default class PagedRemoteArray extends ExtendedArrayProxy {
     if (initCallback) {
       initCallback(this);
     }
-
+    // Array observers are not working anymore
     /*this.addArrayObserver({
       arrayWillChange(me) {
         me.trigger('contentWillChange');
@@ -136,7 +135,7 @@ export default class PagedRemoteArray extends ExtendedArrayProxy {
 
   @alias ('meta.total_pages') totalPages;
 
-  @tracked lastPage = null;
+  lastPage = null;
 
   get pageChanged() {
     var page = this.page;

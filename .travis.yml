@@ -23,7 +23,7 @@ env:
     - EMBER_TRY_SCENARIO=ember-lts-3.24
     - EMBER_TRY_SCENARIO=ember-lts-3.28
     - EMBER_TRY_SCENARIO=ember-release
-    
+
 matrix:
   allow_failures:
     - env: EMBER_TRY_SCENARIO=ember-beta

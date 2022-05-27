@@ -2,24 +2,24 @@ import EmberObject from '@ember/object';
 import Validate from '../validate';
 import Util from '../util';
 
-export var QueryParamsForBackend = EmberObject.extend({
-  defaultKeyFor: function (key) {
+export class QueryParamsForBackend extends EmberObject{
+  defaultKeyFor (key) {
     if (key === 'perPage') {
       return 'per_page';
     }
     return null;
-  },
+  }
 
-  paramKeyFor: function (key) {
+  paramKeyFor (key) {
     return this.getSuppliedParamMapping(key) || this.defaultKeyFor(key) || key;
-  },
+  }
 
-  getSuppliedParamMapping: function (key) {
+  getSuppliedParamMapping (key) {
     var h = this.paramMapping || {};
     return h[key];
-  },
+  }
 
-  accumParams: function (key, accum) {
+  accumParams (key, accum) {
     var val = this.get(key);
     var mappedKey = this.paramKeyFor(key);
 
@@ -28,28 +28,29 @@ export var QueryParamsForBackend = EmberObject.extend({
     } else {
       accum[mappedKey] = val;
     }
-  },
+  }
 
-  accumParamsComplex: function (key, mapArr, accum) {
+  accumParamsComplex (key, mapArr, accum) {
     var mappedKey = mapArr[0];
     var mapFunc = mapArr[1];
 
     var val = mapFunc({ page: this.page, perPage: this.perPage });
     accum[mappedKey] = val;
-  },
+  }
 
-  make: function () {
+  make() {
     var res = {};
 
     this.accumParams('page', res);
     this.accumParams('perPage', res);
 
     return res;
-  },
-});
+  }
+}
 
-export var ChangeMeta = EmberObject.extend({
-  getSuppliedParamMapping: function (targetVal) {
+export class ChangeMeta extends EmberObject{
+  
+  getSuppliedParamMapping (targetVal) {
     var h = this.paramMapping || {};
 
     // have to do this gross thing because mapping looks like this:
@@ -69,22 +70,22 @@ export var ChangeMeta = EmberObject.extend({
     }
 
     return null;
-  },
+  }
 
-  finalKeyFor: function (key) {
+  finalKeyFor (key) {
     return this.getSuppliedParamMapping(key) || key;
-  },
+  }
 
-  makeSingleComplex: function (key, mapArr, rawVal, accum) {
+  makeSingleComplex (key, mapArr, rawVal, accum) {
     var mappedKey = mapArr[0];
     var mapFunc = mapArr[1];
 
     var ops = { rawVal: rawVal, page: this.page, perPage: this.perPage };
     var mappedVal = mapFunc(ops);
     accum[mappedKey] = mappedVal;
-  },
+  }
 
-  make: function () {
+  make () {
     var res = {};
     var meta = this.meta;
 
@@ -102,11 +103,11 @@ export var ChangeMeta = EmberObject.extend({
     this.validate(res);
 
     return res;
-  },
+  }
 
-  validate: function (meta) {
+  validate (meta) {
     if (Util.isBlank(meta.total_pages)) {
       Validate.internalError('no total_pages in meta response', meta);
     }
-  },
-});
+  }
+}

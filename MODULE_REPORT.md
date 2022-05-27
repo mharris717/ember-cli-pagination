@@ -1,4 +1,5 @@
 ## Module Report
+
 ### Unknown Global
 
 **Global**: `Ember.deprecate`
