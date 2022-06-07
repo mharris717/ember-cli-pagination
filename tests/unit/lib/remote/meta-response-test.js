@@ -24,7 +24,7 @@ module('Meta Response Test', function () {
     var s = ChangeMeta.create({ meta: meta });
 
     s.make();
-    assert.equal(
+    assert.strictEqual(
       Validate.getLastInternalError(),
       'no total_pages in meta response'
     );

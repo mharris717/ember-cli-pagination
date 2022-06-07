@@ -6,7 +6,7 @@ export function hasActivePage(assert, num, context) {
   $('.pagination li.page-number', context).each(function () {
     var li = $(this);
     var active = num - 1 === i;
-    assert.equal(
+    assert.strictEqual(
       li.hasClass('active'),
       active,
       'Page ' +
@@ -35,7 +35,7 @@ export function hasButtons(assert, ops) {
 }
 
 export function hasTodos(assert, l) {
-  assert.equal(findAll('table tr.todo').length, l);
+  assert.strictEqual(findAll('table tr.todo').length, l);
 }
 
 export function hasTodo(assert, num, name) {
@@ -45,7 +45,7 @@ export function hasTodo(assert, num, name) {
 }
 
 export function hasPages(assert, l) {
-  assert.equal(findAll('.pagination li.page-number').length, l);
+  assert.strictEqual(findAll('.pagination li.page-number').length, l);
 }
 
 export async function clickPage(i) {

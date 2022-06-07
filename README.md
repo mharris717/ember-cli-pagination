@@ -4,7 +4,7 @@
 
 Simple pagination addon for your Ember CLI app.
 
-⚠️ This addon works with Ember version 3.12.x and below and with Ember version 3.16.2 and up. Some examples are still in non Octane style.
+⚠️ This addon works with Ember version 3.12.x and below and from Ember version 3.16.2 up to 3.28. From ember 4.x and on remote pagination is not working yet as mixins and array observers are fully deprecated (needs to be rethought). Some examples are still in non Octane style.
 
 ![Todos](https://raw.githubusercontent.com/mharris717/ember-cli-pagination/master/screenshots/todos.png)
 

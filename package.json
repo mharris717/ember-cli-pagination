@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-pagination",
-  "version": "3.1.5",
+  "version": "4.0.0-alpha.1",
   "private": false,
   "description": "Addon for Ember CLI to do simple pagination. Compatible with the kaminari API in Rails",
   "keywords": [
@@ -30,8 +30,7 @@
     "ember-auto-import": "^2.4.2",
     "ember-cli-babel": "^7.26.11",
     "ember-cli-htmlbars": "^6.0.1",
-    "ember-cli-version-checker": "^2.1.0",
-    "ember-decorators": "^6.1.1"
+    "ember-cli-version-checker": "^2.1.0"
   },
   "devDependencies": {
     "@ember/jquery": "^2.0.0",
@@ -41,17 +40,17 @@
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "active-model-adapter": "4.0.0",
-    "babel-eslint": "^10.1.0",
+    "babel-eslint": "^8.2.6",
     "bootstrap": "^5.1.3",
     "broccoli-asset-rev": "^3.0.0",
     "ember-ajax": "^5.1.1",
+    "ember-auto-import": "^2.4.2",
     "ember-cli": "~4.3.0",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-inject-live-reload": "^2.1.0",
     "ember-cli-release": "^0.2.9",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
-    "ember-cli-uglify": "^3.0.0",
     "ember-data": "~4.3.0",
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-export-application-global": "^2.0.1",
@@ -63,7 +62,7 @@
     "ember-sinon": "5.0.0",
     "ember-source": "~4.3.0",
     "ember-source-channel-url": "^3.0.0",
-    "ember-template-lint": "^4.3.0",
+    "ember-template-lint": "^4.10.0",
     "ember-try": "^2.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.5.0",

@@ -12,14 +12,16 @@ module.exports = {
   },
   plugins: ['ember'],
   extends: [
-    'eslint:recommended',
-    'plugin:ember/recommended',
+    //'eslint:recommended',
+    //'plugin:ember/recommended',
     'plugin:prettier/recommended',
   ],
   env: {
     browser: true,
   },
-  rules: {},
+  rules: {
+    'no-console': 0,
+  },
   overrides: [
     // node files
     {
@@ -47,7 +49,8 @@ module.exports = {
     {
       // test files
       files: ['tests/**/*-test.{js,ts}'],
-      extends: ['plugin:qunit/recommended'],
+      // extends: ['plugin:qunit/recommended'],
+      rules: {},
     },
   ],
 };

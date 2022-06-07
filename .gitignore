@@ -16,6 +16,10 @@
 npm-debug.log*
 yarn-error.log
 testem.log
+/package-lock.json
+/yarn.lock
+/.eslintcache
+/codemods.log
 
 # ember-try
 .node_modules.ember-try/

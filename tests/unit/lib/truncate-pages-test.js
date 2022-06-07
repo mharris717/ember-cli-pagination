@@ -13,6 +13,7 @@ var paramTest = function (name, ops, f) {
       subject = TruncatePages.create(ops);
     });
 
+    assert.expect(1);
     f(subject, assert);
   });
 };
@@ -23,6 +24,7 @@ var paramTest = function (name, ops, f) {
 // });
 
 paramTest('smoke', { currentPage: 2, totalPages: 4 }, function (s, assert) {
+    assert.expect(1);
   assert.deepEqual(s.get('pagesToShow'), [1, 2, 3, 4]);
 });
 
@@ -30,6 +32,7 @@ paramTest(
   'truncate pages, no scroll',
   { currentPage: 2, totalPages: 10, numPagesToShow: 5 },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [1, 2, 3, 4, 5]);
   }
 );
@@ -38,6 +41,7 @@ paramTest(
   'truncate pages, scroll',
   { currentPage: 4, totalPages: 10, numPagesToShow: 5 },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [2, 3, 4, 5, 6]);
   }
 );
@@ -46,6 +50,7 @@ paramTest(
   'smoke',
   { currentPage: 4, totalPages: 5, numPagesToShow: 1 },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [4]);
   }
 );
@@ -54,6 +59,7 @@ paramTest(
   'negative numbers',
   { currentPage: 3, totalPages: 10, numPagesToShow: -99 },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [3]);
   }
 );
@@ -62,6 +68,7 @@ paramTest(
   'zero to show',
   { currentPage: 5, totalPages: 10, numPagesToShow: 0 },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [5]);
   }
 );
@@ -70,6 +77,7 @@ paramTest(
   'string to show',
   { currentPage: 3, totalPages: 10, numPagesToShow: '2' },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [2, 3]);
   }
 );
@@ -78,6 +86,7 @@ paramTest(
   'truncate pages, no scroll, showFL',
   { currentPage: 2, totalPages: 10, numPagesToShow: 5, showFL: true },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [1, 2, 3, 4, 5, 6, 10]);
   }
 );
@@ -86,6 +95,7 @@ paramTest(
   'truncate pages, scroll, ShowFL',
   { currentPage: 4, totalPages: 10, numPagesToShow: 5, showFL: true },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [1, 2, 3, 4, 5, 6, 10]);
   }
 );
@@ -94,6 +104,7 @@ paramTest(
   'truncate pages, scroll, ShowFL',
   { currentPage: 8, totalPages: 10, numPagesToShow: 5, showFL: true },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [1, 5, 6, 7, 8, 9, 10]);
   }
 );
@@ -102,6 +113,7 @@ paramTest(
   'truncate pages, scroll, ShowFL',
   { currentPage: 6, totalPages: 10, numPagesToShow: 5, showFL: true },
   function (s, assert) {
+    assert.expect(1);
     assert.deepEqual(s.get('pagesToShow'), [1, 4, 5, 6, 7, 8, 10]);
   }
 );
@@ -110,8 +122,9 @@ paramTest(
   'if total pages is missing',
   { currentPage: 6 },
   function (s, assert) {
+    assert.expect(2);
     assert.deepEqual(s.get('pagesToShow'), [6]);
-    assert.equal(
+    assert.strictEqual(
       Validate.getLastInternalError(),
       'no int for totalPages val is null'
     );

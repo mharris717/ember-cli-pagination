@@ -2,7 +2,7 @@ import { fillIn, find, findAll, visit } from '@ember/test-helpers';
 import { hasPages, hasTodo, clickPage } from '../helpers/assertions';
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
-import pretenderServer from '../helpers/pretender-server';
+import { default as pretenderServer } from '../helpers/pretender-server';
 
 let server = null;
 

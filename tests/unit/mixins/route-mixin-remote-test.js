@@ -13,19 +13,19 @@ module('Remote Route Mixin', function () {
     something.findPaged('todo', { name: 'Adam' });
     var findArgs = store.get('findArgs');
 
-    assert.equal(findArgs.length, 1);
-    assert.equal(findArgs[0].modelName, 'todo');
-    assert.equal(findArgs[0].params.name, 'Adam');
+    assert.strictEqual(findArgs.length, 1);
+    assert.strictEqual(findArgs[0].modelName, 'todo');
+    assert.strictEqual(findArgs[0].params.name, 'Adam');
   });
 
   test('default model name', function (assert) {
     var Route = EmberObject.extend(RouteMixin, {});
     var route = Route.create();
 
-    assert.equal(route._findModelName('route'), 'route');
-    assert.equal(route._findModelName('routes'), 'route');
-    assert.equal(route._findModelName('route-name'), 'routeName');
-    assert.equal(route._findModelName('route-names'), 'routeName');
+    assert.strictEqual(route._findModelName('route'), 'route');
+    assert.strictEqual(route._findModelName('routes'), 'route');
+    assert.strictEqual(route._findModelName('route-name'), 'routeName');
+    assert.strictEqual(route._findModelName('route-names'), 'routeName');
   });
 
   test('arguments passed to findPaged', function (assert) {
@@ -38,9 +38,9 @@ module('Remote Route Mixin', function () {
     something.model({ name: 'Adam' });
     var findArgs = store.get('findArgs');
 
-    assert.equal(findArgs.length, 1);
-    assert.equal(findArgs[0].modelName, 'todo');
-    assert.equal(findArgs[0].params.name, 'Adam');
+    assert.strictEqual(findArgs.length, 1);
+    assert.strictEqual(findArgs[0].modelName, 'todo');
+    assert.strictEqual(findArgs[0].params.name, 'Adam');
   });
 
   test('can pass param mappings', function (assert) {
@@ -56,7 +56,7 @@ module('Remote Route Mixin', function () {
     //paramMapping: {page: "current_page"}}
     var findArgs = store.get('findArgs');
 
-    assert.equal(findArgs.length, 1);
-    assert.equal(findArgs[0].params.current_page, 1);
+    assert.strictEqual(findArgs.length, 1);
+    assert.strictEqual(findArgs[0].params.current_page, 1);
   });
 });

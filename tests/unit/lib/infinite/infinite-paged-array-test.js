@@ -26,11 +26,12 @@ test('smoke', function (assert) {
   var s = InfinitePagedArray.create({ all: makeAllPaged() });
   s.then(function () {
     equalArray(assert, s, [1, 2]);
-    assert.equal(s.get('length'), 2);
+    assert.strictEqual(s.get('length'), 2);
   });
 });
 
 test('add next page', function (assert) {
+  assert.expect(2);
   var s = InfinitePagedArray.create({ all: makeAllPaged() });
   equalArray(assert, s, [1, 2]);
   s.loadNextPage();
@@ -38,6 +39,7 @@ test('add next page', function (assert) {
 });
 
 test('add next page - unpagedSource', function (assert) {
+  assert.expect(2);
   var s = InfinitePagedArray.createFromUnpaged({
     all: [1, 2, 3, 4, 5],
     perPage: 2,

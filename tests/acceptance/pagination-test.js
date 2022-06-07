@@ -82,7 +82,7 @@ let createTests = function (todosTest) {
   //     hasTodos(assert,10);
   //     hasActivePage(assert,2);
 
-  //     assert.equal(currentURL(), todosUrl+"?page=2");
+  //     assert.strictEqual(currentURL(), todosUrl+"?page=2");
   //   });
   // },2);
 
@@ -131,7 +131,7 @@ let createTests = function (todosTest) {
       await clickPage('next');
       hasTodos(assert, 3);
       // COMMENTEDOUTTEST
-      // assert.equal(currentURL(), todosUrl+"?page=4");
+      // assert.strictEqual(currentURL(), todosUrl+"?page=4");
       // assert.notEqual(currentURL(), todosUrl+"?page=5");
       hasActivePage(assert, 4);
     }
@@ -145,7 +145,7 @@ let createTests = function (todosTest) {
       await clickPage('prev');
       await clickPage('prev');
       hasTodos(assert, 10);
-      //assert.equal(currentURL(), todosUrl);
+      //assert.strictEqual(currentURL(), todosUrl);
       // COMMENTEDOUTTEST
       //assert.notEqual(currentURL(), todosUrl+"?page=-1");
       hasActivePage(assert, 1);

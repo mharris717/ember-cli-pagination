@@ -173,12 +173,12 @@ module('PagedRemoteArray', function () {
     paged.then(function () {
       equalArray(assert, paged, [1, 2]);
       // not sure if I want this to be 0
-      assert.equal(observer.get('arrayDidChangeCount'), 1);
+      assert.strictEqual(observer.get('arrayDidChangeCount'), 1);
 
       paged.set('page', 2);
       paged.then(function () {
         equalArray(assert, paged, [3, 4]);
-        assert.equal(observer.get('arrayDidChangeCount'), 2);
+        assert.strictEqual(observer.get('arrayDidChangeCount'), 2);
       });
     });
   });
@@ -200,13 +200,13 @@ module('PagedRemoteArray', function () {
     paged.then(function () {
       equalArray(assert, paged, [1, 2]);
       // not sure if I want this to be 0
-      assert.equal(paged.get('contentUpdated'), 1);
+      assert.strictEqual(paged.get('contentUpdated'), 1);
 
       paged.set('page', 2);
       paged.then(function () {
         equalArray(assert, paged, [3, 4]);
-        assert.equal(paged.get('contentUpdated'), 2);
-        assert.equal(spy.callCount, 4);
+        assert.strictEqual(paged.get('contentUpdated'), 2);
+        assert.strictEqual(spy.callCount, 4);
       });
     });
   });
@@ -225,13 +225,14 @@ module('PagedRemoteArray', function () {
     });
     paged.then(function () {
       var findArgs = store.get('findArgs');
-      assert.equal(findArgs.length, 1);
-      assert.equal(findArgs[0].params.page, 1);
-      assert.equal(findArgs[0].params.name, 'Adam');
+      assert.strictEqual(findArgs.length, 1);
+      assert.strictEqual(findArgs[0].params.page, 1);
+      assert.strictEqual(findArgs[0].params.name, 'Adam');
     });
   });
 
   test('paramsForBackend', function (assert) {
+    assert.expect(1);
     var store = MockStore.create();
     var paged = PagedRemoteArray.create({
       store: store,
@@ -244,6 +245,7 @@ module('PagedRemoteArray', function () {
   });
 
   test('paramsForBackend with otherParams', function (assert) {
+    assert.expect(1);
     var store = MockStore.create();
     var paged = PagedRemoteArray.create({
       store: store,
@@ -257,6 +259,7 @@ module('PagedRemoteArray', function () {
   });
 
   test('paramsForBackend with param mapping', function (assert) {
+    assert.expect(1);
     var store = MockStore.create();
     var paged = PagedRemoteArray.create({
       store: store,
@@ -272,6 +275,7 @@ module('PagedRemoteArray', function () {
   });
 
   test('paramsForBackend with param mapping and function', function (assert) {
+    assert.expect(1);
     var store = MockStore.create();
     var paged = PagedRemoteArray.create({
       store: store,
@@ -298,7 +302,7 @@ module('PagedRemoteArray', function () {
 
     paged.then(function () {
       var meta = paged.get('meta');
-      assert.equal(meta.total_pages, 3);
+      assert.strictEqual(meta.total_pages, 3);
     });
   });
 
@@ -319,7 +323,7 @@ module('PagedRemoteArray', function () {
 
     paged.then(function () {
       var meta = paged.get('meta');
-      assert.equal(meta.total_pages, 3);
+      assert.strictEqual(meta.total_pages, 3);
     });
   });
 
@@ -341,7 +345,7 @@ module('PagedRemoteArray', function () {
 
     paged.then(function () {
       var meta = paged.get('meta');
-      assert.equal(meta.total_pages, 6);
+      assert.strictEqual(meta.total_pages, 6);
     });
   });
 });

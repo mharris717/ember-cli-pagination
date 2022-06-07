@@ -97,6 +97,8 @@ export default class PagedRemoteArray extends ExtendedArrayProxy {
   }
 
   rawFindFromStore() {
+    // Store is not inherited anymore, this breaks the whole thing on ember 4
+    
     var store = this.store;
     var modelName = this.modelName;
 

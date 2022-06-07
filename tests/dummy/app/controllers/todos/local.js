@@ -1,4 +1,4 @@
-import Controller, { inject } from '@ember/controller';
+import Controller from '@ember/controller';
 import { sort, alias } from '@ember/object/computed';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';

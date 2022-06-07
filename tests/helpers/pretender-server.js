@@ -2,6 +2,7 @@
 import Todo from '../../models/todo';
 import Helpers from 'ember-cli-pagination/test-helpers';
 import config from '../../config/environment';
+import Pretender from 'pretender';
 
 var todos = function () {
   var res = [];

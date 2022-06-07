@@ -4,6 +4,7 @@ import Util from 'ember-cli-pagination/util';
 // module("TruncatePages");
 
 test('normal values', function (assert) {
+  assert.expect(2);
   function isPresent(val) {
     assert.false(Util.isBlank(val));
   }

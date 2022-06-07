@@ -4,6 +4,7 @@ import PageItems from 'ember-cli-pagination/lib/page-items';
 
 var paramTest = function (name, ops, f) {
   test(name, function (assert) {
+    assert.expect(1);
     var subject = null;
 
     run(function () {
@@ -15,7 +16,8 @@ var paramTest = function (name, ops, f) {
 };
 
 paramTest('smoke', { currentPage: 2, totalPages: 4 }, function (s, assert) {
-  assert.equal(s.get('pageItems').length, 4);
+  assert.expect(3);
+  assert.strictEqual(s.get('pageItems').length, 4);
   assert.deepEqual(s.get('pageItems')[0], {
     page: 1,
     current: false,
@@ -32,7 +34,8 @@ paramTest(
   'truncated',
   { currentPage: 15, totalPages: 50, truncatePages: true, numPagesToShow: 10 },
   function (s, assert) {
-    assert.equal(s.get('pageItems').length, 10);
+    assert.expect(2);
+    assert.strictEqual(s.get('pageItems').length, 10);
     assert.deepEqual(s.get('pageItems')[0], {
       page: 10,
       current: false,
@@ -51,7 +54,8 @@ paramTest(
     showFL: true,
   },
   function (s, assert) {
-    assert.equal(s.get('pageItems').length, 12);
+    assert.expect(3);
+    assert.strictEqual(s.get('pageItems').length, 12);
     assert.deepEqual(s.get('pageItems')[0], {
       page: 1,
       current: false,
