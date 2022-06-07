@@ -1,111 +1,110 @@
-var makeAllFixtures = function() {
+var makeAllFixtures = function () {
   var res = [];
 
   var nextId = 0;
-  for (var i=0;i<11;i++) {
-    res.push({id: nextId++, name: "Clean Gutters "+i, completed: false});
-    res.push({id: nextId++, name: "Make Dinner "+i, completed: true});
-    res.push({id: nextId++, name: "More Stuff "+i, completed: false});
+  for (var i = 0; i < 11; i++) {
+    res.push({ id: nextId++, name: 'Clean Gutters ' + i, completed: false });
+    res.push({ id: nextId++, name: 'Make Dinner ' + i, completed: true });
+    res.push({ id: nextId++, name: 'More Stuff ' + i, completed: false });
   }
 
   return res;
 };
 
-var makeDivide = function() {
+var makeDivide = function () {
   return {
-    get: function(k) {
+    get: function (k) {
       return this[k];
     },
 
-    set: function(k,v) {
+    set: function (k, v) {
       this[k] = v;
     },
 
-    objsForPage: function(page) {
+    objsForPage: function (page) {
       var range = this.range(page);
-      return this.get('all').slice(range.start,range.end+1);
+      return this.all.slice(range.start, range.end + 1);
     },
 
-    totalPages: function() {
-      var allLength = parseInt(this.get('all').length);
-      var perPage = parseInt(this.get('perPage'));
-      return Math.ceil(allLength/perPage);
+    totalPages: function () {
+      var allLength = parseInt(this.all.length);
+      var perPage = parseInt(this.perPage);
+      return Math.ceil(allLength / perPage);
     },
 
-    range: function(page) {
-      var perPage = parseInt(this.get('perPage'));
+    range: function (page) {
+      var perPage = parseInt(this.perPage);
       var s = (parseInt(page) - 1) * perPage;
       var e = s + perPage - 1;
 
-      return {start: s, end: e};
-    }
+      return { start: s, end: e };
+    },
   };
 };
 
-var makePagedResponse = function(page,sortByField) {
+var makePagedResponse = function (page, sortByField) {
   var all = makeAllFixtures();
   if (sortByField == 'name') {
-    all = all.sort(function(a,b) {
+    all = all.sort(function (a, b) {
       return a[sortByField].localeCompare(b[sortByField]);
     });
   }
 
   var divide = makeDivide();
-  divide.set('page',1);
-  divide.set('perPage',10);
-  divide.set('all',all);
+  divide.set('page', 1);
+  divide.set('perPage', 10);
+  divide.set('all', all);
 
   var objs = divide.objsForPage(page);
   var totalPages = divide.totalPages();
 
   return {
-    "todos": objs,
-    "meta": {
-      "total_pages": totalPages
-    }
+    todos: objs,
+    meta: {
+      total_pages: totalPages,
+    },
   };
 };
 
-var makeResponse = function(req) {
+var makeResponse = function (req) {
   if (req.query.page && req.query.page != 'all') {
-    return makePagedResponse(req.query.page,req.query.sortByField);
-  }
-  else {
+    return makePagedResponse(req.query.page, req.query.sortByField);
+  } else {
     return {
-      "todos": makeAllFixtures()
+      todos: makeAllFixtures(),
     };
   }
 };
 
-module.exports = function(app) {
+module.exports = function (app) {
   var express = require('express');
   var todosRouter = express.Router();
 
-  todosRouter.get('/', function(req, res) {
+  todosRouter.get('/', function (req, res) {
     res.send(makeResponse(req));
   });
 
-  todosRouter.post('/', function(req, res) {
+  todosRouter.post('/', function (req, res) {
     res.status(201).end();
   });
 
-  todosRouter.get('/:id', function(req, res) {
+  todosRouter.get('/:id', function (req, res) {
     res.send({
-      "todos": {
-        "id": req.params.id
-      }
+      todos: {
+        id: req.params.id,
+      },
     });
   });
 
-  todosRouter.put('/:id', function(req, res) {
+  todosRouter.put('/:id', function (req, res) {
     res.send({
-      "todos": {
-        "id": req.params.id
-      }
+      todos: {
+        id: req.params.id,
+      },
     });
   });
 
-  todosRouter.delete('/:id', function(req, res) {
+  todosRouter.delete('/:id', function (req, res) {
     res.status(204).end();
   });
 

@@ -1,36 +1,46 @@
-import Ember from 'ember';
+import { once } from '@ember/runloop';
+import { alias } from '@ember/object/computed';
+import { computed, observer } from '@ember/object';
+import Evented from '@ember/object/evented';
+import ArrayProxy from '@ember/array/proxy';
+import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
+import Mixin from '@ember/object/mixin';
 import Util from 'ember-cli-pagination/util';
 import LockToRange from 'ember-cli-pagination/watch/lock-to-range';
 import { QueryParamsForBackend, ChangeMeta } from './mapping';
 import PageMixin from '../page-mixin';
 
-var ArrayProxyPromiseMixin = Ember.Mixin.create(Ember.PromiseProxyMixin, {
-  then: function(success,failure) {
-    var promise = this.get('promise');
+var ArrayProxyPromiseMixin = Mixin.create(PromiseProxyMixin, {
+  then: function (success, failure) {
+    var promise = this.promise;
     var me = this;
 
-    return promise.then(function() {
+    return promise.then(function () {
       return success(me);
     }, failure);
-  }
+  },
 });
 
-export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromiseMixin, {
-  page: 1,
-  paramMapping: Ember.computed(() => {
+
+var ExtendedArrayProxy = ArrayProxy.extend(PageMixin, Evented, ArrayProxyPromiseMixin)
+
+export default class PagedRemoteArray extends ExtendedArrayProxy {
+  page = 1;
+  get paramMapping(){
     return {};
-  }),
-  contentUpdated: 0,
+  }
+  
+  contentUpdated = 0;
 
-  init: function() {
-    this._super(...arguments);
-
-    var initCallback = this.get('initCallback');
+  constructor () {
+    // this._super(...arguments);
+    super();
+    var initCallback = this.initCallback;
     if (initCallback) {
       initCallback(this);
     }
-
-    this.addArrayObserver({
+    // Array observers are not working anymore
+    /*this.addArrayObserver({
       arrayWillChange(me) {
         me.trigger('contentWillChange');
       },
@@ -38,131 +48,141 @@ export default Ember.ArrayProxy.extend(PageMixin, Ember.Evented, ArrayProxyPromi
         me.incrementProperty('contentUpdated');
         me.trigger('contentUpdated');
       },
-    });
+    });*/
 
     try {
-      this.get('promise');
-    }
-    catch (e) {
+      this.promise;
+    } catch (e) {
       this.set('promise', this.fetchContent());
     }
-  },
+  }
 
-  addParamMapping: function(key,mappedKey,mappingFunc) {
-    var paramMapping = this.get('paramMapping') || {};
+  addParamMapping (key, mappedKey, mappingFunc) {
+    var paramMapping = this.paramMapping || {};
     if (mappingFunc) {
-      paramMapping[key] = [mappedKey,mappingFunc];
-    }
-    else {
+      paramMapping[key] = [mappedKey, mappingFunc];
+    } else {
       paramMapping[key] = mappedKey;
     }
-    this.set('paramMapping',paramMapping);
+    this.set('paramMapping', paramMapping);
     this.incrementProperty('paramsForBackendCounter');
     //this.pageChanged();
-  },
+  }
 
-  addQueryParamMapping: function(key,mappedKey,mappingFunc) {
-    return this.addParamMapping(key,mappedKey,mappingFunc);
-  },
+  addQueryParamMapping (key, mappedKey, mappingFunc) {
+    return this.addParamMapping(key, mappedKey, mappingFunc);
+  }
 
-  addMetaResponseMapping: function(key,mappedKey,mappingFunc) {
-    return this.addParamMapping(key,mappedKey,mappingFunc);
-  },
+  addMetaResponseMapping (key, mappedKey, mappingFunc) {
+    return this.addParamMapping(key, mappedKey, mappingFunc);
+  }
 
-  paramsForBackend: Ember.computed('page','perPage','paramMapping','paramsForBackendCounter','zeroBasedIndex', function() {
+  paramsForBackend() {
     var page = this.getPage();
-    if (this.get('zeroBasedIndex')) {
+    if (this.zeroBasedIndex) {
       page--;
     }
 
-    var paramsObj = QueryParamsForBackend.create({page: page,
-                                                  perPage: this.getPerPage(),
-                                                  paramMapping: this.get('paramMapping')});
+    var paramsObj = QueryParamsForBackend.create({
+      page: page,
+      perPage: this.getPerPage(),
+      paramMapping: this.paramMapping,
+    });
     var ops = paramsObj.make();
 
     // take the otherParams hash and add the values at the same level as page/perPage
-    ops = Util.mergeHashes(ops,this.get('otherParams')||{});
+    ops = Util.mergeHashes(ops, this.otherParams || {});
 
     return ops;
-  }),
+  }
 
-  rawFindFromStore: function() {
-    var store = this.get('store');
-    var modelName = this.get('modelName');
+  rawFindFromStore() {
+    // Store is not inherited anymore, this breaks the whole thing on ember 4
+    
+    var store = this.store;
+    var modelName = this.modelName;
 
-    var ops = this.get('paramsForBackend');
-    var res = store.query(modelName, Object.assign({},ops)); // always create a shallow copy of `ops` in case adapter would mutate the original object
+    var ops = this.paramsForBackend;
+    var res = store.query(modelName, Object.assign({}, ops)); // always create a shallow copy of `ops` in case adapter would mutate the original object
 
     return res;
-  },
+  }
 
-  fetchContent: function() {
-    this.set("loading",true);
+  fetchContent() {
+    this.set('loading', true);
     var res = this.rawFindFromStore();
-    this.incrementProperty("numRemoteCalls");
+    this.incrementProperty('numRemoteCalls');
     var me = this;
 
-    res.then(function(rows) {
-      var metaObj = ChangeMeta.create({paramMapping: me.get('paramMapping'),
-                                       meta: rows.meta,
-                                       page: me.getPage(),
-                                       perPage: me.getPerPage()});
+    res.then(
+      function (rows) {
+        var metaObj = ChangeMeta.create({
+          paramMapping: me.get('paramMapping'),
+          meta: rows.meta,
+          page: me.getPage(),
+          perPage: me.getPerPage(),
+        });
 
-      me.set("loading",false);
-      return me.set("meta", metaObj.make());
-
-    }, function(error) {
-      Util.log("PagedRemoteArray#fetchContent error " + error);
-      me.set("loading",false);
-    });
+        me.set('loading', false);
+        return me.set('meta', metaObj.make());
+      },
+      function (error) {
+        Util.log('PagedRemoteArray#fetchContent error ' + error);
+        me.set('loading', false);
+      }
+    );
 
     return res;
-  },
+  }
 
-  totalPages: Ember.computed.alias("meta.total_pages"),
+  @alias ('meta.total_pages') totalPages;
 
-  lastPage: null,
+  lastPage = null;
 
-  pageChanged: Ember.observer("page", "perPage", function() {
-    var page = this.get('page');
-    var lastPage = this.get('lastPage');
+  get pageChanged() {
+    var page = this.page;
+    var lastPage = this.lastPage;
     if (lastPage != page) {
       this.set('lastPage', page);
-      this.set("promise", this.fetchContent());
+      this.set('promise', this.fetchContent());
     }
-  }),
+  }
 
-  lockToRange: function() {
+  lockToRange () {
     LockToRange.watch(this);
-  },
+  }
 
-  watchPage: Ember.observer('page','totalPages', function() {
-    var page = this.get('page');
-    var totalPages = this.get('totalPages');
+  get watchPage () {
+    var page = this.page;
+    var totalPages = this.totalPages;
     if (parseInt(totalPages) <= 0) {
       return;
     }
 
-    this.trigger('pageChanged',page);
+    this.trigger('pageChanged', page);
 
     if (page < 1 || page > totalPages) {
-      this.trigger('invalidPage',{page: page, totalPages: totalPages, array: this});
+      this.trigger('invalidPage', {
+        page: page,
+        totalPages: totalPages,
+        array: this,
+      });
     }
-  }),
+  }
 
-  reload: function() {
+  reload () {
     var promise = this.fetchContent();
     this.set('promise', promise);
     return promise;
-  },
+  }
 
-  setOtherParam: function(k,v) {
-    if (!this.get('otherParams')) {
-      this.set('otherParams',{});
+  setOtherParam (k, v) {
+    if (!this.otherParams) {
+      this.set('otherParams', {});
     }
 
-    this.get('otherParams')[k] = v;
+    this.otherParams[k] = v;
     this.incrementProperty('paramsForBackendCounter');
-    Ember.run.once(this,"pageChanged");
+    once(this, 'pageChanged');
   }
-});
+}

@@ -1,50 +1,51 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import EmberObject, { computed } from '@ember/object';
 import SafeGet from '../util/safe-get';
 
-export default Ember.Object.extend(SafeGet, {
-  numPagesToShow: 10,
-  showFL: false,
-  currentPage: null,
-  totalPages: null,
+export default class TruncatePagesObject extends EmberObject.extend(SafeGet) {
+  numPagesToShow = 10;
+  showFL = false;
+  currentPage = null;
+  totalPages = null;
 
-  isValidPage: function(page) {
+  isValidPage (page) {
     page = parseInt(page);
     var totalPages = this.getInt('totalPages');
 
     return page > 0 && page <= totalPages;
-  },
+  }
 
-  pagesToShow: Ember.computed("numPagesToShow","currentPage","totalPages", function() {
+  get pagesToShow() {
     var res = [];
 
     var numPages = this.getInt('numPagesToShow');
     var currentPage = this.getInt('currentPage');
     var totalPages = this.getInt('totalPages');
-    var showFL = this.get('showFL');
-    
-    var before = parseInt(numPages / 2);    
-    if ((currentPage - before) < 1 ) {
+    var showFL = this.showFL;
+
+    var before = parseInt(numPages / 2);
+    if (currentPage - before < 1) {
       before = currentPage - 1;
     }
     var after = numPages - before - 1;
-    if ((totalPages - currentPage) < after) {
+    if (totalPages - currentPage < after) {
       after = totalPages - currentPage;
       before = numPages - after - 1;
     }
 
     // add one page if no first or last is added
     if (showFL) {
-      if ((currentPage - before) < 2 ) {
+      if (currentPage - before < 2) {
         after++;
       }
-      if ((totalPages - currentPage - 1) < after) {
+      if (totalPages - currentPage - 1 < after) {
         before++;
-      }      
+      }
     }
-    
+
     // add each prior page
-    for(var i=before;i>0;i--) {
-      var possiblePage = currentPage-i;
+    for (var i = before; i > 0; i--) {
+      var possiblePage = currentPage - i;
       if (this.isValidPage(possiblePage)) {
         res.push(possiblePage);
       }
@@ -53,8 +54,8 @@ export default Ember.Object.extend(SafeGet, {
     res.push(currentPage);
 
     // add each following page
-    for(i=1;i<=after;i++) {
-      var possiblePage2 = currentPage+i;
+    for (i = 1; i <= after; i++) {
+      var possiblePage2 = currentPage + i;
       if (this.isValidPage(possiblePage2)) {
         res.push(possiblePage2);
       }
@@ -63,20 +64,18 @@ export default Ember.Object.extend(SafeGet, {
     // add first and last page
     if (showFL) {
       if (res.length > 0) {
-
         // add first page if not already there
         if (res[0] !== 1) {
           res = [1].concat(res);
         }
 
         // add last page if not already there
-        if (res[res.length-1] !== totalPages && totalPages !== 0) {
+        if (res[res.length - 1] !== totalPages && totalPages !== 0) {
           res.push(totalPages);
         }
       }
     }
-    
-    return Ember.A(res);
 
-  })
-});
+    return A(res);
+  }
+}

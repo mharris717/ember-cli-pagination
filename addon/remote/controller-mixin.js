@@ -1,12 +1,12 @@
-import Ember from 'ember';
+import { alias } from '@ember/object/computed';
+import Mixin from '@ember/object/mixin';
 
+export default Mixin.create({
+  queryParams: ['page', 'perPage'],
 
-export default Ember.Mixin.create({
-  queryParams: ["page", "perPage"],
+  page: alias('model.page'),
 
-  page: Ember.computed.alias("model.page"),
+  totalPages: alias('model.totalPages'),
 
-  totalPages: Ember.computed.alias("model.totalPages"),
-
-  pagedContent: Ember.computed.alias("model")
+  pagedContent: alias('model'),
 });

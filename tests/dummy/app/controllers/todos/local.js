@@ -1,11 +1,42 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
+import { sort, alias } from '@ember/object/computed';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.Controller.extend({
-  queryParams: ["page","perPage"],
-  page: 1,
+class QueryParamsObj {
+  @tracked page = 1;
+  @tracked perPage = 10;
+}
 
-  pagedContent: pagedArray("model", {
-    page: Ember.computed.alias('parent.page')
+export default class LocalController extends Controller {
+  @service router;
+
+  queryParams = [
+    { 'queryParamsObj.page': 'page' },
+    { 'queryParamsObj.perPage': 'perPage' },
+  ];
+
+  queryParamsObj = new QueryParamsObj();
+
+  sortingProperties = Object.freeze(['name:asc']);
+  @sort('model', 'sortingProperties') arrangedContent;
+  sortingOrder = 'asc';
+
+  @pagedArray('arrangedContent', {
+    page: alias('parent.queryParamsObj.page'),
+    perPage: alias('parent.queryParamsObj.perPage'),
   })
-});
+  pagedContent;
+
+  @action resetPage() {
+    this.queryParamsObj.page = 1;
+  }
+
+  @action save() {
+    this.pagedContent.forEach((todo) => {
+      todo.save();
+    });
+  }
+}

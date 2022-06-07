@@ -1,7 +1,8 @@
-import ActiveModelAdapter from 'active-model-adapter';
+import { ActiveModelAdapter } from 'active-model-adapter';
 
-export default ActiveModelAdapter.extend({
-  namespace: "api",
-
-  shouldReloadAll: function() { return true; }
-});
+export default class ApplicationAdapter extends ActiveModelAdapter {
+  namespace = 'api';
+  shouldReloadAll() {
+    return true;
+  }
+}

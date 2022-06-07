@@ -1,23 +1,24 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import EmberObject from '@ember/object';
 
-export default Ember.Object.extend({
-  objsForPage: function(page) {
+export default class DivideIntoPages extends EmberObject{
+  objsForPage (page) {
     var range = this.range(page);
-    const all = Ember.A(this.get('all'));
-    return Ember.A(all.slice(range.start,range.end+1));
-  },
+    const all = A(this.all);
+    return A(all.slice(range.start, range.end + 1));
+  }
 
-  totalPages: function() {
+  totalPages () {
     var allLength = parseInt(this.get('all.length'));
-    var perPage = parseInt(this.get('perPage'));
-    return Math.ceil(allLength/perPage);
-  },
+    var perPage = parseInt(this.perPage);
+    return Math.ceil(allLength / perPage);
+  }
 
-  range: function(page) {
-    var perPage = parseInt(this.get('perPage'));
+  range (page) {
+    var perPage = parseInt(this.perPage);
     var s = (parseInt(page) - 1) * perPage;
     var e = s + perPage - 1;
 
-    return {start: s, end: e};
+    return { start: s, end: e };
   }
-});
+}

@@ -1,12 +1,12 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
 import pagedArray from 'ember-cli-pagination/computed/paged-array';
 
-export default Ember.Controller.extend({
-  pagedContent: pagedArray("model", {infinite: true}),
+export default Controller.extend({
+  pagedContent: pagedArray('model', { infinite: true }),
 
   actions: {
-    loadNext: function() {
-      this.get('pagedContent').loadNextPage();
-    }
-  }
+    loadNext: function () {
+      this.pagedContent.loadNextPage();
+    },
+  },
 });

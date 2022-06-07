@@ -1,25 +1,26 @@
-<table class="table">
-  <tr>
-    <th>Name</th>
-    <th>Completed</th>
-  </tr>
-
-  {{#each pagedContent as |content|}}
-    <tr class="todo">
-      <td>{{content.name}}</td>
-      <td>
-        {{input type="checkbox" checked=content.completed}}
-      </td>
+<table class='table table-striped'>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Completed</th>
     </tr>
-  {{/each}}
+  </thead>
+  <tbody>
+    {{#each this.pagedContent as |content|}}
+      <tr class='todo'>
+        <td>{{content.name}}</td>
+        <td>
+          <Input @type='checkbox' @checked={{content.completed}} />
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
 </table>
 
-{{page-numbers content=pagedContent}}
+<PageNumbers @content={{this.pagedContent}} />
 
-<button {{action "save"}}>Save</button>
+<button type='button' class="btn btn-primary" {{on 'click' this.save}}>Save</button>
 
-<div class="numRemoteCalls">
-  {{pagedContent.numRemoteCalls}}
+<div class='numRemoteCalls'>
+  {{this.pagedContent.numRemoteCalls}}
 </div>
-
-{{outlet}}

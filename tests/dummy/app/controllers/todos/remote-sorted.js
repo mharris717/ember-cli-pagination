@@ -1,14 +1,15 @@
-import Ember from 'ember';
+import { observer } from '@ember/object';
+import Controller from '@ember/controller';
 
-export default Ember.Controller.extend({
-  queryParams: ["page","perPage","sortByField"],
+export default Controller.extend({
+  queryParams: ['page', 'perPage', 'sortByField'],
   page: 1,
 
-  updatePaged: Ember.observer("sortByField", function() {
-    var field = this.get('sortByField');
-    var paged = this.get('model');
+  updatePaged: observer('sortByField', function () {
+    var field = this.sortByField;
+    var paged = this.model;
     if (paged && paged.setOtherParam) {
-      paged.setOtherParam('sortByField',field);
+      paged.setOtherParam('sortByField', field);
     }
-  })
+  }),
 });

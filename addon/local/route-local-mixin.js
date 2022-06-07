@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 
-export default Ember.Mixin.create({
-  findPaged: function(name) {
-    return this.get('store').find(name);
-  }
+export default Mixin.create({
+  findPaged: function (name) {
+    return this.store.find(name);
+  },
 });

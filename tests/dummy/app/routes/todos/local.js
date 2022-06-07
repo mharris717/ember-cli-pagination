@@ -1,13 +1,10 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
-export default Ember.Route.extend({
-  model: function() {
-    return Ember.RSVP.hash({
-      model: this.store.findAll('todo')
-    });
-  },
+export default class LocalRoute extends Route {
+  @service store;
 
-  setupController: function(controller, models) {
-    controller.setProperties(models);
+  model() {
+    return this.store.findAll('todo');
   }
-});
+}

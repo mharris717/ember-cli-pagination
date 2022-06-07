@@ -1,0 +1,60 @@
+<div class='pagination-centered'>
+  <ul class='pagination'>
+    {{#if this.canStepBackward}}
+      <li class='page-item arrow prev enabled-arrow'>
+        <a
+          href='#'
+          {{on 'click' (fn this.incrementPage -1)}}
+          class='page-link'
+        >&laquo;</a>
+      </li>
+    {{else}}
+      <li class='page-item arrow prev disabled'>
+        <a
+          href='#'
+          {{on 'click' (fn this.incrementPage -1)}}
+          class='page-link'
+        >&laquo;</a>
+      </li>
+    {{/if}}
+
+    {{#each this.pageItems as |item|}}
+      {{#if item.dots}}
+        <li class='page-item dots disabled'>
+          <span>...</span>
+        </li>
+      {{/if}}
+      {{#if item.current}}
+        <li class='page-item active page-number'>
+          <a href='#' class='page-link'>{{item.page}}</a>
+        </li>
+      {{else}}
+        <li class='page-item page-number'>
+          <a
+            href='#'
+            {{on 'click' (fn this.pageClicked item.page)}}
+            class='page-link'
+          >{{item.page}}</a>
+        </li>
+      {{/if}}
+    {{/each}}
+
+    {{#if this.canStepForward}}
+      <li class='page-item arrow next enabled-arrow'>
+        <a
+          href='#'
+          {{on 'click' (fn this.incrementPage 1)}}
+          class='page-link'
+        >&raquo;</a>
+      </li>
+    {{else}}
+      <li class='page-item arrow next disabled'>
+        <a
+          href='#'
+          {{on 'click' (fn this.incrementPage 1)}}
+          class='page-link'
+        >&raquo;</a>
+      </li>
+    {{/if}}
+  </ul>
+</div>
